@@ -3,6 +3,7 @@ package ge.giosan777.matutu.mbasemobile
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +22,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import ge.giosan777.matutu.mbasemobile.Volley.getAllContacts
+import ge.giosan777.matutu.mbasemobile.utils.GetAllContacts
 import ge.giosan777.matutu.mbasemobile.utils.getPermission
 
 
@@ -29,7 +32,15 @@ var READ_CONTACTS_GRANTED = false
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        (getPermission(this, READ_CONTACTS))
+        getPermission(this, READ_CONTACTS)
+        if (onRequestPermissions()) {
+            Toast.makeText(this, "OK OK OK", Toast.LENGTH_LONG).show();
+            getAllContacts(this)
+        } else {
+            Toast.makeText(this, "FALSE", Toast.LENGTH_LONG).show();
+//            finish()
+//            System.exit(0)
+        }
 
         super.onCreate(savedInstanceState)
         setContent {
@@ -73,27 +84,24 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+    fun onRequestPermissions(): Boolean {
         if (ContextCompat.checkSelfPermission(
                 this,
                 READ_CONTACTS
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             READ_CONTACTS_GRANTED = true
-//            val contactList=loadContacts(this);
-//            Log.d("MyLog",contactList.toString())
+            val array = GetAllContacts.getAll(this)
+            for (a in array) {
+                Log.d("MyLog", "Array NAME ${a._name} and Phone ${a._phone}")
+            }
+            return true
         } else {
-            val contentResolver = getContentResolver()
-            Toast.makeText(this, "nebartvis micemaa sachiro shch", Toast.LENGTH_LONG).show();
-            finish()
-            System.exit(0)
+            return false
         }
     }
+
 }
 
 

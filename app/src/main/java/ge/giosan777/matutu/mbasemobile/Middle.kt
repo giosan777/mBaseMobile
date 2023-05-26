@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,20 +25,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import ge.giosan777.matutu.mbasemobile.Volley.GetResult
+import ge.giosan777.matutu.mbasemobile.Volley.getAllContacts
+import ge.giosan777.matutu.mbasemobile.Volley.getOneContact
 import ge.giosan777.matutu.mbasemobile.models.Person
 import ge.giosan777.matutu.mbasemobile.ui.theme.meore
 import ge.giosan777.matutu.mbasemobile.ui.theme.pirveli
-import ge.giosan777.matutu.mbasemobile.utils.GetAllContacts
 
-@OptIn(ExperimentalMaterial3Api::class)
-//@Preview
 @Composable
 fun Middle(context: Context) {
 
-    val myList = listOf<Person>(Person(1, "599-06-87-21", "GIORGI", "KVARATSKHELIA"))
+    val personState = remember {
+        mutableStateOf(mutableListOf<Person>())
+    }
     val state = remember {
-        mutableStateOf("String")
+        mutableStateOf("")
     }
     Column(
         modifier = Modifier
@@ -58,17 +57,27 @@ fun Middle(context: Context) {
                 label = { Text(stringResource(R.string.enter_phone_number)) },
                 modifier = Modifier
                     .height(60.dp)
-                    .width(220.dp),
+                    .width(20.dp),
             )
-            Button(
-                onClick = {
-                    GetResult(context, state)
-                    GetAllContacts.getAll(context)
-                },
-                modifier = Modifier.padding(start = 15.dp)
-            ) {
-                Text("Search")
+            Row {
+                Button(
+                    onClick = {
+                        getOneContact(context,personState,"+995599068721")
+                    },
+                    modifier = Modifier.padding(start = 15.dp)
+                ) {
+                    Text("getOne")
+                }
+                Button(
+                    onClick = {
+                        getAllContacts(context)
+                    },
+                    modifier = Modifier.padding(start = 15.dp)
+                ) {
+                    Text("GetAllContacts")
+                }
             }
+
         }
 
         Card(
@@ -88,19 +97,33 @@ fun Middle(context: Context) {
                         .fillMaxWidth(0.5f)
                         .background(Color.Green)
                 ) {
+                    personState.value.getOrNull(1)?.let {
+                        Text("  "+it.phone)
+                    }
                     Text(state.value)
-                    Text(text = "sago")
-                    Text(text = "sago")
-                    Text(text = "sago")
-                    Text(text = "sago")
+
                 }
                 Column(
                     modifier = Modifier
                         .fillMaxWidth(1f)
                         .background(Color.Red)
+                        .padding(start = 5.dp)
                 ) {
-                    Text(text = "sago")
-
+                    personState.value.getOrNull(0)?.let {
+                        Text(" "+it.firstName + "  "+it.lastName)
+                    }
+                    personState.value.getOrNull(1)?.let {
+                        Text(" "+it.firstName + "  "+it.lastName)
+                    }
+                    personState.value.getOrNull(2)?.let {
+                        Text(" "+it.firstName + "  "+it.lastName)
+                    }
+                    personState.value.getOrNull(3)?.let {
+                        Text(" "+it.firstName + "  "+it.lastName)
+                    }
+                    personState.value.getOrNull(4)?.let {
+                        Text(" "+it.firstName + "  "+it.lastName)
+                    }
                 }
             }
         }
