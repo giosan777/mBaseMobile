@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import ge.giosan777.matutu.mbasemobile.READ_CONTACTS_GRANTED
 
 private const val REQUEST_COD = 200
 fun getPermission(context: Activity, permission: String): Boolean {

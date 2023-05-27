@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import ge.giosan777.matutu.mbasemobile.Volley.getAllContacts
+import ge.giosan777.matutu.mbasemobile.Volley.getAndSaveAllContacts
 import ge.giosan777.matutu.mbasemobile.Volley.getOneContact
 import ge.giosan777.matutu.mbasemobile.models.Person
 import ge.giosan777.matutu.mbasemobile.ui.theme.meore
@@ -70,7 +70,7 @@ fun Middle(context: Context) {
                 }
                 Button(
                     onClick = {
-                        getAllContacts(context)
+                        getAndSaveAllContacts(context)
                     },
                     modifier = Modifier.padding(start = 15.dp)
                 ) {

@@ -22,20 +22,21 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import ge.giosan777.matutu.mbasemobile.Volley.getAllContacts
+import ge.giosan777.matutu.mbasemobile.Volley.deleteAllContacts
+import ge.giosan777.matutu.mbasemobile.Volley.getAndSaveAllContacts
 import ge.giosan777.matutu.mbasemobile.utils.GetAllContacts
 import ge.giosan777.matutu.mbasemobile.utils.getPermission
 
 
 private const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
-var READ_CONTACTS_GRANTED = false
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         getPermission(this, READ_CONTACTS)
         if (onRequestPermissions()) {
             Toast.makeText(this, "OK OK OK", Toast.LENGTH_LONG).show();
-            getAllContacts(this)
+            deleteAllContacts(this)
+            getAndSaveAllContacts(this)
         } else {
             Toast.makeText(this, "FALSE", Toast.LENGTH_LONG).show();
 //            finish()
@@ -85,23 +86,25 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    fun onRequestPermissions(): Boolean {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                READ_CONTACTS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            READ_CONTACTS_GRANTED = true
-            val array = GetAllContacts.getAll(this)
-            for (a in array) {
-                Log.d("MyLog", "Array NAME ${a._name} and Phone ${a._phone}")
-            }
-            return true
-        } else {
-            return false
-        }
+    private fun onRequestPermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val array = GetAllContacts.getAll(this)
+        for (a in array) {
+            Log.d("MyLog", "Array NAME ${a._name} and Phone ${a._phone}")
+        }
+    }
 }
 
 

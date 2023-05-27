@@ -1,12 +1,12 @@
 package ge.giosan777.matutu.mbasemobile.Volley
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import ge.giosan777.matutu.mbasemobile.database.AppDatabase
 import ge.giosan777.matutu.mbasemobile.models.Person
 
 fun getOneContact(
@@ -22,12 +22,15 @@ fun getOneContact(
         { response ->
             val jsonString = response.toString()
             val personArray: Array<Person> = Gson().fromJson(jsonString, Array<Person>::class.java)
-            mutableState.value=personArray.toMutableList()
+            mutableState.value = personArray.toMutableList()
         },
-        { error ->
-            val errorPerson: Person = Person(1, "ERROR", "ERROR_MESSAGE_ERROR", "ERROR")
-            val personArray = listOf<Person>(errorPerson)
-            Log.d("MyLog", error.toString())
+        { _ ->
+            val mainDb = AppDatabase.getDb(context)
+            val personArray = mainDb.getDao().getAllPeopleWithPhone(phone).orEmpty()
+            mutableState.value = personArray.toMutableList()
+//            val errorPerson: Person = Person(1, "ERROR", "ERROR_MESSAGE_ERROR", "ERROR")
+//            val personArray = listOf<Person>(errorPerson)
+//            Log.d("MyLog", error.toString())
 
         }
     )
