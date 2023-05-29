@@ -25,7 +25,7 @@ fun getAndSaveAllContacts(context: Context) {
             val mainDb = AppDatabase.getDb(context)
             mainDb.getDao().insertAllPeoples(personList)
 
-            Log.d("MyLog", mainDb.getDao().getAllPeople().toString())
+            Log.d("MyLog", "KVELA KONTAKTI" +mainDb.getDao().getAllPeople().toString())
 
         },
         { error ->

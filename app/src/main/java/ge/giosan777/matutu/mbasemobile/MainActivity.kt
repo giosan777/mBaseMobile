@@ -1,9 +1,9 @@
 package ge.giosan777.matutu.mbasemobile
 
 import android.Manifest
-import android.content.pm.PackageManager
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,29 +21,50 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import ge.giosan777.matutu.mbasemobile.Volley.deleteAllContacts
 import ge.giosan777.matutu.mbasemobile.Volley.getAndSaveAllContacts
-import ge.giosan777.matutu.mbasemobile.utils.GetAllContacts
 import ge.giosan777.matutu.mbasemobile.utils.getPermission
+import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 
-
+var READ_CONTACTS_PERMISSION = false
 private const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
+private lateinit var prefs: SharedPreferences
 
 class MainActivity : ComponentActivity() {
+    override fun onResume() {
+        super.onResume()
+
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        getPermission(this, READ_CONTACTS)
-        if (onRequestPermissions()) {
-            Toast.makeText(this, "OK OK OK", Toast.LENGTH_LONG).show();
-            deleteAllContacts(this)
-            getAndSaveAllContacts(this)
+        super.onCreate(savedInstanceState)
+        prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+        if (prefs.contains("read_contacts_permissions_granted") && prefs.getBoolean(
+                "read_contacts_permissions_granted",
+                false
+            )
+        ) {
+            if (hasConnection(this)) {
+                getAndSaveAllContacts(this)
+            }
+            Toast.makeText(this, "UKVE MOCEMULIA", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "FALSE", Toast.LENGTH_LONG).show();
+            getPermission(this, READ_CONTACTS)
+            val editor = prefs.edit()
+            editor.putBoolean("read_contacts_permissions_granted", READ_CONTACTS_PERMISSION)
+                .apply()
+            Toast.makeText(this, "EXLA MISCA", Toast.LENGTH_SHORT).show();
 //            finish()
 //            System.exit(0)
         }
 
-        super.onCreate(savedInstanceState)
         setContent {
             Image(
                 painter = painterResource(id = R.drawable.background),
@@ -79,32 +100,11 @@ class MainActivity : ComponentActivity() {
                     Reklama()
                 }
             }
-
-
-        }
-
-    }
-
-
-    private fun onRequestPermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            READ_CONTACTS
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        val array = GetAllContacts.getAll(this)
-        for (a in array) {
-            Log.d("MyLog", "Array NAME ${a._name} and Phone ${a._phone}")
         }
     }
+
+
+
 }
 
 

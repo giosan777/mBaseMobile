@@ -1,4 +1,4 @@
-package ge.giosan777.matutu.mbasemobile.utils;
+package ge.giosan777.matutu.mbasemobile.Volley;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -12,7 +12,7 @@ import java.util.Objects;
 
 import ge.giosan777.matutu.mbasemobile.models.Contact;
 
-public class GetAllContacts {
+public class GetAllContactsFromLocalDB {
     private static final String CONTACT_ID = ContactsContract.Contacts._ID;
     private static final String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
     private static final String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
