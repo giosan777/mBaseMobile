@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -24,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import ge.giosan777.matutu.mbasemobile.Volley.getOneContact
+import ge.giosan777.matutu.mbasemobile.Volley.getNumberStartingWith
 import ge.giosan777.matutu.mbasemobile.models.Person
 import ge.giosan777.matutu.mbasemobile.ui.theme.meore
 import ge.giosan777.matutu.mbasemobile.ui.theme.pirveli
@@ -34,9 +33,6 @@ fun Middle(context: Context) {
 
     val personState = remember {
         mutableStateOf(mutableListOf<Person>())
-    }
-    val state = remember {
-        mutableStateOf("")
     }
     val text = remember {
         mutableStateOf(TextFieldValue(""))
@@ -56,23 +52,21 @@ fun Middle(context: Context) {
                 value = text.value,
                 onValueChange = { it ->
                     text.value = it
-
+                    getNumberStartingWith(context,personState,text.value.text)
                 },
                 label = { Text(stringResource(R.string.enter_phone_number)) },
                 modifier = Modifier
                     .height(60.dp)
                     .width(200.dp),
             )
-
-
-            Button(
-                onClick = {
-                    getOneContact(context, personState, "+995599068721")
-                },
-                modifier = Modifier.padding(start = 15.dp)
-            ) {
-                Text("getOne")
-            }
+//            Button(
+//                onClick = {
+//                    getOneContact(context, personState, "+995599068721")
+//                },
+//                modifier = Modifier.padding(start = 15.dp)
+//            ) {
+//                Text("getOne")
+//            }
         }
 
         Card(
@@ -92,10 +86,21 @@ fun Middle(context: Context) {
                         .fillMaxWidth(0.5f)
                         .background(Color.Green)
                 ) {
+                    personState.value.getOrNull(0)?.let {
+                        Text("  " + it.phone)
+                    }
                     personState.value.getOrNull(1)?.let {
                         Text("  " + it.phone)
                     }
-                    Text(state.value+"dsadsa")
+                    personState.value.getOrNull(2)?.let {
+                        Text("  " + it.phone)
+                    }
+                    personState.value.getOrNull(3)?.let {
+                        Text("  " + it.phone)
+                    }
+                    personState.value.getOrNull(4)?.let {
+                        Text("  " + it.phone)
+                    }
 
                 }
                 Column(

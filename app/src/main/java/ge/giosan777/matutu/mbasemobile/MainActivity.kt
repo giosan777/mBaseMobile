@@ -3,6 +3,7 @@ package ge.giosan777.matutu.mbasemobile
 import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -21,51 +22,47 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import ge.giosan777.matutu.mbasemobile.Volley.getAndSaveAllContacts
-import ge.giosan777.matutu.mbasemobile.utils.getPermission
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 
-var READ_CONTACTS_PERMISSION = false
-private const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
 private lateinit var prefs: SharedPreferences
+private const val REQUEST_COD = 1
+private const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
+private var readContactPermission = false
 
 class MainActivity : ComponentActivity() {
-    override fun onResume() {
-        super.onResume()
-
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ActivityCompat.requestPermissions(
+            this, arrayOf(READ_CONTACTS), REQUEST_COD
+        )
         prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-        if (prefs.contains("read_contacts_permissions_granted") && prefs.getBoolean(
-                "read_contacts_permissions_granted",
-                false
-            )
-        ) {
-            if (hasConnection(this)) {
-                getAndSaveAllContacts(this)
-            }
-            Toast.makeText(this, "UKVE MOCEMULIA", Toast.LENGTH_SHORT).show();
-        } else {
-            getPermission(this, READ_CONTACTS)
-            val editor = prefs.edit()
-            editor.putBoolean("read_contacts_permissions_granted", READ_CONTACTS_PERMISSION)
-                .apply()
-            Toast.makeText(this, "EXLA MISCA", Toast.LENGTH_SHORT).show();
-//            finish()
-//            System.exit(0)
-        }
-
         setContent {
+
+            if (prefs.contains("read_contacts_permissions_granted") && prefs.getBoolean(
+                    "read_contacts_permissions_granted",
+                    false
+                )
+            ) {
+                if (hasConnection(this)) {
+                    getAndSaveAllContacts(this)
+                }
+                Toast.makeText(this, "UKVE MOCEMULIA", Toast.LENGTH_SHORT).show();
+            } else {
+//                ActivityCompat.requestPermissions(
+//                    this, arrayOf(READ_CONTACTS), REQUEST_COD
+//                )
+                val editor = prefs.edit()
+                editor.putBoolean("read_contacts_permissions_granted", readContactPermission)
+                    .apply()
+                Toast.makeText(this, "EXLA MISCA", Toast.LENGTH_SHORT).show();
+//                finish()
+//                System.exit(0)
+            }
+
             Image(
                 painter = painterResource(id = R.drawable.background),
                 contentDescription = "background",
@@ -103,7 +100,29 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+        if (requestCode == REQUEST_COD) {
+            if (grantResults.isNotEmpty() && grantResults.get(0) == PackageManager.PERMISSION_GRANTED) {
+                val editor = prefs.edit()
+                editor.putBoolean("read_contacts_permissions_granted", true)
+                    .apply()
+//                Toast.makeText(this, "EXLA MISCA", Toast.LENGTH_SHORT).show();
+                readContactPermission = true
+            } else {
+                ActivityCompat.requestPermissions(
+                    this@MainActivity, arrayOf(READ_CONTACTS), REQUEST_COD
+                )
+//                Toast.makeText(this, "22222 33333", Toast.LENGTH_SHORT).show();
 
+            }
+        }
+    }
 
 }
 
