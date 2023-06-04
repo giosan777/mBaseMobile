@@ -1,4 +1,4 @@
-package ge.giosan777.matutu.mbasemobile
+package ge.giosan777.matutu.mbasemobile.screen_components
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import ge.giosan777.matutu.mbasemobile.R
 import ge.giosan777.matutu.mbasemobile.Volley.getNumberStartingWith
 import ge.giosan777.matutu.mbasemobile.models.Person
 import ge.giosan777.matutu.mbasemobile.ui.theme.meore
@@ -128,17 +129,6 @@ fun Middle(context: Context) {
             }
         }
 
-
-//        LazyColumn(
-//            modifier = Modifier
-//                .fillMaxSize()
-//        ) {
-//            itemsIndexed(
-//                myList
-//            ) { _, person ->
-//                ItemRow(person = person)
-//            }
-//        }
     }
 }
 

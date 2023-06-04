@@ -26,7 +26,7 @@ fun getOneContact(
         },
         { _ ->
             val mainDb = AppDatabase.getDb(context)
-            val personArray = mainDb.getDao().getAllPeopleWithPhone(phone).orEmpty()
+            val personArray = mainDb.getDao().findByPhoneStartingWith(phone).orEmpty()
             personState.value = personArray.toMutableList()
 //            val errorPerson: Person = Person(1, "ERROR", "ERROR_MESSAGE_ERROR", "ERROR")
 //            val personArray = listOf<Person>(errorPerson)

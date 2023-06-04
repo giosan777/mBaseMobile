@@ -10,10 +10,15 @@ import ge.giosan777.matutu.mbasemobile.models.Person
 
 @Database(entities = [Person::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun getDao():PersonDAO
-    companion object{
-        fun getDb(context:Context): AppDatabase{
-            return Room.databaseBuilder(context.applicationContext,AppDatabase::class.java,"m_base.db").allowMainThreadQueries().build()
+    abstract fun getDao(): PersonDAO
+
+    companion object {
+        fun getDb(context: Context): AppDatabase {
+            return Room.databaseBuilder(
+                context.applicationContext,
+                AppDatabase::class.java,
+                "m_base.db"
+            ).allowMainThreadQueries().build()
         }
     }
 }

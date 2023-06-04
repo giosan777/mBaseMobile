@@ -1,4 +1,4 @@
-package ge.giosan777.matutu.mbasemobile
+package ge.giosan777.matutu.mbasemobile.screen_components
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
