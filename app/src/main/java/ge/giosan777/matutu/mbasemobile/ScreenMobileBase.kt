@@ -1,5 +1,6 @@
 package ge.giosan777.matutu.mbasemobile
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,9 +36,10 @@ import ge.giosan777.matutu.mbasemobile.ui.theme.meore
 import ge.giosan777.matutu.mbasemobile.ui.theme.pirveli
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 
+
 //@Preview
 @Composable
-fun ScreenMobileBase(onClick:() -> Unit) {
+fun ScreenMobileBase(onClick: () -> Unit) {
     val personState = remember {
         mutableStateOf(mutableListOf<Person>())
     }
@@ -76,7 +78,7 @@ fun ScreenMobileBase(onClick:() -> Unit) {
                     Text(text = "MOBILE BASE")
                 }
                 Button(onClick = {
-                        onClick()
+                    onClick()
                 }) {
                     Text(text = "ORG BASE")
                 }
@@ -98,8 +100,8 @@ fun ScreenMobileBase(onClick:() -> Unit) {
                             text.value = it
                             if (hasConnection(APP_CONTEXT!!)) {
                                 getNumberStartingWith(APP_CONTEXT!!, personState, text.value.text)
-                            }else{
-                                getAllPeopleWithPhone(APP_CONTEXT!!,personState,text.value.text)
+                            } else {
+                                getAllPeopleWithPhone(APP_CONTEXT!!, personState, text.value.text)
                             }
                         },
                         label = { Text(stringResource(R.string.enter_phone_number)) },
@@ -107,6 +109,20 @@ fun ScreenMobileBase(onClick:() -> Unit) {
                             .height(60.dp)
                             .width(200.dp),
                     )
+
+                    Button(onClick = {
+//                            val call = Intent(Intent.ACTION_DIAL, Uri.parse("tel:8495-123-45-56"))
+//                            APP_CONTEXT?.startActivity(call)
+//                            Log.d("MyLog","dach")
+
+                        val intent = Intent(APP_CONTEXT, MainActivity2::class.java)
+//                        intent.putExtra(YourExtraKey, YourExtraValue)
+                        APP_CONTEXT!!.startActivity(intent)
+
+
+                    }) {
+                        Text(text = "start")
+                    }
                 }
 
                 Card(
@@ -150,7 +166,7 @@ fun ScreenMobileBase(onClick:() -> Unit) {
                                 .padding(start = 5.dp)
                         ) {
                             personState.value.getOrNull(0)?.let {
-                                Text(" " + it.firstName + "  " + it.lastName )
+                                Text(" " + it.firstName + "  " + it.lastName)
                             }
                             personState.value.getOrNull(1)?.let {
                                 Text(" " + it.firstName + "  " + it.lastName)
