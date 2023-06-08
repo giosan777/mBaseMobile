@@ -10,4 +10,5 @@ data class Person(
     @ColumnInfo(name = "phone") var phone: String,
     @ColumnInfo(name = "first_name") var firstName: String,
     @ColumnInfo(name = "last_name") var lastName: String,
+    @ColumnInfo(name = "duplicate_int") var duplicateInt: String,
 )

@@ -1,9 +1,6 @@
 package ge.giosan777.matutu.mbasemobile
 
 import android.Manifest
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.Volley.getAllContactsFromServer
 import ge.giosan777.matutu.mbasemobile.Volley.saveAllContactsFromPhoneToServer
+import ge.giosan777.matutu.mbasemobile.database.deleteAllContactsFromLocalDB
 import ge.giosan777.matutu.mbasemobile.database.getAllContactsFromPhoneMy
 import ge.giosan777.matutu.mbasemobile.database.getAllPeopleFromLocalDb
 import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDb
@@ -39,12 +37,9 @@ private const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
 private const val READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE
 private const val READ_CALL_LOG = Manifest.permission.READ_CALL_LOG
 
-
 var APP_CONTEXT: MainActivity? = null
 
 class MainActivity : ComponentActivity() {
-
-//    private var myBroadcastReceiver: Nothing? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,35 +94,6 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    class PhoneStateChangedReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-
-            val i = Intent()
-            i.setClassName(
-                "ge.giosan777.matutu.mbasemobile",
-                "ge.giosan777.matutu.mbasemobile.MainActivity2"
-            )
-            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            context.startActivity(i)
-                            Log.d("MyLog","dsadsa")
-
-
-
-//            val phoneState = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
-//            if (phoneState == TelephonyManager.EXTRA_STATE_RINGING) {
-//                val incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-//                Log.d("MyLog",incomingNumber.toString())
-//                val call = Intent(Intent.ACTION_DIAL, Uri.parse("tel:8495-123-45-56"))
-//                val call = Intent(Intent.ACTION_DIAL)
-//                context.startActivity(call)
-
-//                val intent = Intent(context, MainActivity2::class.java)
-////                intent.putExtra(YourExtraKey, YourExtraValue)
-//                context.startActivity(intent)
-        }
-    }
-
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -165,6 +131,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
 }
 
 
@@ -172,20 +139,35 @@ fun standardStart() {
 
     getAllContactsFromServer(APP_CONTEXT!!) {
         val unsortingPhoneContacts = getAllContactsFromPhoneMy(APP_CONTEXT!!)
+        Log.d("MyLog", "unsortingPhoneContacts size ${unsortingPhoneContacts.size}")
+
         val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
+        Log.d("MyLog", "sortingPhoneContact size ${sortingPhoneContact.size}")
+
         val setListSortingPhone = sortingPhoneContact.toMutableSet()
+        Log.d("MyLog", "setListSortingPhone size ${setListSortingPhone.size}")
+
         val setListSortingServer = it.toMutableSet()
+        Log.d("MyLog", "setListSortingServer size ${setListSortingServer.size}")
+
+
         val onlyPhoneList = setListSortingPhone.minus(setListSortingServer)
+        Log.d("MyLog", "onlyPhoneList size ${onlyPhoneList.size}")
         setListSortingServer.addAll(setListSortingPhone)
+        Log.d("MyLog", "setListSortingServer size ${setListSortingServer.size}")
 
         if (onlyPhoneList.isNotEmpty()) {
             saveAllContactsFromPhoneToServer(APP_CONTEXT!!, onlyPhoneList.toMutableList())
         }
 
+        deleteAllContactsFromLocalDB(APP_CONTEXT!!)
+        saveAllContactsToLocalDb(APP_CONTEXT!!, setListSortingServer.toMutableList())
+
+
         val localDbList = getAllPeopleFromLocalDb(APP_CONTEXT!!)
-        val firstNewList = localDbList.minus(setListSortingServer)
-        saveAllContactsToLocalDb(APP_CONTEXT!!, firstNewList.toMutableList())
+        Log.d("MyLog", "localDbList size ${localDbList.size}")
     }
+
 
 }
 

@@ -21,7 +21,7 @@ fun getAllContactsFromPhoneMy(context: Context): MutableList<Person> {
             val phone =
                 it.getString(it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
             if (fullName != null && phone != null) {
-                val personTmp = Person(null, phone, fullName, "")
+                val personTmp = Person(null, phone, fullName, "","")
                 arrayContacts.add(personTmp)
             }
         }

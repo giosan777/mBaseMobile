@@ -1,6 +1,5 @@
 package ge.giosan777.matutu.mbasemobile.sorting
 
-import android.util.Log
 import androidx.core.text.isDigitsOnly
 import ge.giosan777.matutu.mbasemobile.models.Person
 
@@ -17,6 +16,7 @@ fun contactSorting(unsortingList: MutableList<Person>): MutableList<Person> {
                     null,
                     phoneTMP,
                     firstNameTMP,
+                    "",
                     ""
                 )
             )
@@ -25,6 +25,8 @@ fun contactSorting(unsortingList: MutableList<Person>): MutableList<Person> {
     val setList=sortingList.toSet()
     return setList.toMutableList()
 }
+
+
 
 fun translateGe(firstNameTMP: String): String {
     val stringBuilderGe = StringBuilder()

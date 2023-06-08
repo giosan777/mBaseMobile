@@ -10,10 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -28,15 +27,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.Volley.getNumberStartingWith
 import ge.giosan777.matutu.mbasemobile.models.Person
-import ge.giosan777.matutu.mbasemobile.ui.theme.meore
-import ge.giosan777.matutu.mbasemobile.ui.theme.pirveli
 
 //@Preview
 @Composable
-fun ScreenMobileBaseOrg(onClick:() -> Unit) {
+fun ScreenMobileBaseOrg(onClick: () -> Unit) {
     val navController = rememberNavController()
     val personState = remember {
         mutableStateOf(mutableListOf<Person>())
@@ -73,11 +71,15 @@ fun ScreenMobileBaseOrg(onClick:() -> Unit) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(onClick = {
-                        onClick()
-                }) {
+                    onClick()
+                }, modifier = Modifier.width(140.dp)) {
                     Text(text = "MOBILE BASE")
                 }
-                Button(onClick = {}) {
+                Button(
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(R.color.citeli)),
+                    modifier = Modifier.width(140.dp)
+                ) {
                     Text(text = "ORG BASE")
                 }
             }
@@ -94,75 +96,33 @@ fun ScreenMobileBaseOrg(onClick:() -> Unit) {
                 ) {
                     TextField(
                         value = text.value,
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.text_field_org_icon),
+                                contentDescription = "text_field_org_icon"
+                            )
+                        },
                         onValueChange = { it ->
                             text.value = it
                             getNumberStartingWith(APP_CONTEXT!!, personState, text.value.text)
                         },
-                        label = { Text(stringResource(R.string.enter_phone_number)) },
+                        label = {
+                            Text(
+                                stringResource(R.string.enter_org_name),
+                                fontSize = 12.sp
+                            )
+                        },
                         modifier = Modifier
                             .height(60.dp)
-                            .width(200.dp),
+                            .fillMaxWidth(),
+                        placeholder = {
+                            Text(
+                                stringResource(R.string.example_org),
+                                fontSize = 14.sp
+                            )
+                        },
                     )
 
-                }
-
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(meore),
-                    elevation = CardDefaults.cardElevation(),
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(pirveli)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(0.5f)
-                                .background(Color.Green)
-                        ) {
-                            personState.value.getOrNull(0)?.let {
-                                Text("  " + it.phone)
-                            }
-                            personState.value.getOrNull(1)?.let {
-                                Text("  " + it.phone)
-                            }
-                            personState.value.getOrNull(2)?.let {
-                                Text("  " + it.phone)
-                            }
-                            personState.value.getOrNull(3)?.let {
-                                Text("  " + it.phone)
-                            }
-                            personState.value.getOrNull(4)?.let {
-                                Text("  " + it.phone)
-                            }
-
-                        }
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(1f)
-                                .background(Color.Red)
-                                .padding(start = 5.dp)
-                        ) {
-                            personState.value.getOrNull(0)?.let {
-                                Text(" " + it.firstName + "  " + it.lastName)
-                            }
-                            personState.value.getOrNull(1)?.let {
-                                Text(" " + it.firstName + "  " + it.lastName)
-                            }
-                            personState.value.getOrNull(2)?.let {
-                                Text(" " + it.firstName + "  " + it.lastName)
-                            }
-                            personState.value.getOrNull(3)?.let {
-                                Text(" " + it.firstName + "  " + it.lastName)
-                            }
-                            personState.value.getOrNull(4)?.let {
-                                Text(" " + it.firstName + "  " + it.lastName)
-                            }
-                        }
-                    }
                 }
 
             }
@@ -179,4 +139,4 @@ fun ScreenMobileBaseOrg(onClick:() -> Unit) {
             Text(text = "Reklama ORG")
         }
     }
-}
+}   

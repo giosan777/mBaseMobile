@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">mBaseMobile</string>
+    <string name="enter_phone_number">შეიყვანეტ ტელეფონის ნომერი</string>
+    <string name="enter_org_name">შეიყვანეტ ორგანიზაციის დასახელება</string>
+    <string name="example_org">მაგ: თბს ან tbc</string>
+</resources>

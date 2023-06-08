@@ -28,3 +28,17 @@ fun getAllPeopleWithPhone(
     val list = mainDb.getDao().findByPhoneStartingWith(phone)
     mutableState.value = list.toMutableList()
 }
+
+fun getAllPeopleWithPhoneExcept(
+    context: Context,
+    phone: String,
+    result :(user:String) -> Unit
+) {
+    val mainDb = AppDatabase.getDb(context)
+    val list = mainDb.getDao().findByPhoneStartingWith(phone)
+    if (list.isNotEmpty()) {
+        result(list[0].firstName)
+    } else {
+        result("User not found")
+    }
+}
