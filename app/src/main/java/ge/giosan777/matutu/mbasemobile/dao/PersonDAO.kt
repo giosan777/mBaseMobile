@@ -23,6 +23,4 @@ interface PersonDAO {
 
     @Query("SELECT * FROM persons WHERE phone LIKE :startingWith")
     fun findByPhoneStartingWith(startingWith:String ): List<Person>
-
-
 }

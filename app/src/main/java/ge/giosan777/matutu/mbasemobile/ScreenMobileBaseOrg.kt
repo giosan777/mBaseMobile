@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -25,19 +26,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
-import ge.giosan777.matutu.mbasemobile.Volley.getNumberStartingWith
-import ge.giosan777.matutu.mbasemobile.models.Person
+import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getNumberStartingWithOrg
+import ge.giosan777.matutu.mbasemobile.models.Organization
 
 //@Preview
 @Composable
 fun ScreenMobileBaseOrg(onClick: () -> Unit) {
     val navController = rememberNavController()
-    val personState = remember {
-        mutableStateOf(mutableListOf<Person>())
+    val orgState = remember {
+        mutableStateOf(mutableListOf<Organization>())
     }
     val text = remember {
         mutableStateOf(TextFieldValue(""))
@@ -104,8 +106,9 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                         },
                         onValueChange = { it ->
                             text.value = it
-                            getNumberStartingWith(APP_CONTEXT!!, personState, text.value.text)
+                            getNumberStartingWithOrg(APP_CONTEXT!!, orgState, text.value.text)
                         },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         label = {
                             Text(
                                 stringResource(R.string.enter_org_name),
@@ -121,10 +124,14 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                                 fontSize = 14.sp
                             )
                         },
+
                     )
-
                 }
-
+                Text(
+                    text = if (orgState.value.isNotEmpty()) {
+                        orgState . value . get (0).phone
+                    }else{"null"}
+                )
             }
 
         }

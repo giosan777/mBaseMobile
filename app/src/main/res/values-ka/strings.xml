@@ -4,4 +4,11 @@
     <string name="enter_phone_number">შეიყვანეტ ტელეფონის ნომერი</string>
     <string name="enter_org_name">შეიყვანეტ ორგანიზაციის დასახელება</string>
     <string name="example_org">მაგ: თბს ან tbc</string>
+    <string name="permissions">ნებართვები</string>
+    <string name="all_permissions_are_required_for_the_app_to_work_properly">ყველა საჭირო ნებართვა არის სავალდებულო \nაპლიკაციის სწორი მუშაობისთვის</string>
+    <string name="internet_connection">Internet connection</string>
+    <string name="internet_required_for_first_launch">internet required for first launch</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
 </resources>

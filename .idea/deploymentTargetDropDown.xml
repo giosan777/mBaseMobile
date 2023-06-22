@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="deploymentTargetDropDown">
+    <runningDeviceTargetSelectedWithDropDown>
+      <Target>
+        <type value="RUNNING_DEVICE_TARGET" />
+        <deviceKey>
+          <Key>
+            <type value="SERIAL_NUMBER" />
+            <value value="127.0.0.1:5555" />
+          </Key>
+        </deviceKey>
+      </Target>
+    </runningDeviceTargetSelectedWithDropDown>
+    <timeTargetWasSelectedWithDropDown value="2023-06-22T17:42:30.257013404Z" />
+    <multipleDevicesSelectedInDropDown value="true" />
     <runningDeviceTargetsSelectedWithDialog>
       <Target>
         <type value="RUNNING_DEVICE_TARGET" />
@@ -16,7 +29,7 @@
         <deviceKey>
           <Key>
             <type value="SERIAL_NUMBER" />
-            <value value="D6M4C20110003691" />
+            <value value="508fdc14" />
           </Key>
         </deviceKey>
       </Target>

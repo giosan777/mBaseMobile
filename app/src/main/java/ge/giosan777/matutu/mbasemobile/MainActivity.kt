@@ -1,9 +1,10 @@
 package ge.giosan777.matutu.mbasemobile
 
 import android.Manifest
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -20,37 +21,60 @@ import androidx.core.app.ActivityCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import ge.giosan777.matutu.mbasemobile.Volley.getAllContactsFromServer
-import ge.giosan777.matutu.mbasemobile.Volley.saveAllContactsFromPhoneToServer
+import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getAllContactsFromServer
+import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.saveAllContactsFromPhoneToServer
 import ge.giosan777.matutu.mbasemobile.database.deleteAllContactsFromLocalDB
 import ge.giosan777.matutu.mbasemobile.database.getAllContactsFromPhoneMy
-import ge.giosan777.matutu.mbasemobile.database.getAllPeopleFromLocalDb
 import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDb
 import ge.giosan777.matutu.mbasemobile.sorting.contactSorting
+import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
+import ge.giosan777.matutu.mbasemobile.utils.AlertDialogPermissions
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 
 
 private const val REQUEST_COD1 = 1
-private const val REQUEST_COD2 = 2
-private const val REQUEST_COD3 = 3
 private const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
 private const val READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE
 private const val READ_CALL_LOG = Manifest.permission.READ_CALL_LOG
+const val APP_PREFERENCES = "mBaseSettings"
+
 
 var APP_CONTEXT: MainActivity? = null
 
-class MainActivity : ComponentActivity() {
+var mSettings: SharedPreferences? = null
 
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-        ActivityCompat.requestPermissions(
-            this, arrayOf(READ_CONTACTS, READ_PHONE_STATE, READ_CALL_LOG), REQUEST_COD1
-        )
-
+        APP_CONTEXT=this
+        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         setContent {
+            if (!mSettings!!.contains("firstStart")) {
+                AlertDialogPermissions {
+                    if (it) {
+                        ActivityCompat.requestPermissions(
+                            this,
+                            arrayOf(READ_CONTACTS, READ_PHONE_STATE, READ_CALL_LOG),
+                            REQUEST_COD1
+                        )
+                        mSettings!!.edit().putBoolean("firstStart", false).apply()
+                    } else {
+                        this.finish()
+                        System.exit(0)
+                    }
+                }
+                if (!hasConnection(this)) {
+                    AlertDialogInternet {
+                        this.finish()
+                        System.exit(0)
+                    }
+                }
+
+            }else{
+                standardStart()
+            }
+
             val navController = rememberNavController()
             APP_CONTEXT = this
             Image(
@@ -103,29 +127,23 @@ class MainActivity : ComponentActivity() {
 
         when (requestCode) {
             REQUEST_COD1 -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    if (hasConnection(APP_CONTEXT!!)) {
-                        standardStart()
-                    }
-            }
-
-            REQUEST_COD2 -> {
-                if (grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED)
-                    if (hasConnection(APP_CONTEXT!!)) {
-                        standardStart()
-                    }
-            }
-
-            REQUEST_COD3 -> {
-                if (grantResults.isNotEmpty() && grantResults[2] == PackageManager.PERMISSION_GRANTED)
-                    if (hasConnection(APP_CONTEXT!!)) {
-                        standardStart()
-                    }
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[2] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    firstStart()
+//                    val uuid = UUID.randomUUID().toString()
+//                    mSettings!!.edit().putString("uuid", uuid).apply()
+//                    uuidSave(this, uuid)
+//                    Log.d("MyLog", "onRequestPermissionsResult 1111111111111")
+                }
             }
 
             else -> {
                 ActivityCompat.requestPermissions(
-                    this@MainActivity, arrayOf(READ_CONTACTS), REQUEST_COD1
+                    this@MainActivity,
+                    arrayOf(READ_CONTACTS, READ_PHONE_STATE, READ_CALL_LOG),
+                    REQUEST_COD1
                 )
             }
         }
@@ -134,38 +152,32 @@ class MainActivity : ComponentActivity() {
 
 }
 
+fun firstStart() {
+    val unsortingPhoneContacts = getAllContactsFromPhoneMy(APP_CONTEXT!!)
+    val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
+    val setListSortingPhone = sortingPhoneContact.toMutableSet().toMutableList()
+    saveAllContactsFromPhoneToServer(APP_CONTEXT!!, setListSortingPhone)
+    getAllContactsFromServer(APP_CONTEXT!!){
+        saveAllContactsToLocalDb(APP_CONTEXT!!, it)
+    }
+
+
+}
 
 fun standardStart() {
 
     getAllContactsFromServer(APP_CONTEXT!!) {
-        val unsortingPhoneContacts = getAllContactsFromPhoneMy(APP_CONTEXT!!)
-        Log.d("MyLog", "unsortingPhoneContacts size ${unsortingPhoneContacts.size}")
-
-        val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
-        Log.d("MyLog", "sortingPhoneContact size ${sortingPhoneContact.size}")
-
-        val setListSortingPhone = sortingPhoneContact.toMutableSet()
-        Log.d("MyLog", "setListSortingPhone size ${setListSortingPhone.size}")
-
-        val setListSortingServer = it.toMutableSet()
-        Log.d("MyLog", "setListSortingServer size ${setListSortingServer.size}")
-
-
-        val onlyPhoneList = setListSortingPhone.minus(setListSortingServer)
-        Log.d("MyLog", "onlyPhoneList size ${onlyPhoneList.size}")
-        setListSortingServer.addAll(setListSortingPhone)
-        Log.d("MyLog", "setListSortingServer size ${setListSortingServer.size}")
-
-        if (onlyPhoneList.isNotEmpty()) {
-            saveAllContactsFromPhoneToServer(APP_CONTEXT!!, onlyPhoneList.toMutableList())
-        }
-
+//        val unsortingPhoneContacts = getAllContactsFromPhoneMy(APP_CONTEXT!!)
+//        val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
+//        val setListSortingPhone = sortingPhoneContact.toMutableSet()
+//        val setListSortingServer = it.toMutableSet()
+//        val onlyPhoneList = setListSortingPhone.minus(setListSortingServer)
+//        setListSortingServer.addAll(setListSortingPhone)
+//        if (onlyPhoneList.isNotEmpty()) {
+//            saveAllContactsFromPhoneToServer(APP_CONTEXT!!, onlyPhoneList.toMutableList())
+//        }
         deleteAllContactsFromLocalDB(APP_CONTEXT!!)
-        saveAllContactsToLocalDb(APP_CONTEXT!!, setListSortingServer.toMutableList())
-
-
-        val localDbList = getAllPeopleFromLocalDb(APP_CONTEXT!!)
-        Log.d("MyLog", "localDbList size ${localDbList.size}")
+        saveAllContactsToLocalDb(APP_CONTEXT!!, it.toMutableList())
     }
 
 

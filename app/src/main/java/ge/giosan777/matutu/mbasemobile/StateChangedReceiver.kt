@@ -6,7 +6,7 @@ import android.content.Intent
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.widget.Toast
-import ge.giosan777.matutu.mbasemobile.Volley.getOneContactExcept
+import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getOneContactExcept
 import ge.giosan777.matutu.mbasemobile.database.getAllPeopleWithPhoneExcept
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 

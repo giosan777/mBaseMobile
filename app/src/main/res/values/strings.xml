@@ -3,4 +3,10 @@
     <string name="enter_phone_number">Enter Phone Number</string>
     <string name="enter_org_name">Enter Organization Name</string>
     <string name="example_org">exam: tbc</string>
+    <string name="permissions">Permissions</string>
+    <string name="all_permissions_are_required_for_the_app_to_work_properly">All permissions are required for \nthe App to work properly!</string>
+    <string name="internet_connection">Internet connection</string>
+    <string name="internet_required_for_first_launch">internet required for first launch</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>

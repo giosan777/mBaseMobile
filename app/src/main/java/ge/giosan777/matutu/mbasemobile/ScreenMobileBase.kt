@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -32,9 +33,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import ge.giosan777.matutu.mbasemobile.Volley.getNumberStartingWith
+import androidx.compose.ui.unit.sp
+import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getNumberStartingWith
 import ge.giosan777.matutu.mbasemobile.database.getAllPeopleWithPhone
 import ge.giosan777.matutu.mbasemobile.models.Person
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
@@ -118,11 +121,17 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                                 getAllPeopleWithPhone(APP_CONTEXT!!, personState, text.value.text)
                             }
                         },
-                        label = { Text(stringResource(R.string.enter_phone_number)) },
+                        label = {
+                            Text(
+                                stringResource(R.string.enter_phone_number),
+                                fontSize = 12.sp
+                            )
+                        },
 
                         modifier = Modifier
                             .height(60.dp)
                             .fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                     )
 
                 }
