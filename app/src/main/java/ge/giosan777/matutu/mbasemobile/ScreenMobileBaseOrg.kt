@@ -35,12 +35,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getNumberStartingWithOrg
 import ge.giosan777.matutu.mbasemobile.models.Organization
 
+@Preview
+@Composable
+fun MyViewPreviewOrg() {
+    ScreenMobileBaseOrg(onClick = {})
+}
 //@Preview
 @Composable
 fun ScreenMobileBaseOrg(onClick: () -> Unit) {

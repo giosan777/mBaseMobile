@@ -3,13 +3,14 @@ package ge.giosan777.matutu.mbasemobile.sorting
 import androidx.core.text.isDigitsOnly
 import ge.giosan777.matutu.mbasemobile.models.Person
 
-fun contactSorting(unsortingList: MutableList<Person>): MutableList<Person> {
+fun contactSorting1(unsortingList: MutableList<Person>): MutableList<Person> {
     val sortingList = mutableListOf<Person>()
     unsortingList.forEach {
         val phoneTMP = it.phone.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
         var firstNameTMP = it.firstName.replace("[^\\W\\S+]".toRegex(), "")
-        firstNameTMP= translateGe(firstNameTMP)
-        firstNameTMP= translateRu(firstNameTMP)
+        firstNameTMP= translateFromGe(firstNameTMP)
+        firstNameTMP= translateFromRu(firstNameTMP)
+        firstNameTMP= translateEnToEn(firstNameTMP)
         if (phoneTMP.count() in 9..9 && phoneTMP.isDigitsOnly()) {
             sortingList.add(
                 Person(
@@ -28,7 +29,7 @@ fun contactSorting(unsortingList: MutableList<Person>): MutableList<Person> {
 
 
 
-fun translateGe(firstNameTMP: String): String {
+fun translateFromGe(firstNameTMP: String): String {
     val stringBuilderGe = StringBuilder()
 
     firstNameTMP.forEach {
@@ -36,11 +37,19 @@ fun translateGe(firstNameTMP: String): String {
     }
     return stringBuilderGe.toString()
 }
-fun translateRu(firstNameTMP: String): String {
+fun translateFromRu(firstNameTMP: String): String {
     val stringBuilderGe = StringBuilder()
 
     firstNameTMP.forEach {
         stringBuilderGe.append(replaceRuToEn(it))
+    }
+    return stringBuilderGe.toString()
+}
+fun translateEnToEn(firstNameTMP: String): String {
+    val stringBuilderGe = StringBuilder()
+
+    firstNameTMP.forEach {
+        stringBuilderGe.append(replaceEntoEn(it))
     }
     return stringBuilderGe.toString()
 }
@@ -70,11 +79,11 @@ fun replaceGeToEn(char: Char): String {
         'ფ' -> return "f"
         'ღ' -> return "R"
         'ყ' -> return "y"
-        'შ' -> return "Sh"
-        'ჩ' -> return "Ch"
+        'შ' -> return "S"
+        'ჩ' -> return "C"
         'ც' -> return "c"
         'ძ' -> return "Z"
-        'წ' -> return "W"
+        'წ' -> return "w"
         'ჭ' -> return "W"
         'ხ' -> return "x"
         'ჯ' -> return "j"
@@ -114,9 +123,9 @@ fun replaceRuToEn(char: Char): String {
         'ц' -> return "c"
         'ч' -> return "Ch"
         'ш' -> return "Sh"
-        'щ' -> return "Shc"
+        'щ' -> return "Sh"
         'ъ' -> return ""
-        'ы' -> return "i!"
+        'ы' -> return "i"
         'ь' -> return ""
         'э' -> return "e"
         'ю' -> return "iu"
@@ -129,6 +138,41 @@ fun replaceRuToEn(char: Char): String {
 
 
 
+fun replaceEntoEn(char: Char): String {
+    val charTmp=char.lowercaseChar().toString()
+//    when (charTmp) {
+//        'a' -> return "a"
+//        'b' -> return "b"
+//        'c' -> return "v"
+//        'd' -> return "g"
+//        'e' -> return "d"
+//        'f' -> return "e"
+//        'g' -> return "e"
+//        'h' -> return "j"
+//        'i' -> return "z"
+//        'j' -> return "i"
+//        'k' -> return "i"
+//        'l' -> return "k"
+//        'm' -> return "l"
+//        'n' -> return "m"
+//        'o' -> return "n"
+//        'p' -> return "o"
+//        'q' -> return "p"
+//        'r' -> return "r"
+//        's' -> return "s"
+//        't' -> return "t"
+//        'у' -> return "u"
+//        'u' -> return "f"
+//        'v' -> return "x"
+//        'w' -> return "c"
+//        'x' -> return "Ch"
+//        'y' -> return "Sh"
+//        'z' -> return "Sh"
+//        ' ' -> return " "
+//        else -> return "$charTmp"
+//    }
+    return charTmp
+}
 
 
 

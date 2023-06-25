@@ -26,7 +26,7 @@ import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.saveAllContactsFromPhon
 import ge.giosan777.matutu.mbasemobile.database.deleteAllContactsFromLocalDB
 import ge.giosan777.matutu.mbasemobile.database.getAllContactsFromPhoneMy
 import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDb
-import ge.giosan777.matutu.mbasemobile.sorting.contactSorting
+import ge.giosan777.matutu.mbasemobile.sorting.contactSorting1
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogPermissions
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
@@ -153,14 +153,13 @@ class MainActivity : ComponentActivity() {
 
 fun firstStart() {
     val unsortingPhoneContacts = getAllContactsFromPhoneMy(APP_CONTEXT!!)
-    val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
+    val sortingPhoneContact = contactSorting1(unsortingPhoneContacts)
     val setListSortingPhone = sortingPhoneContact.toMutableSet().toMutableList()
+
     saveAllContactsFromPhoneToServer(APP_CONTEXT!!, setListSortingPhone)
     getAllContactsFromServer(APP_CONTEXT!!){
         saveAllContactsToLocalDb(APP_CONTEXT!!, it)
     }
-
-
 }
 
 fun standardStart() {
@@ -175,6 +174,7 @@ fun standardStart() {
 //        if (onlyPhoneList.isNotEmpty()) {
 //            saveAllContactsFromPhoneToServer(APP_CONTEXT!!, onlyPhoneList.toMutableList())
 //        }
+
         deleteAllContactsFromLocalDB(APP_CONTEXT!!)
         saveAllContactsToLocalDb(APP_CONTEXT!!, it.toMutableList())
     }

@@ -10,17 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -42,7 +35,9 @@ import androidx.compose.ui.unit.sp
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getNumberStartingWith
 import ge.giosan777.matutu.mbasemobile.database.getAllPeopleWithPhone
 import ge.giosan777.matutu.mbasemobile.models.Person
+import ge.giosan777.matutu.mbasemobile.screen_components.myCard
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
+
 @Preview
 @Composable
 fun MyViewPreview() {
@@ -55,7 +50,7 @@ fun ScreenMobileBase(onClick: () -> Unit) {
         mutableStateOf(mutableListOf<Person>())
     }
     val text = remember {
-        mutableStateOf(TextFieldValue(""))
+        mutableStateOf(TextFieldValue("599"))
     }
 
 
@@ -122,7 +117,7 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                             text.value = it
                             if (hasConnection(APP_CONTEXT!!)) {
                                 getNumberStartingWith(APP_CONTEXT!!, personState, text.value.text)
-                                Log.d("MyLog",personState.toString())
+                                Log.d("MyLog", personState.toString())
                             } else {
                                 getAllPeopleWithPhone(APP_CONTEXT!!, personState, text.value.text)
                             }
@@ -141,58 +136,21 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                     )
 
                 }
-
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp),
-                    elevation = CardDefaults.cardElevation(),
-                    shape = RoundedCornerShape(15.dp)
-                ) {
-                    Row {
-                        Image(
-                            painter = painterResource(R.drawable.person_shabl),
-                            contentDescription = "Photo",
-                            contentScale = ContentScale.FillHeight,
-                            modifier = Modifier
-                                .padding(5.dp)
-                                .size(64.dp)
-                                .clip(CircleShape)
-                        )
-                        Column {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.smartphone_icon),
-                                    contentDescription = "phone_ico",
-                                    Modifier.padding(5.dp)
-                                )
-                                if (personState.value.isNotEmpty()) {
-                                    Text(
-                                        modifier = Modifier.padding(start = 10.dp),
-                                        text = personState.value[0].phone,
-                                        style = MaterialTheme.typography.bodyLarge
-                                    )
-                                }
-
-                            }
-                            Column(modifier = Modifier.padding(start = 5.dp)) {
-                                if (personState.value.isNotEmpty()) {
-                                    Text(text = personState.value[0].firstName, maxLines = 1)
-                                    if (personState.value.size >= 2) {
-                                        Text(text = personState.value[1].firstName, maxLines = 1)
-                                        if (personState.value.size >= 3) {
-                                            Text(
-                                                text = personState.value[2].firstName,
-                                                maxLines = 1
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                    }
+                if (personState.value.isNotEmpty()) {
+                    myCard(personState = personState, rigi = 0)
                 }
+
+                ///////////////////////////////////
+                if (personState.value.size >= 2) {
+                    myCard(personState = personState, rigi = 1)
+
+                }
+                ///////////////////////////////////
+                if (personState.value.size >= 3) {
+                    myCard(personState = personState, rigi = 2)
+
+                }
+
 
             }
 
@@ -210,4 +168,3 @@ fun ScreenMobileBase(onClick: () -> Unit) {
     }
 
 }
-
