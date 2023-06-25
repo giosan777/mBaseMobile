@@ -17,7 +17,7 @@ fun contactSorting(unsortingList: MutableList<Person>): MutableList<Person> {
                     phoneTMP,
                     firstNameTMP,
                     "",
-                    ""
+                    1
                 )
             )
         }

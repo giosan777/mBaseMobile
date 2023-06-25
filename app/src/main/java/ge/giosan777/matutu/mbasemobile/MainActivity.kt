@@ -42,7 +42,6 @@ const val APP_PREFERENCES = "mBaseSettings"
 var APP_CONTEXT: MainActivity? = null
 
 var mSettings: SharedPreferences? = null
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

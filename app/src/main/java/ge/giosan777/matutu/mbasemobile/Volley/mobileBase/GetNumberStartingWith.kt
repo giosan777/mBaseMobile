@@ -23,7 +23,9 @@ fun getNumberStartingWith(
         { response ->
             val jsonString = response.toString()
             val personArray: Array<Person> = Gson().fromJson(jsonString, Array<Person>::class.java)
-            mutableState.value = personArray.toMutableList()
+            val sortedList=personArray.sortedDescending()
+
+            mutableState.value = sortedList.toMutableList()
         },
         { _ ->
             val mainDb = AppDatabase.getDb(context)

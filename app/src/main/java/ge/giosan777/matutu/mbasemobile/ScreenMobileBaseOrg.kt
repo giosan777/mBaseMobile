@@ -9,11 +9,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -22,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -127,11 +134,54 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
 
                     )
                 }
-                Text(
-                    text = if (orgState.value.isNotEmpty()) {
-                        orgState . value . get (0).phone
-                    }else{"null"}
-                )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp),
+                    elevation = CardDefaults.cardElevation(),
+                    shape = RoundedCornerShape(15.dp)
+                ) {
+                    Row {
+                        Image(
+                            painter = painterResource(R.drawable.person_shabl),
+                            contentDescription = "Photo",
+                            contentScale = ContentScale.FillHeight,
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .size(64.dp)
+                                .clip(CircleShape)
+                        )
+                        Column {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.smartphone_icon),
+                                    contentDescription = "phone_ico",
+                                    Modifier.padding(5.dp)
+                                )
+                                Text(
+                                    modifier = Modifier.padding(start = 10.dp),
+                                    text = text.value.text,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            }
+                            Column(modifier = Modifier.padding(start = 5.dp)) {
+                                if (orgState.value.isNotEmpty()) {
+                                    Text(text = orgState.value[0].orgName, maxLines = 1)
+                                    if (orgState.value.size >= 2) {
+                                        Text(text = orgState.value[1].orgName, maxLines = 1)
+                                        if (orgState.value.size >= 3) {
+                                            Text(
+                                                text = orgState.value[2].orgName,
+                                                maxLines = 1
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
             }
 
         }

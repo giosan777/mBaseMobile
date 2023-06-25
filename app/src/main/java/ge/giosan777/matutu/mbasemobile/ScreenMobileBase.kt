@@ -1,5 +1,6 @@
 package ge.giosan777.matutu.mbasemobile
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,15 +36,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getNumberStartingWith
 import ge.giosan777.matutu.mbasemobile.database.getAllPeopleWithPhone
 import ge.giosan777.matutu.mbasemobile.models.Person
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
+@Preview
+@Composable
+fun MyViewPreview() {
+    ScreenMobileBase(onClick = {})
+}
 
-
-//@Preview
 @Composable
 fun ScreenMobileBase(onClick: () -> Unit) {
     val personState = remember {
@@ -117,6 +122,7 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                             text.value = it
                             if (hasConnection(APP_CONTEXT!!)) {
                                 getNumberStartingWith(APP_CONTEXT!!, personState, text.value.text)
+                                Log.d("MyLog",personState.toString())
                             } else {
                                 getAllPeopleWithPhone(APP_CONTEXT!!, personState, text.value.text)
                             }
@@ -160,11 +166,14 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                                     contentDescription = "phone_ico",
                                     Modifier.padding(5.dp)
                                 )
-                                Text(
-                                    modifier = Modifier.padding(start = 10.dp),
-                                    text = text.value.text,
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
+                                if (personState.value.isNotEmpty()) {
+                                    Text(
+                                        modifier = Modifier.padding(start = 10.dp),
+                                        text = personState.value[0].phone,
+                                        style = MaterialTheme.typography.bodyLarge
+                                    )
+                                }
+
                             }
                             Column(modifier = Modifier.padding(start = 5.dp)) {
                                 if (personState.value.isNotEmpty()) {
@@ -199,4 +208,6 @@ fun ScreenMobileBase(onClick: () -> Unit) {
             Text(text = "Reklama MOBILE")
         }
     }
+
 }
+
