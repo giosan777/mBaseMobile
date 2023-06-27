@@ -1,8 +1,6 @@
 package ge.giosan777.matutu.mbasemobile.screen_components
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,9 +35,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.R
+import ge.giosan777.matutu.mbasemobile.contacts.getAllJournal
 import ge.giosan777.matutu.mbasemobile.models.Person
 
 @Preview
@@ -48,12 +46,12 @@ fun MyViewPreview() {
     val personState = remember {
         mutableStateOf(mutableListOf<Person>())
     }
-    myCard(personState, 1)
+    personCard(personState, 1)
 }
 
 
 @Composable
-fun myCard(personState: MutableState<MutableList<Person>>, rigi: Int) {
+fun personCard(personState: MutableState<MutableList<Person>>, rigi: Int) {
     var isExpanded by remember {
            mutableStateOf(false)
     }
@@ -112,9 +110,13 @@ fun myCard(personState: MutableState<MutableList<Person>>, rigi: Int) {
                     Spacer(Modifier.width(16.dp))
                     Button(elevation = ButtonDefaults.buttonElevation(),
                         onClick = {
-                            val intent = Intent(Intent.ACTION_DIAL);
-                            intent.setData(Uri.parse("tel:${personState.value[rigi].phone}"));
-                            startActivity(APP_CONTEXT!!,intent, Bundle());
+                            val journal=getAllJournal(APP_CONTEXT!!)
+                            if (!journal.isNullOrEmpty()) {
+                                Log.d("MyLog",journal.size.toString())
+                            }
+//                            val intent = Intent(Intent.ACTION_DIAL)
+//                            intent.data = Uri.parse("tel:${personState.value[rigi].phone}")
+//                            startActivity(APP_CONTEXT!!,intent, Bundle())
                         }) {
                         Image(
                             painterResource(id = R.drawable.call_ico),

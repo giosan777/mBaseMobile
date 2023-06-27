@@ -33,9 +33,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getNumberStartingWith
+import ge.giosan777.matutu.mbasemobile.contacts.getAllJournal
 import ge.giosan777.matutu.mbasemobile.database.getAllPeopleWithPhone
 import ge.giosan777.matutu.mbasemobile.models.Person
-import ge.giosan777.matutu.mbasemobile.screen_components.myCard
+import ge.giosan777.matutu.mbasemobile.screen_components.journalCard
+import ge.giosan777.matutu.mbasemobile.screen_components.personCard
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 
 @Preview
@@ -137,21 +139,22 @@ fun ScreenMobileBase(onClick: () -> Unit) {
 
                 }
                 if (personState.value.isNotEmpty()) {
-                    myCard(personState = personState, rigi = 0)
+                    personCard(personState = personState, rigi = 0)
                 }
 
                 ///////////////////////////////////
                 if (personState.value.size >= 2) {
-                    myCard(personState = personState, rigi = 1)
+                    personCard(personState = personState, rigi = 1)
 
                 }
                 ///////////////////////////////////
                 if (personState.value.size >= 3) {
-                    myCard(personState = personState, rigi = 2)
+                    personCard(personState = personState, rigi = 2)
 
                 }
-
-
+                getAllJournal(APP_CONTEXT!!).forEach {
+                    journalCard(it)
+                }
             }
 
         }

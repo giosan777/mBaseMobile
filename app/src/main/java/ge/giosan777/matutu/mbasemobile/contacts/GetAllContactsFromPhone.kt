@@ -1,4 +1,4 @@
-package ge.giosan777.matutu.mbasemobile.database
+package ge.giosan777.matutu.mbasemobile.contacts
 
 import android.content.Context
 import android.provider.ContactsContract

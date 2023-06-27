@@ -23,8 +23,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getAllContactsFromServer
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.saveAllContactsFromPhoneToServer
+import ge.giosan777.matutu.mbasemobile.contacts.getAllContactsFromPhoneMy
 import ge.giosan777.matutu.mbasemobile.database.deleteAllContactsFromLocalDB
-import ge.giosan777.matutu.mbasemobile.database.getAllContactsFromPhoneMy
 import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDb
 import ge.giosan777.matutu.mbasemobile.sorting.contactSorting1
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
