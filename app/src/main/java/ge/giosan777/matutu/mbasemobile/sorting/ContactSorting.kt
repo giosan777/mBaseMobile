@@ -8,9 +8,9 @@ fun contactSorting1(unsortingList: MutableList<Person>): MutableList<Person> {
     unsortingList.forEach {
         val phoneTMP = it.phone.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
         var firstNameTMP = it.firstName.replace("[^\\W\\S+]".toRegex(), "")
-        firstNameTMP= translateFromGe(firstNameTMP)
-        firstNameTMP= translateFromRu(firstNameTMP)
-        firstNameTMP= translateEnToEn(firstNameTMP)
+//        firstNameTMP= translateFromGe(firstNameTMP)
+//        firstNameTMP= translateFromRu(firstNameTMP)
+//        firstNameTMP= translateEnToEn(firstNameTMP)
         if (phoneTMP.count() in 9..9 && phoneTMP.isDigitsOnly()) {
             sortingList.add(
                 Person(

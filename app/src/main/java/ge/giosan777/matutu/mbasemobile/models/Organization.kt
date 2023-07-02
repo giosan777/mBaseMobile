@@ -6,8 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "organizations")
 data class Organization(
-    @PrimaryKey(autoGenerate = true) var id: Int,
+    @PrimaryKey(autoGenerate = true) var id: Int?,
     @ColumnInfo(name = "phone") var phone: String,
-    @ColumnInfo(name = "org_name") var orgName: String,
-    @ColumnInfo(name = "description") var description: String,
+    @ColumnInfo(name = "organization_name") var organizationName: String,
+    @ColumnInfo(name = "description") var description: String?,
+    @ColumnInfo(name = "category") var category: String,
+    @ColumnInfo(name = "address") var address: String?,
+    @ColumnInfo(name = "web_site") var webSite: String?
 )

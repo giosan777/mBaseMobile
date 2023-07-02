@@ -19,14 +19,14 @@ class StateChangedReceiver: BroadcastReceiver() {
                 if (incomingNumber != null) {
                     Log.d("MyLog","$incomingNumber aqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 
-                    getOneContactExcept(context,incomingNumber,){
+                    getOneContactExcept(incomingNumber,){
 
                         Toast.makeText(context, "rekavs $it", Toast.LENGTH_LONG).show()
                     }
                 }
             }else{
                 if (incomingNumber != null) {
-                    getAllPeopleWithPhoneExcept(context,incomingNumber){
+                    getAllPeopleWithPhoneExcept(incomingNumber){
                         Toast.makeText(context, "rekavs $it", Toast.LENGTH_LONG).show()
                     }
                 }

@@ -9,12 +9,12 @@ import com.google.gson.Gson
 import ge.giosan777.matutu.mbasemobile.database.AppDatabaseOrg
 import ge.giosan777.matutu.mbasemobile.models.Organization
 
-fun getNumberStartingWithOrg(
+
+suspend fun getStartingNameWithOrg(
     context: Context,
     mutableState: MutableState<MutableList<Organization>>,
     orgName: String,
 ) {
-
     val url = "http://162.55.141.130:1990/user_organization_base/StartingWith/$orgName"
     val queue = Volley.newRequestQueue(context)
     val stringRequest = StringRequest(
@@ -38,3 +38,4 @@ fun getNumberStartingWithOrg(
     )
     queue.add(stringRequest)
 }
+

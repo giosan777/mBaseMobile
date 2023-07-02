@@ -34,26 +34,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.R
-import ge.giosan777.matutu.mbasemobile.models.Person
-
-@Preview
-@Composable
-fun MyViewPreview() {
-    val personState = remember {
-        mutableStateOf(mutableListOf<Person>())
-    }
-    personCard(personState, 1)
-}
+import ge.giosan777.matutu.mbasemobile.models.Organization
 
 
 @Composable
-fun personCard(personState: MutableState<MutableList<Person>>, rigi: Int) {
+fun orgCard(orgCard: MutableState<MutableList<Organization>>, rigi: Int) {
     var isExpanded by remember {
            mutableStateOf(false)
     }
@@ -82,10 +72,10 @@ fun personCard(personState: MutableState<MutableList<Person>>, rigi: Int) {
                         contentDescription = "phone_ico",
                         Modifier.padding(5.dp)
                     )
-                    if (personState.value.isNotEmpty()) {
+                    if (orgCard.value.isNotEmpty()) {
                         Text(
                             modifier = Modifier.padding(start = 10.dp),
-                            text = personState.value[rigi].phone,
+                            text = orgCard.value[rigi].phone,
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
@@ -99,7 +89,7 @@ fun personCard(personState: MutableState<MutableList<Person>>, rigi: Int) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = personState.value[rigi].firstName,
+                        text = orgCard.value[rigi].organizationName,
                         fontSize = 16.sp,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
@@ -113,7 +103,7 @@ fun personCard(personState: MutableState<MutableList<Person>>, rigi: Int) {
                     Button(elevation = ButtonDefaults.buttonElevation(),
                         onClick = {
                             val intent = Intent(Intent.ACTION_DIAL)
-                            intent.data = Uri.parse("tel:${personState.value[rigi].phone}")
+                            intent.data = Uri.parse("tel:${orgCard.value[rigi].phone}")
                             startActivity(APP_CONTEXT!!,intent, Bundle())
                         }) {
                         Image(

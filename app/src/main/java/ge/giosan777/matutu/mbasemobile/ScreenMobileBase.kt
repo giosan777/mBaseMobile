@@ -3,14 +3,19 @@ package ge.giosan777.matutu.mbasemobile
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -20,6 +25,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,6 +33,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,11 +42,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getNumberStartingWith
 import ge.giosan777.matutu.mbasemobile.contacts.getAllJournal
-import ge.giosan777.matutu.mbasemobile.database.getAllPeopleWithPhone
 import ge.giosan777.matutu.mbasemobile.models.Person
-import ge.giosan777.matutu.mbasemobile.screen_components.journalCard
+import ge.giosan777.matutu.mbasemobile.screen_components.JournalCard
 import ge.giosan777.matutu.mbasemobile.screen_components.personCard
-import ge.giosan777.matutu.mbasemobile.utils.hasConnection
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @Preview
 @Composable
@@ -46,16 +57,19 @@ fun MyViewPreview() {
     ScreenMobileBase(onClick = {})
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun ScreenMobileBase(onClick: () -> Unit) {
     val personState = remember {
         mutableStateOf(mutableListOf<Person>())
     }
     val text = remember {
-        mutableStateOf(TextFieldValue("599"))
+        mutableStateOf(TextFieldValue(""))
     }
-
-
+    val cardVisible = remember {
+        mutableStateOf(false)
+    }
+    val scope = rememberCoroutineScope()
     Image(
         painter = painterResource(id = R.drawable.background),
         contentDescription = "background",
@@ -107,54 +121,87 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextField(
-                        value = text.value,
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.text_field_mobile_icon),
-                                contentDescription = "text_field_org_icon"
-                            )
-                        },
-                        onValueChange = { it ->
-                            text.value = it
-                            if (hasConnection(APP_CONTEXT!!)) {
-                                getNumberStartingWith(APP_CONTEXT!!, personState, text.value.text)
-                                Log.d("MyLog", personState.toString())
-                            } else {
-                                getAllPeopleWithPhone(APP_CONTEXT!!, personState, text.value.text)
-                            }
-                        },
-                        label = {
-                            Text(
-                                stringResource(R.string.enter_phone_number),
-                                fontSize = 12.sp
-                            )
-                        },
+                    Box(
+                        modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd,
+                    ) {
+                        TextField(
+                            value = text.value,
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.text_field_mobile_icon),
+                                    contentDescription = "text_field_org_icon"
+                                )
+                            },
+                            onValueChange = { it ->
+                                cardVisible.value = true
+                                text.value = it
+                                 GlobalScope.launch(Dispatchers.IO) {
+                                     getNumberStartingWith(
+                                         APP_CONTEXT!!,
+                                         personState,
+                                         text.value.text
+                                     )
+                                 }
 
-                        modifier = Modifier
-                            .height(60.dp)
-                            .fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
-                    )
+                                Log.d("MyLog", personState.toString())
+                            },
+                            label = {
+                                Text(
+                                    stringResource(R.string.enter_phone_number),
+                                    fontSize = 12.sp
+                                )
+                            },
+
+                            modifier = Modifier
+                                .height(60.dp)
+                                .fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                        )
+                        Text(
+                            modifier = Modifier
+                                .padding(end = 15.dp)
+                                .clickable {
+                                    cardVisible.value = false
+                                    text.value = TextFieldValue("")
+                                },
+                            text = "Clear",
+                            style = TextStyle(color = Color.Magenta)
+                        )
+                    }
+
 
                 }
-                if (personState.value.isNotEmpty()) {
+                if (personState.value.isNotEmpty() && cardVisible.value) {
                     personCard(personState = personState, rigi = 0)
                 }
 
                 ///////////////////////////////////
-                if (personState.value.size >= 2) {
+                if (personState.value.size >= 2 && cardVisible.value) {
                     personCard(personState = personState, rigi = 1)
 
                 }
                 ///////////////////////////////////
-                if (personState.value.size >= 3) {
+                if (personState.value.size >= 3 && cardVisible.value) {
                     personCard(personState = personState, rigi = 2)
 
                 }
-                getAllJournal(APP_CONTEXT!!).forEach {
-                    journalCard(it)
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "DANAREKEBIS JURNALI", fontSize = 16.sp, fontStyle = FontStyle.Italic)
+
+                LazyColumn {
+                    GlobalScope.launch(Dispatchers.IO, start = CoroutineStart.UNDISPATCHED) {
+                        val allJournal = getAllJournal()
+                        itemsIndexed(allJournal){ index, item ->
+                            JournalCard(journalItem = item)
+                        }
+                    }
+
+
                 }
+
+
+
             }
 
         }
@@ -171,3 +218,4 @@ fun ScreenMobileBase(onClick: () -> Unit) {
     }
 
 }
+

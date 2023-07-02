@@ -1,6 +1,6 @@
 package ge.giosan777.matutu.mbasemobile.models
 
-data class Journal(val number: String, val type: Int, val date: Long, val duration: Long){
+data class Journal(val number: String, var type: Int, val date: Long, val duration: Long){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

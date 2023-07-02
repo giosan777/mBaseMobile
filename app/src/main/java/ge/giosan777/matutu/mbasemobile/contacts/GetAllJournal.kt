@@ -10,7 +10,7 @@ import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.models.Journal
 
 
-fun getAllJournal(context: Context): MutableSet<Journal> {
+suspend fun getAllJournal(): MutableList<Journal> {
     val CALL_LOG_PERMISSION_REQUEST_CODE = 1
 
     if (ContextCompat.checkSelfPermission(
@@ -24,13 +24,20 @@ fun getAllJournal(context: Context): MutableSet<Journal> {
             CALL_LOG_PERMISSION_REQUEST_CODE
         )
     } else {
-        return getCallLog(context)
+        val journalList = getCallLog(APP_CONTEXT!!).toMutableList()
+        journalList.sortByDescending { it.date }
+
+
+        return if (journalList.size > 50 ) {
+            journalList.toMutableList().subList(0, 50)
+        } else journalList
     }
-    return mutableSetOf(Journal("",0,0,0))
+    return mutableListOf<Journal>(Journal("", 0, 0, 0))
 }
 
-fun getCallLog(context: Context): MutableSet<Journal> {
-    val journalList = mutableSetOf<Journal>()
+
+fun getCallLog(context: Context): MutableList<Journal> {
+    val journalList = mutableListOf<Journal>()
     val cursor = context.contentResolver.query(
         CallLog.Calls.CONTENT_URI,
         null,
@@ -40,6 +47,7 @@ fun getCallLog(context: Context): MutableSet<Journal> {
     )
 
     cursor?.let {
+
         if (it.moveToFirst()) {
             do {
                 val number = it.getString(it.getColumnIndexOrThrow(CallLog.Calls.NUMBER))

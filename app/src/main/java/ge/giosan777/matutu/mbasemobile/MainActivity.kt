@@ -1,3 +1,5 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package ge.giosan777.matutu.mbasemobile
 
 import android.Manifest
@@ -23,13 +25,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getAllContactsFromServer
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.saveAllContactsFromPhoneToServer
+import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getAllContactsFromServerOrg
 import ge.giosan777.matutu.mbasemobile.contacts.getAllContactsFromPhoneMy
 import ge.giosan777.matutu.mbasemobile.database.deleteAllContactsFromLocalDB
+import ge.giosan777.matutu.mbasemobile.database.deleteAllOrganizationsFromLocalDBOrg
 import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDb
+import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDbOrg
 import ge.giosan777.matutu.mbasemobile.sorting.contactSorting1
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogPermissions
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.concurrent.thread
 
 
 private const val REQUEST_COD1 = 1
@@ -41,12 +50,18 @@ const val APP_PREFERENCES = "mBaseSettings"
 
 var APP_CONTEXT: MainActivity? = null
 
+
 var mSettings: SharedPreferences? = null
+
+@OptIn(DelicateCoroutinesApi::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        APP_CONTEXT=this
+        APP_CONTEXT = this
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+
+
+
 
         setContent {
             if (!mSettings!!.contains("firstStart")) {
@@ -70,7 +85,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-            }else{
+            } else {
                 standardStart()
             }
 
@@ -126,11 +141,14 @@ class MainActivity : ComponentActivity() {
 
         when (requestCode) {
             REQUEST_COD1 -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                if (grantResults.isNotEmpty() && grantResults.size >= 3 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED
                     && grantResults[2] == PackageManager.PERMISSION_GRANTED
                 ) {
-                    firstStart()
+                    GlobalScope.launch {
+                        firstStart()
+                    }
+
 //                    val uuid = UUID.randomUUID().toString()
 //                    mSettings!!.edit().putString("uuid", uuid).apply()
 //                    uuidSave(this, uuid)
@@ -152,15 +170,25 @@ class MainActivity : ComponentActivity() {
 }
 
 fun firstStart() {
-    val unsortingPhoneContacts = getAllContactsFromPhoneMy(APP_CONTEXT!!)
+
+
+    val unsortingPhoneContacts = getAllContactsFromPhoneMy()
     val sortingPhoneContact = contactSorting1(unsortingPhoneContacts)
     val setListSortingPhone = sortingPhoneContact.toMutableSet().toMutableList()
 
     saveAllContactsFromPhoneToServer(APP_CONTEXT!!, setListSortingPhone)
-    getAllContactsFromServer(APP_CONTEXT!!){
-        saveAllContactsToLocalDb(APP_CONTEXT!!, it)
+
+    getAllContactsFromServer(APP_CONTEXT!!) {
+        saveAllContactsToLocalDb(it)
+    }
+
+    getAllContactsFromServerOrg(APP_CONTEXT!!) {
+        saveAllContactsToLocalDbOrg(it)
     }
 }
+
+
+
 
 fun standardStart() {
 
@@ -175,10 +203,14 @@ fun standardStart() {
 //            saveAllContactsFromPhoneToServer(APP_CONTEXT!!, onlyPhoneList.toMutableList())
 //        }
 
-        deleteAllContactsFromLocalDB(APP_CONTEXT!!)
-        saveAllContactsToLocalDb(APP_CONTEXT!!, it.toMutableList())
+        deleteAllContactsFromLocalDB()
+        saveAllContactsToLocalDb(it.toMutableList())
     }
 
+    getAllContactsFromServerOrg(APP_CONTEXT!!) {
+        deleteAllOrganizationsFromLocalDBOrg()
+        saveAllContactsToLocalDbOrg(it)
+    }
 
 }
 

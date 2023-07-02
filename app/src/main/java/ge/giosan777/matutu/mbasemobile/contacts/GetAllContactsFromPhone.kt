@@ -1,12 +1,12 @@
 package ge.giosan777.matutu.mbasemobile.contacts
 
-import android.content.Context
 import android.provider.ContactsContract
+import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.models.Person
 
-fun getAllContactsFromPhoneMy(context: Context): MutableList<Person> {
+fun getAllContactsFromPhoneMy(): MutableList<Person> {
     val arrayContacts = mutableListOf<Person>()
-    val cursor = context.contentResolver.query(
+    val cursor = APP_CONTEXT!!.contentResolver.query(
         ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
         null,
         null,

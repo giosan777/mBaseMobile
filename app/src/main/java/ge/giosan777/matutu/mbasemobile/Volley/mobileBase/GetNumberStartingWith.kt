@@ -9,12 +9,12 @@ import com.google.gson.Gson
 import ge.giosan777.matutu.mbasemobile.database.AppDatabase
 import ge.giosan777.matutu.mbasemobile.models.Person
 
-fun getNumberStartingWith(
+suspend fun getNumberStartingWith(
     context: Context,
     mutableState: MutableState<MutableList<Person>>,
     phone: String,
 ) {
-
+    val mainDb = AppDatabase.getDb(context)
     val url = "http://162.55.141.130:1990/user_mobile_base/StartingWith/$phone"
     val queue = Volley.newRequestQueue(context)
     val stringRequest = StringRequest(
@@ -28,14 +28,9 @@ fun getNumberStartingWith(
             mutableState.value = sortedList.toMutableList()
         },
         { _ ->
-            val mainDb = AppDatabase.getDb(context)
             val personArray = mainDb.getDao().findByPhoneStartingWith(phone).orEmpty()
             mutableState.value = personArray.toMutableList()
-
-//            val errorPerson: Person = Person(1, "ERROR", "ERROR_MESSAGE_ERROR", "ERROR")
-//            val personArray = listOf<Person>(errorPerson)
-//            Log.d("MyLog", error.toString())
-
+            println(phone)
         }
     )
     queue.add(stringRequest)
