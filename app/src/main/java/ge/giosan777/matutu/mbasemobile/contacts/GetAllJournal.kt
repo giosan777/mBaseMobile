@@ -28,8 +28,8 @@ suspend fun getAllJournal(): MutableList<Journal> {
         journalList.sortByDescending { it.date }
 
 
-        return if (journalList.size > 50 ) {
-            journalList.toMutableList().subList(0, 50)
+        return if (journalList.size > 20 ) {
+            journalList.toMutableList().subList(0, 20)
         } else journalList
     }
     return mutableListOf<Journal>(Journal("", 0, 0, 0))

@@ -1,7 +1,17 @@
 package ge.giosan777.matutu.mbasemobile.screen_components
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.provider.ContactsContract
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,8 +20,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,12 +38,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
+import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.R
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getOneContactExcept
 import ge.giosan777.matutu.mbasemobile.models.Journal
-import ge.giosan777.matutu.mbasemobile.models.Person
 
 
 @Composable
@@ -36,6 +55,7 @@ fun JournalCard(journalItem: Journal) {
         mutableStateOf("")
     }
     var type: Int = 0
+    var expanded by remember { mutableStateOf(false) }
 
 
     when (journalItem.type) {
@@ -52,72 +72,143 @@ fun JournalCard(journalItem: Journal) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding(5.dp).clickable { expanded = !expanded },
         elevation = CardDefaults.cardElevation(),
-        shape = RoundedCornerShape(15.dp),
-
-        ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Image(
-                painter = painterResource(type),
-                contentDescription = "Photo",
-                contentScale = ContentScale.FillHeight,
-                modifier = Modifier
-                    .padding(5.dp)
-                    .size(20.dp)
-                    .clip(CircleShape),
+        shape = RoundedCornerShape(bottomStart = 16.dp, topEnd = 16.dp)
+    ) {
+        Column(
+            modifier = Modifier.animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
             )
-            val numberRegex =
-                journalItem.number.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
-            getOneContactExcept(numberRegex) {
-                firstNameFromServer = it
-            }
+        ) {
             Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(modifier = Modifier.padding(start = 5.dp), text = numberRegex)
+                Image(
+                    painter = painterResource(type),
+                    contentDescription = "Photo",
+                    contentScale = ContentScale.FillHeight,
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .size(20.dp)
+                        .clip(CircleShape),
+                )
+                val numberRegex =
+                    journalItem.number.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
+                getOneContactExcept(numberRegex) {
+                    firstNameFromServer = it
+                }
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
 
-                Row(modifier = Modifier.width(180.dp)) {
-                    Text(modifier = Modifier.padding(end = 15.dp), text = "- $firstNameFromServer")
+                ) {
+                    Text(modifier = Modifier.padding(start = 5.dp), text = numberRegex)
+
+                    Row(modifier = Modifier.width(180.dp)) {
+                        Text(
+                            modifier = Modifier.padding(end = 15.dp),
+                            text = "- $firstNameFromServer"
+                        )
+                    }
+                    JournalItemButton(
+                        expanded = expanded,
+                        onClick = { expanded = !expanded }
+                    )
+
                 }
             }
-
-
+            if (expanded) {
+                ExtraJournalButtons(journalItem,firstNameFromServer,
+                    modifier = Modifier.padding(
+                        start = dimensionResource(R.dimen.padding_small),
+                        top = dimensionResource(R.dimen.padding_small),
+                        end = dimensionResource(R.dimen.padding_small),
+                        bottom = dimensionResource(R.dimen.padding_small)
+                    )
+                )
+            }
         }
     }
+
+
 }
 
 
-fun cardFun(journalItem: Journal, phoneContacts: MutableList<Person>): Journal {
+@Composable
+fun JournalItemButton(
+    expanded: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
 
-    phoneContacts.forEach {
-        val phoneTmp = it.phone.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
-        val journalTmp = journalItem.number.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
-
-        if (phoneTmp == journalTmp) {
-            when (journalItem.type) {
-                1 -> journalItem.type = R.drawable.phone_migebuli_ico
-                2 -> journalItem.type = R.drawable.phone_darekili_ico
-                3 -> journalItem.type = R.drawable.phone_darekili_ico
-                4 -> journalItem.type = R.drawable.phone_migebuli_ico
-                5 -> journalItem.type = R.drawable.phone_gamotovebuli_ico
-                else -> journalItem.type = R.drawable.error_phone_ico
-            }
-        } else {
-            when (journalItem.type) {
-                1 -> journalItem.type = R.drawable.phone_migebuli_red_ico
-                2 -> journalItem.type = R.drawable.phone_darekili_red_ico
-                3 -> journalItem.type = R.drawable.phone_darekili_red_ico
-                4 -> journalItem.type = R.drawable.phone_migebuli_red_ico
-                5 -> journalItem.type = R.drawable.phone_gamotovebuli_red_ico
-                else -> journalItem.type = R.drawable.error_phone_ico
-            }
-        }
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+            contentDescription = stringResource(R.string.expand_button_content_description),
+            tint = MaterialTheme.colorScheme.secondary
+        )
     }
 
-    return journalItem
+}
+
+@Composable
+fun ExtraJournalButtons(
+    journalItem:Journal,
+    firstName:String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+
+        Box() {
+            Image(painter = painterResource(id = R.drawable.call_card), contentDescription = null,
+                modifier = Modifier
+                    .size(48.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_DIAL)
+                        intent.data = Uri.parse("tel:${journalItem.number}")
+                        startActivity(APP_CONTEXT!!, intent, Bundle())
+                    })
+        }
+
+        Box() {
+            Image(painter = painterResource(id = R.drawable.message_card), contentDescription = null,
+                modifier = Modifier
+                    .size(48.dp)
+                    .clickable {
+                        val toSms = "smsto:${journalItem.number}"
+                        val messageText = ""
+                        val sms = Intent(Intent.ACTION_SENDTO, Uri.parse(toSms))
+                        sms.putExtra("sms_body", messageText)
+                        startActivity(APP_CONTEXT!!, sms, Bundle())
+                    })
+        }
+
+        Box() {
+            Image(painter = painterResource(id = R.drawable.call_card), contentDescription = null,
+                modifier = Modifier
+                    .size(48.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_INSERT)
+                        intent.type = ContactsContract.Contacts.CONTENT_TYPE
+
+                        intent.putExtra(ContactsContract.Intents.Insert.NAME, firstName)
+                        intent.putExtra(ContactsContract.Intents.Insert.PHONE, journalItem.number)
+
+                        startActivity(APP_CONTEXT!!,intent, Bundle())
+                    })
+        }
+    }
 }

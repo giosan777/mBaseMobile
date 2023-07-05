@@ -63,7 +63,7 @@ fun personCard(personState: MutableState<MutableList<Person>>, rigi: Int) {
             .fillMaxWidth()
             .padding(5.dp),
         elevation = CardDefaults.cardElevation(),
-        shape = RoundedCornerShape(15.dp)
+        shape = RoundedCornerShape(bottomStart = 32.dp, topEnd = 32.dp)
     ) {
         Row {
             Image(

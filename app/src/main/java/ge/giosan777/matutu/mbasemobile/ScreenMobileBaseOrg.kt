@@ -1,6 +1,5 @@
 package ge.giosan777.matutu.mbasemobile
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,11 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -23,17 +23,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getStartingNameWithOrg
 import ge.giosan777.matutu.mbasemobile.models.Organization
@@ -64,14 +60,7 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
         mutableStateOf(false)
     }
 
-    Image(
-        painter = painterResource(id = R.drawable.background),
-        contentDescription = "background",
-        modifier = Modifier
-            .fillMaxSize()
-            .alpha(0.8f),
-        contentScale = ContentScale.FillBounds
-    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -93,15 +82,21 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
             ) {
                 Button(onClick = {
                     onClick()
-                }, modifier = Modifier.width(140.dp)) {
-                    Text(text = "MOBILE BASE")
+                }, modifier = Modifier) {
+                    Text(
+                        text = "MOBILE", style = MaterialTheme.typography.displayMedium
+                    )
                 }
                 Button(
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(R.color.citeli)),
-                    modifier = Modifier.width(140.dp)
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(R.color.btn_disabled)),
+                    modifier = Modifier,
+                    shape = RoundedCornerShape(topStart = 32.dp, bottomEnd = 32.dp)
                 ) {
-                    Text(text = "ORG BASE")
+                    Text(
+                        text = "ORG BASE",
+                        style = MaterialTheme.typography.displayMedium
+                    )
                 }
             }
             Column(
@@ -116,8 +111,9 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    Box( modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd,
-                        ){
+                    Box(
+                        modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd,
+                    ) {
                         TextField(
                             value = text.value,
                             leadingIcon = {
@@ -127,7 +123,7 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                                 )
                             },
                             onValueChange = { it ->
-                                cardVisible.value=true
+                                cardVisible.value = true
                                 text.value = it
                                 GlobalScope.launch(Dispatchers.IO) {
                                     getStartingNameWithOrg(APP_CONTEXT!!, orgState, text.value.text)
@@ -137,7 +133,7 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                             label = {
                                 Text(
                                     stringResource(R.string.enter_org_name),
-                                    fontSize = 12.sp
+                                    style = MaterialTheme.typography.labelSmall
                                 )
                             },
                             modifier = Modifier
@@ -146,35 +142,36 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                             placeholder = {
                                 Text(
                                     stringResource(R.string.example_org),
-                                    fontSize = 14.sp
+                                    style = MaterialTheme.typography.labelSmall
                                 )
                             },
 
                             )
                         Text(
-                            modifier = Modifier.padding(end = 15.dp).
-                            clickable {
-                                cardVisible.value=false
-                                text.value = TextFieldValue("")
-                            },
+                            modifier = Modifier
+                                .padding(end = 15.dp)
+                                .clickable {
+                                    cardVisible.value = false
+                                    text.value = TextFieldValue("")
+                                },
                             text = "Clear",
-                            style = TextStyle(color = Color.Magenta)
+                            style = MaterialTheme.typography.labelSmall
                         )
 
                     }
 
                 }
-                if (orgState.value.isNotEmpty()&&cardVisible.value) {
+                if (orgState.value.isNotEmpty() && cardVisible.value) {
                     orgCard(orgCard = orgState, rigi = 0)
                 }
 
                 ///////////////////////////////////
-                if (orgState.value.size >= 2&&cardVisible.value) {
+                if (orgState.value.size >= 2 && cardVisible.value) {
                     orgCard(orgCard = orgState, rigi = 1)
 
                 }
                 ///////////////////////////////////
-                if (orgState.value.size >= 3&&cardVisible.value) {
+                if (orgState.value.size >= 3 && cardVisible.value) {
                     orgCard(orgCard = orgState, rigi = 2)
 
                 }

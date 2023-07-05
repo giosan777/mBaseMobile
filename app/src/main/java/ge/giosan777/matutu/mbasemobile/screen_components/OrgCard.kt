@@ -3,8 +3,8 @@ package ge.giosan777.matutu.mbasemobile.screen_components
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,11 +15,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,16 +49,14 @@ import ge.giosan777.matutu.mbasemobile.models.Organization
 
 @Composable
 fun orgCard(orgCard: MutableState<MutableList<Organization>>, rigi: Int) {
-    var isExpanded by remember {
-           mutableStateOf(false)
-    }
+    var expanded by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp),
         elevation = CardDefaults.cardElevation(),
-        shape = RoundedCornerShape(15.dp)
+        shape = RoundedCornerShape(bottomStart = 32.dp, topEnd = 32.dp)
     ) {
         Row {
             Image(
@@ -93,11 +96,7 @@ fun orgCard(orgCard: MutableState<MutableList<Organization>>, rigi: Int) {
                         fontSize = 16.sp,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
-                            .weight(1f)
-                            .clickable {
-                                isExpanded = !isExpanded
-                            },
-                        maxLines = if (isExpanded)2 else 1,
+                            .weight(1f),
                     )
                     Spacer(Modifier.width(16.dp))
                     Button(elevation = ButtonDefaults.buttonElevation(),
@@ -119,4 +118,43 @@ fun orgCard(orgCard: MutableState<MutableList<Organization>>, rigi: Int) {
         }
     }
 
+}
+
+@Composable
+fun OrgItemButton(
+    expanded: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+            contentDescription = stringResource(R.string.expand_button_content_description),
+            tint = MaterialTheme.colorScheme.secondary
+        )
+    }
+
+}
+
+@Composable
+fun OrgExtraButtons(
+    @StringRes dogHobby: Int,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(R.string.app_name),
+            style = MaterialTheme.typography.labelSmall
+        )
+        Text(
+            text = stringResource(dogHobby),
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
 }
