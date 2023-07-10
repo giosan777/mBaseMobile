@@ -19,8 +19,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +31,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,12 +58,11 @@ fun ScreenMobileBase(onClick: () -> Unit) {
         mutableStateOf(mutableListOf<Person>())
     }
     val text = remember {
-        mutableStateOf(TextFieldValue(""))
+        mutableStateOf("")
     }
     val cardVisible = remember {
         mutableStateOf(false)
     }
-
 
     Column(
         modifier = Modifier
@@ -119,7 +117,7 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                     Box(
                         modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd,
                     ) {
-                        TextField(
+                        OutlinedTextField(
                             value = text.value,
                             leadingIcon = {
                                 Icon(
@@ -134,7 +132,7 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                                     getNumberStartingWith(
                                         APP_CONTEXT!!,
                                         personState,
-                                        text.value.text
+                                        text.value
                                     )
                                 }
                             },
@@ -144,18 +142,18 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                                     style = MaterialTheme.typography.labelSmall
                                 )
                             },
-
                             modifier = Modifier
                                 .height(60.dp)
                                 .fillMaxWidth(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                            textStyle = MaterialTheme.typography.labelSmall
                         )
                         Text(
                             modifier = Modifier
                                 .padding(end = 15.dp)
                                 .clickable {
                                     cardVisible.value = false
-                                    text.value = TextFieldValue("")
+                                    text.value = ""
                                 },
                             text = "Clear",
                             style = MaterialTheme.typography.labelSmall

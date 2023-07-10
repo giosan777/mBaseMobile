@@ -3,23 +3,26 @@ package ge.giosan777.matutu.mbasemobile.screen_components
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.annotation.StringRes
+import android.widget.Toast
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -40,85 +43,166 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.ContextCompat
+import coil.compose.AsyncImage
 import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.R
 import ge.giosan777.matutu.mbasemobile.models.Organization
+import ge.giosan777.matutu.mbasemobile.utils.copyToClipboard
 
 
 @Composable
 fun orgCard(orgCard: MutableState<MutableList<Organization>>, rigi: Int) {
     var expanded by remember { mutableStateOf(false) }
+    val color by animateColorAsState(
+        targetValue = if (expanded) MaterialTheme.colorScheme.tertiaryContainer
+        else MaterialTheme.colorScheme.primaryContainer,
+    )
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding(5.dp)
+            .clickable { expanded = !expanded },
         elevation = CardDefaults.cardElevation(),
         shape = RoundedCornerShape(bottomStart = 32.dp, topEnd = 32.dp)
     ) {
-        Row {
-            Image(
-                painter = painterResource(R.drawable.person_shabl),
-                contentDescription = "Photo",
-                contentScale = ContentScale.FillHeight,
-                modifier = Modifier
-                    .padding(5.dp)
-                    .size(64.dp)
-                    .clip(CircleShape)
-            )
-            Column {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.smartphone_icon),
-                        contentDescription = "phone_ico",
-                        Modifier.padding(5.dp)
+        Column(
+            modifier = Modifier
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessMedium
                     )
-                    if (orgCard.value.isNotEmpty()) {
-                        Text(
-                            modifier = Modifier.padding(start = 10.dp),
-                            text = orgCard.value[rigi].phone,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
+                )
+                .background(color = color)
+        ) {
 
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = orgCard.value[rigi].organizationName,
-                        fontSize = 16.sp,
-                        overflow = TextOverflow.Ellipsis,
+            Row {
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        if (!orgCard.value[rigi].img.isNullOrEmpty()) {
+                            AsyncImage(
+                                model = "http://162.55.141.130:1990/files/${orgCard.value[rigi].img}",
+                                contentDescription = "Organization logo",
+                                modifier = Modifier.size(64.dp).padding(start = 5.dp, top = 5.dp)
+                            )
+                        }else{
+                            Image(
+                                painter = painterResource(id = R.drawable.nologo),
+                                contentDescription = "Photo",
+                                contentScale = ContentScale.FillHeight,
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .size(64.dp)
+                                    .clip(CircleShape)
+                            )
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.smartphone_icon),
+                                contentDescription = "phone_ico",
+                                Modifier.padding(5.dp)
+                            )
+                            if (orgCard.value.isNotEmpty()) {
+                                Text(
+                                    modifier = Modifier.padding(start = 10.dp),
+                                    text = orgCard.value[rigi].phone,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            }
+                        }
+
+
+
+                        Box(modifier = Modifier.padding(end = 25.dp, top = 5.dp)) {
+                            Image(painter = painterResource(id = R.drawable.call_card),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clickable {
+                                        val intent = Intent(Intent.ACTION_DIAL)
+                                        intent.data = Uri.parse("tel:${orgCard.value[rigi].phone}")
+                                        ContextCompat.startActivity(APP_CONTEXT!!, intent, Bundle())
+                                    })
+                        }
+
+                    }
+                    Row(
                         modifier = Modifier
-                            .weight(1f),
-                    )
-                    Spacer(Modifier.width(16.dp))
-                    Button(elevation = ButtonDefaults.buttonElevation(),
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_DIAL)
-                            intent.data = Uri.parse("tel:${orgCard.value[rigi].phone}")
-                            startActivity(APP_CONTEXT!!,intent, Bundle())
-                        }) {
-                        Image(
-                            painterResource(id = R.drawable.call_ico),
-                            contentDescription = "Call",
-                            modifier = Modifier.width(30.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "${orgCard.value[rigi].category.uppercase()}: ${orgCard.value[rigi].organizationName}",
+                            style = MaterialTheme.typography.labelSmall,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(start = 10.dp),
                         )
+                        OrgItemButton(expanded = expanded, onClick = { expanded = !expanded })
                     }
+                    if (expanded) {
+                        Text(
+                            text = "Address: ${orgCard.value[rigi].address}",
+                            style = MaterialTheme.typography.labelSmall,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(start = 10.dp),
+                        )
+                        Row {
+                            Text(
+                                text = "WebSite: ${orgCard.value[rigi].webSite}",
+                                style = MaterialTheme.typography.labelSmall,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier
+                                    .padding(start = 10.dp)
 
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.copy_ico),
+                                contentDescription = "phone_ico",
+                                Modifier
+                                    .padding(start = 5.dp)
+                                    .clickable {
+                                        copyToClipboard(
+                                            APP_CONTEXT!!,
+                                            orgCard.value[rigi].webSite ?: ""
+                                        )
+                                        Toast
+                                            .makeText(
+                                                APP_CONTEXT!!,
+                                                "WebSite Copied",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            .show()
+                                    }
+                            )
+                        }
+
+                        Text(
+                            text = "Description: ${orgCard.value[rigi].description}",
+                            style = MaterialTheme.typography.labelSmall,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(start = 10.dp, bottom = 10.dp),
+                        )
+
+                    }
                 }
-            }
 
+            }
         }
     }
-
 }
+
 
 @Composable
 fun OrgItemButton(
@@ -129,7 +213,7 @@ fun OrgItemButton(
 
     IconButton(
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier.padding(5.dp)
     ) {
         Icon(
             imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
@@ -140,21 +224,3 @@ fun OrgItemButton(
 
 }
 
-@Composable
-fun OrgExtraButtons(
-    @StringRes dogHobby: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.labelSmall
-        )
-        Text(
-            text = stringResource(dogHobby),
-            style = MaterialTheme.typography.bodyLarge
-        )
-    }
-}

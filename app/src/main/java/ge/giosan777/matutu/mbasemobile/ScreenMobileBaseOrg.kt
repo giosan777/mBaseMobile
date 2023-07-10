@@ -10,29 +10,37 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getStartingNameWithOrg
 import ge.giosan777.matutu.mbasemobile.models.Organization
+import ge.giosan777.matutu.mbasemobile.screen_components.addCompanyCard
 import ge.giosan777.matutu.mbasemobile.screen_components.orgCard
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -54,11 +62,13 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
         mutableStateOf(mutableListOf<Organization>())
     }
     val text = remember {
-        mutableStateOf(TextFieldValue(""))
+        mutableStateOf("")
     }
     val cardVisible = remember {
         mutableStateOf(false)
     }
+
+    var expanded by remember { mutableStateOf(false) }
 
 
     Column(
@@ -114,7 +124,7 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                     Box(
                         modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd,
                     ) {
-                        TextField(
+                        OutlinedTextField(
                             value = text.value,
                             leadingIcon = {
                                 Icon(
@@ -122,12 +132,18 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                                     contentDescription = "text_field_org_icon"
                                 )
                             },
-                            onValueChange = { it ->
-                                cardVisible.value = true
-                                text.value = it
-                                GlobalScope.launch(Dispatchers.IO) {
-                                    getStartingNameWithOrg(APP_CONTEXT!!, orgState, text.value.text)
+                            onValueChange = { it
+                                ->
+                                if (it.isNotEmpty()&&it[0] == '*') {
+                                    text.value = it
+                                }else{
+                                    cardVisible.value = true
+                                    text.value = it
+                                    GlobalScope.launch(Dispatchers.IO) {
+                                        getStartingNameWithOrg(APP_CONTEXT!!, orgState, text.value)
+                                    }
                                 }
+
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                             label = {
@@ -139,20 +155,14 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                             modifier = Modifier
                                 .height(60.dp)
                                 .fillMaxWidth(),
-                            placeholder = {
-                                Text(
-                                    stringResource(R.string.example_org),
-                                    style = MaterialTheme.typography.labelSmall
-                                )
-                            },
-
+                            textStyle = MaterialTheme.typography.labelSmall
                             )
                         Text(
                             modifier = Modifier
                                 .padding(end = 15.dp)
                                 .clickable {
                                     cardVisible.value = false
-                                    text.value = TextFieldValue("")
+                                    text.value = ""
                                 },
                             text = "Clear",
                             style = MaterialTheme.typography.labelSmall
@@ -161,22 +171,24 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                     }
 
                 }
-                if (orgState.value.isNotEmpty() && cardVisible.value) {
-                    orgCard(orgCard = orgState, rigi = 0)
+
+                Button(onClick = { expanded = !expanded },modifier=Modifier.padding(top = 8.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = stringResource(R.string.daamate_organizacia))
+                        OrgAddItemButton(expanded = expanded, onClick = { expanded = !expanded })
+                    }
+                }
+                if (expanded) {
+                    addCompanyCard(expanded)
                 }
 
-                ///////////////////////////////////
-                if (orgState.value.size >= 2 && cardVisible.value) {
-                    orgCard(orgCard = orgState, rigi = 1)
-
+                LazyColumn {
+                    itemsIndexed(orgState.value) { index, item ->
+                        if (orgState.value.isNotEmpty() && cardVisible.value && !expanded) {
+                            orgCard(orgCard = orgState, rigi = index)
+                        }
+                    }
                 }
-                ///////////////////////////////////
-                if (orgState.value.size >= 3 && cardVisible.value) {
-                    orgCard(orgCard = orgState, rigi = 2)
-
-                }
-
-
             }
 
         }
@@ -191,4 +203,23 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
             Text(text = "Reklama ORG")
         }
     }
-}   
+}
+
+@Composable
+fun OrgAddItemButton(
+    expanded: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    IconButton(
+        onClick = onClick,
+        modifier = modifier.padding(start = 5.dp, end = 5.dp)
+    ) {
+        Icon(
+            imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+            contentDescription = stringResource(R.string.expand_button_content_description),
+        )
+    }
+
+}

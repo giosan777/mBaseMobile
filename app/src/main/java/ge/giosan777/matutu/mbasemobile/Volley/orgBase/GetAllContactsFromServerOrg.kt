@@ -21,7 +21,7 @@ fun getAllContactsFromServerOrg(context: Context, callbacks: (MutableList<Organi
                 val orgArray: Array<Organization> = Gson().fromJson(jsonString, Array<Organization>::class.java)
                 val orgList = mutableListOf<Organization>()
                 orgArray.forEach {
-                    orgList.add(Organization(null, it.phone, it.organizationName, it.description,it.category,it.address,it.webSite))
+                    orgList.add(Organization(null, it.phone, it.organizationName, it.description,it.category,it.address,it.webSite,it.img))
                 }
                 callbacks.invoke(orgList)
 

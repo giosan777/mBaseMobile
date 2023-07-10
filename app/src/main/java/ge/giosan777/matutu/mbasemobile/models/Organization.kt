@@ -12,5 +12,6 @@ data class Organization(
     @ColumnInfo(name = "description") var description: String?,
     @ColumnInfo(name = "category") var category: String,
     @ColumnInfo(name = "address") var address: String?,
-    @ColumnInfo(name = "web_site") var webSite: String?
+    @ColumnInfo(name = "web_site") var webSite: String?,
+    @ColumnInfo(name = "img") var img: String?
 )

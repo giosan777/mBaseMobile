@@ -4,10 +4,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,7 +58,10 @@ fun JournalCard(journalItem: Journal) {
     }
     var type: Int = 0
     var expanded by remember { mutableStateOf(false) }
-
+    val color by animateColorAsState(
+        targetValue = if (expanded) MaterialTheme.colorScheme.tertiaryContainer
+        else MaterialTheme.colorScheme.primaryContainer,
+    )
 
     when (journalItem.type) {
         1 -> type = R.drawable.phone_migebuli_ico
@@ -82,7 +87,7 @@ fun JournalCard(journalItem: Journal) {
                     dampingRatio = Spring.DampingRatioMediumBouncy,
                     stiffness = Spring.StiffnessMedium
                 )
-            )
+            ).background(color=color)
         ) {
             Row(
                 modifier = Modifier.fillMaxSize(),

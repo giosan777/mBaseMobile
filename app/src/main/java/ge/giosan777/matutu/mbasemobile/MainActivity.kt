@@ -55,6 +55,7 @@ private const val REQUEST_COD1 = 1
 private const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
 private const val READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE
 private const val READ_CALL_LOG = Manifest.permission.READ_CALL_LOG
+private const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
 const val APP_PREFERENCES = "mBaseSettings"
 
 
@@ -85,7 +86,7 @@ class MainActivity : ComponentActivity() {
                             if (it) {
                                 ActivityCompat.requestPermissions(
                                     this,
-                                    arrayOf(READ_CONTACTS, READ_PHONE_STATE, READ_CALL_LOG),
+                                    arrayOf(READ_CONTACTS, READ_PHONE_STATE, READ_CALL_LOG,READ_EXTERNAL_STORAGE),
                                     REQUEST_COD1
                                 )
                                 mSettings!!.edit().putBoolean("firstStart", false).apply()
