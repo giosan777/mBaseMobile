@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.MBaseMobile" parent="android:Theme.Material.Light.NoActionBar" />
+
+<!--    <style name="Theme.DialogStyle" parent="Theme.AppCompat.Dialog">-->
+<!--        <item name="android:windowMinWidthMajor">50%</item>-->
+<!--        <item name="android:windowMinWidthMinor">50%</item>-->
+<!--        <item name="windowFixedHeightMajor">50%</item>-->
+<!--        <item name="windowFixedHeightMinor">50%</item>-->
+<!--    </style>-->
 </resources>

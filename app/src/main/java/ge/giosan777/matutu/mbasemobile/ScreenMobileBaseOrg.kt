@@ -79,7 +79,7 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(3f),
+                .weight(3f)
 //                    verticalArrangement = Arrangement.SpaceAround,
 //                    horizontalAlignment = Alignment.CenterHorizontally
         ) {

@@ -4,9 +4,13 @@ package ge.giosan777.matutu.mbasemobile
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -41,6 +45,7 @@ import ge.giosan777.matutu.mbasemobile.database.deleteAllContactsFromLocalDB
 import ge.giosan777.matutu.mbasemobile.database.deleteAllOrganizationsFromLocalDBOrg
 import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDb
 import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDbOrg
+import ge.giosan777.matutu.mbasemobile.service.CallsService
 import ge.giosan777.matutu.mbasemobile.sorting.contactSorting1
 import ge.giosan777.matutu.mbasemobile.ui.theme.MBaseTheme
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
@@ -72,7 +77,9 @@ class MainActivity : ComponentActivity() {
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(Intent(applicationContext, CallsService::class.java))
+        }
 
         setContent {
             MBaseTheme() {
@@ -161,6 +168,12 @@ class MainActivity : ComponentActivity() {
                     && grantResults[2] == PackageManager.PERMISSION_GRANTED
                 ) {
                     lifecycleScope.launch(Dispatchers.IO) {
+                        val intent =
+                            Intent(
+                                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:$packageName")
+                            )
+                        startActivityForResult(intent, 205)
                         firstStart()
                     }
 

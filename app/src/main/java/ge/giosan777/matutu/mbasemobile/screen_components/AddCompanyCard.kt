@@ -122,12 +122,17 @@ fun addCompanyCard(expanded: Boolean) {
     val phoneValidation = remember {
         mutableStateOf("")
     }
-    val selectedText = remember {
-        mutableStateOf("")
-    }
     val categoryValidation = remember {
         mutableStateOf("")
     }
+    val validationStatus= remember {
+        mutableStateOf(false)
+    }
+
+    val selectedText = remember {
+        mutableStateOf("")
+    }
+
 
 
 
@@ -232,27 +237,6 @@ fun addCompanyCard(expanded: Boolean) {
                     categoryValidation.value = organizationCategoryValidation(selectedText.value)
                     MyContent(selectedText, color, categoryValidation)
                     newOrganization.category = selectedText.value
-
-                    println(selectedText.value)
-//                    OutlinedTextField(
-//                        value = companyCategory.value,
-//                        onValueChange = {
-//                            companyCategory.value = it
-//                            newOrganization.category = companyCategory.value
-//                        },
-//                        modifier = Modifier.padding(start = 16.dp, bottom = 5.dp),
-//                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-//                        keyboardActions = KeyboardActions(
-//                            onNext = {
-//                                focusManager.moveFocus(FocusDirection.Down)
-//                            }
-//                        ),
-//                        label = {
-//                            Text(
-//                                stringResource(R.string.enter_company_category),
-//                                style = MaterialTheme.typography.labelSmall
-//                            )
-//                        })
                     Image(
                         modifier = Modifier.offset(y = 5.dp),
                         painter = painterResource(id = R.drawable.star_ico),
@@ -321,8 +305,10 @@ fun addCompanyCard(expanded: Boolean) {
                             style = MaterialTheme.typography.labelSmall
                         )
                     })
-
-                RequestContentPermission(firstCardVisible, secondCardVisible)
+                if (nameValidation.value == "ok" && phoneValidation.value == "ok" && categoryValidation.value == "ok") {
+                    validationStatus.value=true
+                }
+                RequestContentPermission(firstCardVisible, secondCardVisible,validationStatus)
 
 
             }
@@ -339,7 +325,8 @@ fun addCompanyCard(expanded: Boolean) {
 @Composable
 fun RequestContentPermission(
     firstCardVisible: MutableState<Boolean>,
-    secondCardVisible: MutableState<Boolean>
+    secondCardVisible: MutableState<Boolean>,
+    validatorsStatus:MutableState<Boolean>
 ) {
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
@@ -426,27 +413,32 @@ fun RequestContentPermission(
 
         if (!completeClicked.value) {
             Button(onClick = {
-                completeClicked.value = true
-                imagePicker.value = false
-                val saveOrg = listOf(newOrganization)
-                val result = GlobalScope.async {
-                    saveNewOrganization(APP_CONTEXT!!, saveOrg)
-                    imageUri?.let {
-                        uploadImage(
-                            getRealPathFromURI(imageUri!!, APP_CONTEXT!!)!!,
-                            uuid.toString()
-                        )
+                if (validatorsStatus.value) {
+                    completeClicked.value = true
+                    imagePicker.value = false
+                    val saveOrg = listOf(newOrganization)
+                    val result = GlobalScope.async {
+                        saveNewOrganization(APP_CONTEXT!!, saveOrg)
+                        imageUri?.let {
+                            uploadImage(
+                                getRealPathFromURI(imageUri!!, APP_CONTEXT!!)!!,
+                                uuid.toString()
+                            )
+                        }
+                        true
                     }
-                    true
-                }
-                GlobalScope.launch {
-                    if (result.await()) {
-                        uploadProgress.value = true
-                        delay(2000)
-                        firstCardVisible.value = false
-                        secondCardVisible.value = true
+                    GlobalScope.launch {
+                        if (result.await()) {
+                            uploadProgress.value = true
+                            delay(2000)
+                            firstCardVisible.value = false
+                            secondCardVisible.value = true
+
+                        }
                     }
                 }
+
+
             }, modifier = Modifier.padding(start = 16.dp, bottom = 10.dp, end = 16.dp)) {
                 Text(text = "Complete")
             }

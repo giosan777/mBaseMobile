@@ -104,7 +104,7 @@ fun JournalCard(journalItem: Journal) {
                 )
                 val numberRegex =
                     journalItem.number.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
-                getOneContactExcept(numberRegex) {
+                getOneContactExcept(numberRegex, APP_CONTEXT!!) {
                     firstNameFromServer = it
                 }
                 Row(
