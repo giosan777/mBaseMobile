@@ -7,14 +7,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getOneContactExcept
+
 
 class CallsService : Service() {
     var context: Context = this
@@ -22,7 +22,7 @@ class CallsService : Service() {
     var runnable: Runnable? = null
     var running = false
 
-    var MyServiceReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+    private var MyServiceReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val phoneState = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
             if (phoneState == TelephonyManager.EXTRA_STATE_RINGING) {
@@ -43,14 +43,40 @@ class CallsService : Service() {
                     }
                 }
 
+            }
 
+
+
+            if (phoneState == TelephonyManager.EXTRA_STATE_IDLE) {
+                val i = Intent()
+                i.setClassName(
+                    "ge.giosan777.matutu.mbasemobile",
+                    "ge.giosan777.matutu.mbasemobile.SecondActivity"
+                )
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                i.putExtra("endCall", true)
+                context.startActivity(i)
+                Log.d("MyLog","DAKIDAA")
+            }
+
+            if (phoneState == TelephonyManager.EXTRA_STATE_OFFHOOK) {
+                val i = Intent()
+                i.setClassName(
+                    "ge.giosan777.matutu.mbasemobile",
+                    "ge.giosan777.matutu.mbasemobile.SecondActivity"
+                )
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                i.putExtra("endCall", true)
+                context.startActivity(i)
+                Log.d("MyLog", "UPASUXAA")
 
             }
-//                            Toast.makeText(getApplicationContext(), "Toast from Service: I hear you!", Toast.LENGTH_LONG).show();
+
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
+
     override fun onCreate() {
         super.onCreate()
 
@@ -121,4 +147,9 @@ class CallsService : Service() {
     override fun onUnbind(intent: Intent?): Boolean {
         return true
     }
+
+
+
+
 }
+

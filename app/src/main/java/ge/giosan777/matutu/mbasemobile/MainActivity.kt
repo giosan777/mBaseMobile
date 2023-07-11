@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -69,17 +70,28 @@ var APP_CONTEXT: MainActivity? = null
 
 var mSettings: SharedPreferences? = null
 
-@OptIn(DelicateCoroutinesApi::class)
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         APP_CONTEXT = this
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(Intent(applicationContext, CallsService::class.java))
-        }
+//        val OVERLAY_PERMISSION_REQUEST_CODE = 1234
+//
+//        if (!Settings.canDrawOverlays(this)) {
+//            val intent = Intent(
+//                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                Uri.parse("package:" + getPackageName())
+//            );
+//            startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE);
+//        } else {
+//            showOverlayDialog();
+//        }
+
+
+        startForegroundService(Intent(applicationContext, CallsService::class.java))
 
         setContent {
             MBaseTheme() {
@@ -93,7 +105,12 @@ class MainActivity : ComponentActivity() {
                             if (it) {
                                 ActivityCompat.requestPermissions(
                                     this,
-                                    arrayOf(READ_CONTACTS, READ_PHONE_STATE, READ_CALL_LOG,READ_EXTERNAL_STORAGE),
+                                    arrayOf(
+                                        READ_CONTACTS,
+                                        READ_PHONE_STATE,
+                                        READ_CALL_LOG,
+                                        READ_EXTERNAL_STORAGE
+                                    ),
                                     REQUEST_COD1
                                 )
                                 mSettings!!.edit().putBoolean("firstStart", false).apply()
@@ -154,6 +171,7 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -167,6 +185,7 @@ class MainActivity : ComponentActivity() {
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED
                     && grantResults[2] == PackageManager.PERMISSION_GRANTED
                 ) {
+
                     lifecycleScope.launch(Dispatchers.IO) {
                         val intent =
                             Intent(
@@ -262,12 +281,6 @@ class MainActivity : ComponentActivity() {
     }
 
 }
-
-
-
-
-
-
 
 
 
