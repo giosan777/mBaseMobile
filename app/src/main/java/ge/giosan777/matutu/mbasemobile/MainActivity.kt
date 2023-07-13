@@ -3,6 +3,7 @@
 package ge.giosan777.matutu.mbasemobile
 
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,24 +12,35 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -62,44 +74,71 @@ private const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
 private const val READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE
 private const val READ_CALL_LOG = Manifest.permission.READ_CALL_LOG
 private const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
+
 const val APP_PREFERENCES = "mBaseSettings"
 
 
 var APP_CONTEXT: MainActivity? = null
-
-
 var mSettings: SharedPreferences? = null
 
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        APP_CONTEXT = this
+        APP_CONTEXT = this@MainActivity
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
 
-//        val OVERLAY_PERMISSION_REQUEST_CODE = 1234
+//        startForegroundService(Intent(this, CallsService::class.java))//////////////////////////
+//
+////        val intent = Intent()
+////        intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+////        startActivity(intent)
+//
+//        val SYSTEM_ALERT_WINDOW_REQUEST_CODE = 1001
 //
 //        if (!Settings.canDrawOverlays(this)) {
-//            val intent = Intent(
-//                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-//                Uri.parse("package:" + getPackageName())
-//            );
-//            startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE);
-//        } else {
-//            showOverlayDialog();
+//            // Запрос разрешения
+//            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+//            intent.data = Uri.parse("package:$packageName")
+//            startActivityForResult(intent, SYSTEM_ALERT_WINDOW_REQUEST_CODE)
 //        }
+        var checkedState = mutableStateOf(false)
 
+        val overlayPermissionContract = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { _ ->
+            if (Settings.canDrawOverlays(this)) {
+                startForegroundService(Intent(this, CallsService::class.java))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    ActivityCompat.requestPermissions(
+                        this@MainActivity,
+                        arrayOf(
+                            POST_NOTIFICATIONS
+                        ),
+                        222
+                    )
+                }
+                mSettings!!.edit().putBoolean("canDrawOverlays", true).apply()
+                Log.d("MyLog", "ARIIIIIIIIIIIIIIIIIIS")
+            } else {
+                mSettings!!.edit().putBoolean("canDrawOverlays", false).apply()
 
-        startForegroundService(Intent(applicationContext, CallsService::class.java))
+                Log.d("MyLog", "araaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                checkedState.value = false
+            }
+        }
 
         setContent {
+            checkedState = remember {
+                mutableStateOf(false)
+            }
+
+
             MBaseTheme() {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-
-
                     if (!mSettings!!.contains("firstStart")) {
                         AlertDialogPermissions {
                             if (it) {
@@ -131,13 +170,89 @@ class MainActivity : ComponentActivity() {
                     }
 
                     val navController = rememberNavController()
-                    APP_CONTEXT = this
 
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(start = 15.dp, end = 15.dp)
                     ) {
+                        if (mSettings!!.contains("canDrawOverlays") && mSettings!!.getBoolean(
+                                "canDrawOverlays",
+                                false
+                            )
+                        ) {
+                            checkedState.value = true
+                            startForegroundService(
+                                Intent(
+                                    this@MainActivity,
+                                    CallsService::class.java
+                                )
+                            )//TODO//
+                        }
+
+
+
+
+
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            Switch(
+                                checked = checkedState.value,
+                                onCheckedChange = {
+                                    checkedState.value = it
+                                    if (checkedState.value) {
+                                        if (!Settings.canDrawOverlays(this@MainActivity)) {
+                                            val intent =
+                                                Intent(
+                                                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                                    Uri.parse("package:${packageName}")
+                                                )
+                                            overlayPermissionContract.launch(intent)
+
+                                        }
+                                        startForegroundService(
+                                            Intent(
+                                                this@MainActivity,
+                                                CallsService::class.java
+                                            )
+                                        )
+                                        mSettings!!.edit().putBoolean("canDrawOverlays", true)
+                                            .apply()
+                                    } else if (!checkedState.value) {
+                                        val serviceIntent =
+                                            Intent(APP_CONTEXT, CallsService::class.java)
+                                        mSettings!!.edit().putBoolean("canDrawOverlays", false)
+                                            .apply()
+
+                                        stopService(serviceIntent)
+                                    }
+
+                                    //        val intent = Intent()
+                                    //        intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+                                    //        startActivity(intent)
+
+                                },
+                                thumbContent = {
+                                    Icon(
+                                        imageVector = if (checkedState.value) Icons.Filled.Check else Icons.Filled.Close,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(SwitchDefaults.IconSize)
+                                    )
+                                },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = Color.Green,
+                                    checkedIconColor = Color.DarkGray,
+                                    uncheckedThumbColor = Color.Red,
+                                    uncheckedIconColor = Color.LightGray,
+                                ),
+                            )
+                        }
+
+
+
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -148,7 +263,7 @@ class MainActivity : ComponentActivity() {
                                 startDestination = "ScreenMobileBase"
                             ) {
                                 composable(route = "ScreenMobileBase") {
-                                    ScreenMobileBase {
+                                    ScreenMobileBase() {
                                         navController.navigate("ScreenMobileBaseOrg")
                                     }
                                 }
@@ -168,6 +283,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
     }
 
 
@@ -185,21 +301,9 @@ class MainActivity : ComponentActivity() {
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED
                     && grantResults[2] == PackageManager.PERMISSION_GRANTED
                 ) {
-
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val intent =
-                            Intent(
-                                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                Uri.parse("package:$packageName")
-                            )
-                        startActivityForResult(intent, 205)
                         firstStart()
                     }
-
-//                    val uuid = UUID.randomUUID().toString()
-//                    mSettings!!.edit().putString("uuid", uuid).apply()
-//                    uuidSave(this, uuid)
-//                    Log.d("MyLog", "onRequestPermissionsResult 1111111111111")
                 }
             }
 
@@ -281,10 +385,6 @@ class MainActivity : ComponentActivity() {
     }
 
 }
-
-
-
-
 
 
 

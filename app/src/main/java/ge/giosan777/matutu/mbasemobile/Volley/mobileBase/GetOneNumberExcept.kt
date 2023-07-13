@@ -6,8 +6,6 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
-import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
-import ge.giosan777.matutu.mbasemobile.database.AppDatabase
 import ge.giosan777.matutu.mbasemobile.models.Person
 import kotlin.concurrent.thread
 
@@ -31,11 +29,11 @@ fun getOneContactExcept(
                 }
             },
             { _ ->
-                val mainDb = AppDatabase.getDb(APP_CONTEXT!!)
-                val personArray = mainDb.getDao().findByPhoneStartingWith(phone).orEmpty()
-                if (personArray.isNotEmpty()) {
-                    result(personArray[0].firstName.toString())
-                }
+//                val mainDb = AppDatabase.getDb(APP_CONTEXT!!)
+//                val personArray = mainDb.getDao().findByPhoneStartingWith(phone).orEmpty()
+//                if (personArray.isNotEmpty()) {
+//                    result(personArray[0].firstName.toString())
+//                }
 
             }
         )

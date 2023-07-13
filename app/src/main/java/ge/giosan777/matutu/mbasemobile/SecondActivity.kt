@@ -1,75 +1,82 @@
 package ge.giosan777.matutu.mbasemobile
 
-import android.R
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
 
-class SecondActivity : ComponentActivity() {
+class SecondActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
         setContent {
             val phoneAndUser = remember {
                 mutableStateOf("")
             }
 
+
+
             setFinishOnTouchOutside(true)
             intent.extras?.getString("user")?.let {
                 phoneAndUser.value = it
+                println("chairtooo " + this@SecondActivity)
 //                showOverlayDialog(phoneAndUser.value)
                 newDialog(phoneAndUser.value)
+                finish()
             }
-
-
-            intent.extras?.getBoolean("endCall")?.let {
-                if (it) {
-//                    dialog.dismiss()
-                }
-            }
-            intent.extras?.getBoolean("endCall")?.let {
-                if (it) {
-//                    dialog.dismiss()
-                }
-            }
-
-
         }
+    }
 
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent != null) {
+            if (intent.getBooleanExtra("endCall", false)) {
+                this.finish()
+            } else
+                if (intent.getBooleanExtra("startCall", false)) {
+                    val user = intent.getStringExtra("user")
+                    newDialog(user!!)
+                }
+        }
     }
 
 
     fun newDialog(userName: String) {
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this,R.style.CustomDialog)
         val customDialogView: View = layoutInflater.inflate(
             ge.giosan777.matutu.mbasemobile.R.layout.dialog_custom_layout,
             null
         )
+        customDialogView.minimumWidth=200
+        customDialogView.minimumHeight=100
+
+
         builder.setView(customDialogView)
         val btnOk =
-            customDialogView.findViewById<Button>(ge.giosan777.matutu.mbasemobile.R.id.btn_ok)
+            customDialogView.findViewById<ImageButton>(R.id.btn_ok)
         val txtUser =
-            customDialogView.findViewById<TextView>(ge.giosan777.matutu.mbasemobile.R.id.txt_user)
+            customDialogView.findViewById<TextView>(R.id.txt_user)
         txtUser.text = userName
 
-         val dialog = builder.create()
-        val dialogRootView = dialog.window!!.decorView.findViewById<View>(R.id.content)
-        dialogRootView.minimumWidth = 300 // Ширина в пикселях
-        dialogRootView.minimumHeight = 200 // Высота в пикселях
+        val dialog = builder.create()
+
         dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+
+        dialog.setOnCancelListener(DialogInterface.OnCancelListener {
+            this.finish()
+        })
+
 
         dialog.show()
         btnOk.setOnClickListener(View.OnClickListener {
@@ -77,6 +84,7 @@ class SecondActivity : ComponentActivity() {
             this.finish()
         })
     }
+
 
     private fun showOverlayDialog(userName: String) {
         val params = WindowManager.LayoutParams(
@@ -90,7 +98,7 @@ class SecondActivity : ComponentActivity() {
         // Создание и настройка вашего диалогового окна
         val builder = AlertDialog.Builder(this);
         builder.setTitle("Rekavs $userName");
-        builder.setMessage("Пример диалогового окна поверх звонилки");
+        builder.setMessage("Пример диалогов ого окна поверх звонилки");
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
             dialog.dismiss()
             this.finish()

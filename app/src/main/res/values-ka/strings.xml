@@ -19,5 +19,6 @@
     <string name="enter_company_description">Enter Company Description</string>
     <string name="category">Category</string>
     <string name="aucilebeli_veli">aucilebeli veli</string>
+    <string name="ignore_battery_optimization">IGNORE_BATTERY_OPTIMIZATION</string>
 
 </resources>

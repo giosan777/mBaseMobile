@@ -22,59 +22,78 @@ class CallsService : Service() {
     var runnable: Runnable? = null
     var running = false
 
+
     private var MyServiceReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+
+
         override fun onReceive(context: Context, intent: Intent) {
-            val phoneState = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
-            if (phoneState == TelephonyManager.EXTRA_STATE_RINGING) {
-                val incomingNumber = intent.getStringExtra(TelephonyManager. EXTRA_INCOMING_NUMBER)
-                println(incomingNumber)
-                incomingNumber?.let {
-                    getOneContactExcept(incomingNumber,context){
-                        Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
+            val action = intent.action
+            if (action == "android.intent.action.PHONE_STATE") {
+                // Обработка изменения состояния звонка
+                val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
+                when (state) {
+                    TelephonyManager.EXTRA_STATE_RINGING -> {
+                        // Звонок входящий
+                        Log.d("MyLog", "gvirekaven")
+                        val incomingNumber =
+                            intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
+                        incomingNumber?.let {
+                            getOneContactExcept(incomingNumber, context) {
+                                Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
+                                val i = Intent()
+                                i.setClassName(
+                                    "ge.giosan777.matutu.mbasemobile",
+                                    "ge.giosan777.matutu.mbasemobile.SecondActivity"
+                                )
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                i.putExtra("user", it)
+                                context.startActivity(i)
+                            }
+                        }
+                    }
+
+                    TelephonyManager.EXTRA_STATE_OFFHOOK -> {
+
+                        val outGoingNumber=intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
+                        Log.d("MyLog", "Звонок начат")
+                        outGoingNumber?.let { it ->
+                            getOneContactExcept(it, context) {itUser->
+                                Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
+                                val i = Intent()
+                                i.setClassName(
+                                    "ge.giosan777.matutu.mbasemobile",
+                                    "ge.giosan777.matutu.mbasemobile.SecondActivity"
+                                )
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                i.putExtra("startCall", true)
+                                i.putExtra("user", itUser)
+                                context.startActivity(i)
+                            }
+                        }
+
+                    }
+
+                    TelephonyManager.EXTRA_STATE_IDLE -> {
+                        Log.d("MyLog", "Звонок заершен")
                         val i = Intent()
                         i.setClassName(
                             "ge.giosan777.matutu.mbasemobile",
                             "ge.giosan777.matutu.mbasemobile.SecondActivity"
                         )
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        i.putExtra("number", "$incomingNumber")
-                        i.putExtra("user", it)
+                        i.putExtra("endCall", true)
                         context.startActivity(i)
                     }
                 }
-
+            } else if (action == "android.intent.action.NEW_OUTGOING_CALL") {
+                Log.d("MyLog", "Обработка исходящего звонка")
+                val phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER)
+                phoneNumber?.let {
+//                    OpenDialog(it)
+                }
             }
-
-
-
-            if (phoneState == TelephonyManager.EXTRA_STATE_IDLE) {
-                val i = Intent()
-                i.setClassName(
-                    "ge.giosan777.matutu.mbasemobile",
-                    "ge.giosan777.matutu.mbasemobile.SecondActivity"
-                )
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                i.putExtra("endCall", true)
-                context.startActivity(i)
-                Log.d("MyLog","DAKIDAA")
-            }
-
-            if (phoneState == TelephonyManager.EXTRA_STATE_OFFHOOK) {
-                val i = Intent()
-                i.setClassName(
-                    "ge.giosan777.matutu.mbasemobile",
-                    "ge.giosan777.matutu.mbasemobile.SecondActivity"
-                )
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                i.putExtra("endCall", true)
-                context.startActivity(i)
-                Log.d("MyLog", "UPASUXAA")
-
-            }
-
         }
     }
-
 
 
     override fun onCreate() {
@@ -120,7 +139,7 @@ class CallsService : Service() {
 
 
     override fun onDestroy() {
-        printMsg("Foreground Service stopped")
+        Log.d("MyLog", "gaitisha servisiii")
         try {
             running = false
             unregisterReceiver(MyServiceReceiver)
@@ -147,8 +166,6 @@ class CallsService : Service() {
     override fun onUnbind(intent: Intent?): Boolean {
         return true
     }
-
-
 
 
 }

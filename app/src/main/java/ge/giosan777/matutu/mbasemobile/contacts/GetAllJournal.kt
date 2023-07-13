@@ -10,7 +10,7 @@ import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.models.Journal
 
 
-suspend fun getAllJournal(): MutableList<Journal> {
+fun getAllJournal(): MutableList<Journal> {
     val CALL_LOG_PERMISSION_REQUEST_CODE = 1
 
     if (ContextCompat.checkSelfPermission(

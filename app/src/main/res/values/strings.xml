@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">mBaseMobile</string>
     <string name="enter_phone_number">Enter Phone Number</string>
@@ -18,4 +19,6 @@
     <string name="enter_company_description">Enter Company Description</string>
     <string name="category">Category</string>
     <string name="aucilebeli_veli">aucilebeli veli</string>
+    <string name="ignore_battery_optimization">IGNORE_BATTERY_OPTIMIZATIONs</string>
+
 </resources>

@@ -3,10 +3,19 @@
 
     <style name="Theme.MBaseMobile" parent="android:Theme.Material.Light.NoActionBar" />
 
-<!--    <style name="Theme.DialogStyle" parent="Theme.AppCompat.Dialog">-->
-<!--        <item name="android:windowMinWidthMajor">50%</item>-->
-<!--        <item name="android:windowMinWidthMinor">50%</item>-->
-<!--        <item name="windowFixedHeightMajor">50%</item>-->
-<!--        <item name="windowFixedHeightMinor">50%</item>-->
-<!--    </style>-->
+    <style name="CustomDialog" parent="android:Theme.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">#004CAF50</item>
+    </style>
+
+
+    <style name="Theme.DialogStyleMy" parent="Theme.AppCompat.Dialog.Alert">
+<!--        <item name="android:windowMinWidthMajor">3%</item>-->
+<!--                <item name="android:windowMinWidthMinor">3%</item>-->
+<!--                <item name="windowFixedHeightMajor">3%</item>-->
+<!--                <item name="windowFixedHeightMinor">3%</item>-->
+        <item name="android:resizeableActivity">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">#00AF4C4C</item>
+    </style>
 </resources>

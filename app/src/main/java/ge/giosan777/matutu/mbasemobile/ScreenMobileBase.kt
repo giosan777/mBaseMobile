@@ -31,7 +31,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getNumberStartingWith
@@ -45,11 +44,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@Preview
-@Composable
-fun MyViewPreview() {
-    ScreenMobileBase(onClick = {})
-}
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
@@ -103,6 +97,8 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                     )
                 }
             }
+
+
             Column(
                 modifier = Modifier
                     .padding(top = 8.dp)
@@ -206,6 +202,8 @@ fun ScreenMobileBase(onClick: () -> Unit) {
             Text(text = "Reklama MOBILE")
         }
     }
+
+
 
 }
 
