@@ -37,7 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getStartingNameWithOrg
 import ge.giosan777.matutu.mbasemobile.models.Organization
 import ge.giosan777.matutu.mbasemobile.screen_components.addCompanyCard
@@ -57,7 +56,6 @@ fun MyViewPreviewOrg() {
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun ScreenMobileBaseOrg(onClick: () -> Unit) {
-    val navController = rememberNavController()
     val orgState = remember {
         mutableStateOf(mutableListOf<Organization>())
     }

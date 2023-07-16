@@ -1,5 +1,3 @@
-@file:OptIn(DelicateCoroutinesApi::class)
-
 package ge.giosan777.matutu.mbasemobile
 
 import android.Manifest
@@ -64,7 +62,6 @@ import ge.giosan777.matutu.mbasemobile.ui.theme.MBaseTheme
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogPermissions
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -118,6 +115,9 @@ class MainActivity : ComponentActivity() {
                         ),
                         222
                     )
+                    val intent = Intent()
+                    intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+                    startActivity(intent)
                 }
                 mSettings!!.edit().putBoolean("canDrawOverlays", true).apply()
                 Log.d("MyLog", "ARIIIIIIIIIIIIIIIIIIS")
@@ -128,7 +128,6 @@ class MainActivity : ComponentActivity() {
                 checkedState.value = false
             }
         }
-
         setContent {
             checkedState = remember {
                 mutableStateOf(false)
@@ -229,11 +228,6 @@ class MainActivity : ComponentActivity() {
 
                                         stopService(serviceIntent)
                                     }
-
-                                    //        val intent = Intent()
-                                    //        intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
-                                    //        startActivity(intent)
-
                                 },
                                 thumbContent = {
                                     Icon(
@@ -382,6 +376,11 @@ class MainActivity : ComponentActivity() {
             },
             modifier = modifier
         )
+    }
+
+    @Composable
+    fun HomeScreen() {
+
     }
 
 }

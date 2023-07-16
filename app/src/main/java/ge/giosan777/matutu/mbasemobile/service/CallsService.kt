@@ -52,38 +52,36 @@ class CallsService : Service() {
                         }
                     }
 
-                    TelephonyManager.EXTRA_STATE_OFFHOOK -> {
-
-                        val outGoingNumber=intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-                        Log.d("MyLog", "Звонок начат")
-                        outGoingNumber?.let { it ->
-                            getOneContactExcept(it, context) {itUser->
-                                Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
-                                val i = Intent()
-                                i.setClassName(
-                                    "ge.giosan777.matutu.mbasemobile",
-                                    "ge.giosan777.matutu.mbasemobile.SecondActivity"
-                                )
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                i.putExtra("startCall", true)
-                                i.putExtra("user", itUser)
-                                context.startActivity(i)
-                            }
-                        }
-
-                    }
-
-                    TelephonyManager.EXTRA_STATE_IDLE -> {
-                        Log.d("MyLog", "Звонок заершен")
-                        val i = Intent()
-                        i.setClassName(
-                            "ge.giosan777.matutu.mbasemobile",
-                            "ge.giosan777.matutu.mbasemobile.SecondActivity"
-                        )
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        i.putExtra("endCall", true)
-                        context.startActivity(i)
-                    }
+//                    TelephonyManager.EXTRA_STATE_OFFHOOK -> {
+//                        val outGoingNumber=intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
+//                        Log.d("MyLog", "Звонок начат")
+//                        outGoingNumber?.let { it ->
+//                            getOneContactExcept(it, context) {itUser->
+//                                val i = Intent()
+//                                i.setClassName(
+//                                    "ge.giosan777.matutu.mbasemobile",
+//                                    "ge.giosan777.matutu.mbasemobile.SecondActivity"
+//                                )
+//                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                                i.putExtra("startCall", true)
+//                                i.putExtra("user", itUser)
+//                                context.startActivity(i)
+//                            }
+//                        }
+//
+//                    }
+//
+//                    TelephonyManager.EXTRA_STATE_IDLE -> {
+//                        Log.d("MyLog", "Звонок заершен")
+//                        val i = Intent()
+//                        i.setClassName(
+//                            "ge.giosan777.matutu.mbasemobile",
+//                            "ge.giosan777.matutu.mbasemobile.SecondActivity"
+//                        )
+//                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                        i.putExtra("endCall", true)
+//                        context.startActivity(i)
+//                    }
                 }
             } else if (action == "android.intent.action.NEW_OUTGOING_CALL") {
                 Log.d("MyLog", "Обработка исходящего звонка")

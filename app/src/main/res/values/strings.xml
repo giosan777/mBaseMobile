@@ -20,5 +20,6 @@
     <string name="category">Category</string>
     <string name="aucilebeli_veli">aucilebeli veli</string>
     <string name="ignore_battery_optimization">IGNORE_BATTERY_OPTIMIZATIONs</string>
+    <string name="image">image</string>
 
 </resources>

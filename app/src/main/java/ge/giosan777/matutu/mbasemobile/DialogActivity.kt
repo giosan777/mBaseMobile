@@ -1,23 +1,27 @@
 package ge.giosan777.matutu.mbasemobile
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.PixelFormat
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
 
-class SecondActivity : AppCompatActivity() {
+class DialogActivity : ComponentActivity() {
+    private lateinit var windowManager: WindowManager
+    private lateinit var dialogView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        dialogView = layoutInflater.inflate(R.layout.dialog_custom_layout, null)
         super.onCreate(savedInstanceState)
         setContent {
             val phoneAndUser = remember {
@@ -29,8 +33,7 @@ class SecondActivity : AppCompatActivity() {
             setFinishOnTouchOutside(true)
             intent.extras?.getString("user")?.let {
                 phoneAndUser.value = it
-                println("chairtooo " + this@SecondActivity)
-//                showOverlayDialog(phoneAndUser.value)
+                println("chairtooo " + this@DialogActivity)
                 newDialog(phoneAndUser.value)
                 finish()
             }
@@ -42,24 +45,26 @@ class SecondActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         if (intent != null) {
             if (intent.getBooleanExtra("endCall", false)) {
+//                windowManager.removeView(dialogView)
                 this.finish()
             } else
                 if (intent.getBooleanExtra("startCall", false)) {
                     val user = intent.getStringExtra("user")
-                    newDialog(user!!)
+//                    windowManager.removeView(dialogView)
                 }
         }
     }
 
 
     fun newDialog(userName: String) {
-        val builder = AlertDialog.Builder(this,R.style.CustomDialog)
+        val builder = AlertDialog.Builder(this, R.style.CustomDialog)
         val customDialogView: View = layoutInflater.inflate(
-            ge.giosan777.matutu.mbasemobile.R.layout.dialog_custom_layout,
+            R.layout.dialog_custom_layout,
             null
         )
-        customDialogView.minimumWidth=200
-        customDialogView.minimumHeight=100
+        customDialogView.minimumWidth = 200
+        customDialogView.minimumHeight = 100
+
 
 
         builder.setView(customDialogView)
@@ -73,6 +78,7 @@ class SecondActivity : AppCompatActivity() {
 
         dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
 
+
         dialog.setOnCancelListener(DialogInterface.OnCancelListener {
             this.finish()
         })
@@ -84,30 +90,6 @@ class SecondActivity : AppCompatActivity() {
             this.finish()
         })
     }
-
-
-    private fun showOverlayDialog(userName: String) {
-        val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
-        );
-
-        // Создание и настройка вашего диалогового окна
-        val builder = AlertDialog.Builder(this);
-        builder.setTitle("Rekavs $userName");
-        builder.setMessage("Пример диалогов ого окна поверх звонилки");
-        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
-            dialog.dismiss()
-            this.finish()
-        });
-
-        val dialog: AlertDialog = builder.create();
-        dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-        dialog.show()
-    }
-
-
 }
+
+

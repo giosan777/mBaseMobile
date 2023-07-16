@@ -104,7 +104,7 @@ dependencies {
 
     implementation('commons-net:commons-net:20030805.205232')
 
-
+    implementation "androidx.core:core-splashscreen:1.0.1"
 
 
 
