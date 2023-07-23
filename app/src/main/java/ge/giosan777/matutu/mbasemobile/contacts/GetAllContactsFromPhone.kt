@@ -6,7 +6,7 @@ import ge.giosan777.matutu.mbasemobile.models.Person
 
 fun getAllContactsFromPhoneMy(): MutableList<Person> {
     val arrayContacts = mutableListOf<Person>()
-    val cursor = APP_CONTEXT!!.contentResolver.query(
+    val cursor = APP_CONTEXT.contentResolver.query(
         ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
         null,
         null,
@@ -20,6 +20,7 @@ fun getAllContactsFromPhoneMy(): MutableList<Person> {
                 it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME))
             val phone =
                 it.getString(it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
+
             if (fullName != null && phone != null) {
                 val personTmp = Person(null, phone, fullName, "",1)
                 arrayContacts.add(personTmp)

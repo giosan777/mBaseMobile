@@ -94,3 +94,82 @@ fun AlertDialogInternet(callbacks:(Boolean) -> Unit) {
 
     }
 }
+
+
+@Composable
+fun AlertDialogBattery(callbacks:(Boolean) -> Unit) {
+    MaterialTheme {
+        Column {
+            val openDialog = remember { mutableStateOf(true) }
+            if (openDialog.value) {
+
+                AlertDialog(
+                    onDismissRequest = {
+                        // Dismiss the dialog when the user clicks outside the dialog or on the back
+                        // button. If you want to disable that functionality, simply use an empty
+                        // onCloseRequest.
+//                        openDialog.value = false
+                    },
+                    title = {
+                        Text(text = stringResource(R.string.battery_optimization))
+                    },
+                    text = {
+                        Text(stringResource(R.string.battery_optimization_text))
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                openDialog.value = false
+                                callbacks(true)
+                            }) {
+                            Text(stringResource(R.string.ok))
+                        }
+                    },
+                    dismissButton = {
+
+                    }
+                )
+            }
+        }
+
+    }
+}
+
+@Composable
+fun AlertDialogInternetFromAddNewOrg() {
+    MaterialTheme {
+        Column {
+            val openDialog = remember { mutableStateOf(true) }
+            if (openDialog.value) {
+
+                AlertDialog(
+                    onDismissRequest = {
+                        // Dismiss the dialog when the user clicks outside the dialog or on the back
+                        // button. If you want to disable that functionality, simply use an empty
+                        // onCloseRequest.
+//                        openDialog.value = false
+                    },
+                    title = {
+                        Text(text = stringResource(R.string.internet_connection))
+                    },
+                    text = {
+                        Text(stringResource(R.string.internet_required_for_add_new_org))
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                openDialog.value = false
+
+                            }) {
+                            Text(stringResource(R.string.ok))
+                        }
+                    },
+                    dismissButton = {
+
+                    }
+                )
+            }
+        }
+
+    }
+}

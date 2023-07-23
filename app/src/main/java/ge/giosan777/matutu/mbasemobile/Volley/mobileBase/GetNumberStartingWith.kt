@@ -7,6 +7,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import ge.giosan777.matutu.mbasemobile.database.AppDatabase
+import ge.giosan777.matutu.mbasemobile.database.getAllPeopleWithPhoneStartingWith
 import ge.giosan777.matutu.mbasemobile.models.Person
 
 suspend fun getNumberStartingWith(
@@ -24,13 +25,11 @@ suspend fun getNumberStartingWith(
             val jsonString = response.toString()
             val personArray: Array<Person> = Gson().fromJson(jsonString, Array<Person>::class.java)
             val sortedList=personArray.sortedDescending()
-
             mutableState.value = sortedList.toMutableList()
         },
         { _ ->
-            val personArray = mainDb.getDao().findByPhoneStartingWith(phone).orEmpty()
+            val personArray = getAllPeopleWithPhoneStartingWith(phone = phone)
             mutableState.value = personArray.toMutableList()
-            println(phone)
         }
     )
     queue.add(stringRequest)

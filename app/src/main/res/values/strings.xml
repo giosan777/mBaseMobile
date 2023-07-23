@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="add_mob_giigle" translatable="false">ca-app-pub-7766146936543732/4849684881</string>
+
     <string name="app_name">mBaseMobile</string>
     <string name="enter_phone_number">Enter Phone Number</string>
     <string name="enter_org_name">Enter Organization Name</string>
@@ -8,10 +11,11 @@
     <string name="all_permissions_are_required_for_the_app_to_work_properly">All permissions are required for \nthe App to work properly!</string>
     <string name="internet_connection">Internet connection</string>
     <string name="internet_required_for_first_launch">internet required for first launch</string>
+    <string name="internet_required_for_add_new_org">internet required for add new Organization</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="expand_button_content_description">expand button content description</string>
-    <string name="daamate_organizacia">დაამატე შენი კომპანია</string>
+    <string name="add_organization">Add organization</string>
     <string name="enter_company_phone">Enter Company Phone</string>
     <string name="enter_company_address">Enter Company Address</string>
     <string name="enter_company_web_site">Enter Company Web Site</string>
@@ -21,5 +25,91 @@
     <string name="aucilebeli_veli">aucilebeli veli</string>
     <string name="ignore_battery_optimization">IGNORE_BATTERY_OPTIMIZATIONs</string>
     <string name="image">image</string>
+    <string name="policy_1">user agreement</string>
+    <string name="policy_2">privacy policy</string>
+    <string name="danarekebis_jurnali">Call log</string>
+    <string name="tanxmoba">I agree</string>
+    <string name="en" translatable="false">English</string>
+    <string name="ge" translatable="false">ქართული</string>
+    <string name="language" translatable="false">English</string>
+    <string name="battery_optimization" translatable="true">turn off battery optimization</string>
+    <string name="battery_optimization_text" translatable="true">For the application to work correctly, disable battery optimization</string>
+
+
+    <string name="policy_text">
+1. Displaying the Company Number in the Database
+If you want your company number to be easily searchable by other users of the application, you can add your company\'s
+        information to our "Organizations Database" for adding listings. To do this, please click on: Add Your Company.\n
+
+\n2. Principle of Application Operation
+The "MBase" application does not require access to your GPS coordinates, SMS messages, or microphone recording function.
+        The application does not store any GPS coordinates, nor does it perform any call recording, message reading, viewing, or modification.
+        The application does not store any personal information about your contacts or messaging history on your device. Therefore, it does not request access to mobile devices for these services.\n
+
+\n4. Incoming and Outgoing Calls
+In case you enable the "Number Identifier" function in the application, it automatically performs a search for the incoming and outgoing calls in the database and retrieves the results.
+In the event that the application does not have internet access, it searches for the number\'s owner in the databases available on your phone.
+The number will be automatically searched in the database, and in the case of a match, the application will display the results,
+        namely the names associated with that number in the application\'s other users\' mobile devices.\n
+
+\n5. Use of Contacts
+The "MBase" application uses the contacts stored on your mobile device with your permission and shares them with the application\'s users.
+        This means that the application only processes your contacts information after obtaining your consent.
+By sending your contacts, you confirm that you have legal authority over the personal information, and you grant the right to process,
+        store, and transfer the information to the application\'s servers located in the United States, in compliance with the laws and regulations on personal data protection.\n
+
+\n6. Retrieving Mobile/Phone Numbers from the Application\'s Database
+In case you are searching for your mobile/phone number within the application and wish to retrieve its associated name from the
+        application or prefer that your number is not searchable within the application, you can reach out to us via Facebook Messenger
+        or through the website. After the verification process to ensure that this number is genuinely yours, we will either remove the number or
+</string>
+    <string name="phone">Phone</string>
+    <string name="company">Company</string>
+    <string name="category_bank">Bank</string>
+    <string name="category_taxi">Taxi</string>
+    <string name="category_pizza">Pizza</string>
+    <string name="category_shawerma">Shawarma</string>
+    <string name="category_totalizator">Bookmaker</string>
+    <string name="category_restourant">Restaurant</string>
+    <string name="category_dazgveva">Insurance</string>
+    <string name="category_online_sekhi">Online loan</string>
+    <string name="category_uzravi_qoneba">Real estate</string>
+    <string name="category_apotneka">Pharmacy</string>
+    <string name="category_teqnikis_magazia">Hardware store</string>
+    <string name="category_sastumro">Hotel</string>
+    <string name="category_silamazis_saloni">Beauty salon</string>
+    <string name="category_sadgesascaulo_centri">Holiday center</string>
+    <string name="category_turistuli_compania">Travel company</string>
+    <string name="category_internet_provider">Internet provider</string>
+    <string name="category_arasamtavrobo">NGO</string>
+    <string name="category_clinika">Clinic</string>
+    <string name="category_saxelmcifo_dacesebuleba">State institution</string>
+    <string name="category_microsafinanso">Microfinance organization</string>
+    <string name="category_mshenebloba">Construction, repair</string>
+    <string name="category_amanati">Parcel</string>
+    <string name="category_comunaluri">communal</string>
+    <string name="category_avto_gaqiraveba">Car rental</string>
+    <string name="category_skola">School</string>
+    <string name="category_sxva">Other</string>
+    <string name="category_comp_momsaxureba">Computer services</string>
+    <string name="category_ziza">Babysitter</string>
+    <string name="category_damlagebeli">Maid</string>
+    <string name="category_flaerebis_darigeba">Distribution of flyers</string>
+    <string name="category_ofis_menegeri">Office manager</string>
+    <string name="category_masajisti">Masseuse</string>
+    <string name="category_mzgoli">Driver</string>
+    <string name="category_diasaxlisi">Housewife, Cook</string>
+    <string name="category_ojaxis_eqimi">Family doctor</string>
+    <string name="category_repetitori">Tutor</string>
+    <string name="category_bugalteri">Accountant</string>
+    <string name="category_molare">Cashier, consultant</string>
+    <string name="category_gatboba">Heating, air conditioning</string>
+    <string name="category_dacva">Security guard</string>
+    <string name="category_iuristi">Lawyer</string>
+    <string name="category_tarjimani">Translator</string>
+    <string name="category_tvirtis_gadazidva">Cargo transportation</string>
+    <string name="category_evakuatori">Evacuate, technical assistance</string>
+    <string name="enter_organization_category">Enter Organization Category</string>
+    <string name="else_search_category">Or search by Category</string>
 
 </resources>

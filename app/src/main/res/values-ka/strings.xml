@@ -2,23 +2,111 @@
 <resources>
     <string name="app_name">mBaseMobile</string>
     <string name="enter_phone_number">შეიყვანეტ ტელეფონის ნომერი</string>
-    <string name="enter_org_name">შეიყვანეტ ორგანიზაციის დასახელება</string>
-    <string name="example_org">მაგ: თბს ან tbc</string>
+    <string name="enter_org_name">ორგანიზაციის დასახელება</string>
+    <string name="example_org">მაგ: თბს</string>
     <string name="permissions">ნებართვები</string>
     <string name="all_permissions_are_required_for_the_app_to_work_properly">ყველა საჭირო ნებართვა არის სავალდებულო \nაპლიკაციის სწორი მუშაობისთვის</string>
-    <string name="internet_connection">Internet connection</string>
-    <string name="internet_required_for_first_launch">internet required for first launch</string>
+    <string name="internet_connection">ინტერნეტთან წვდომა</string>
+    <string name="internet_required_for_first_launch">ინტერნეტი აუცილებელია პირველი ჩართვისას</string>
+    <string name="internet_required_for_add_new_org">ინტერნეტი აუცილებელია ახალი ორგანიზაციის დამატებისთვის</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="expand_button_content_description">expand button content description</string>
-    <string name="daamate_organizacia">დაამატე შენი კომპანია</string>
-    <string name="enter_company_phone">Enter Company Phone</string>
-    <string name="enter_company_address">Enter Company Address</string>
-    <string name="enter_company_web_site">Enter Company Web Site</string>
-    <string name="enter_company_category">Enter Company Category</string>
-    <string name="enter_company_description">Enter Company Description</string>
-    <string name="category">Category</string>
-    <string name="aucilebeli_veli">aucilebeli veli</string>
-    <string name="ignore_battery_optimization">IGNORE_BATTERY_OPTIMIZATION</string>
+    <string name="add_organization">ორგანიზაციის დამატება</string>
+    <string name="enter_company_phone">ორგანიზაციის ტელეფონი</string>
+    <string name="enter_company_address">ორგანიზაციის მისამართი</string>
+    <string name="enter_company_web_site">ორგანიზაციის ვებ გვერდი</string>
+    <string name="enter_company_category">ორგანიზაციის კატეგორია</string>
+    <string name="enter_company_description">ორგანიზაციის აღწერა</string>
+    <string name="category">კატეგორია</string>
+    <string name="aucilebeli_veli">აუცილებელი ველი</string>
+    <string name="ignore_battery_optimization">ბატარეის ოპტიმიზაციის გათიშვა</string>
+    <string name="image">image</string>
+    <string name="policy_2">კონფიდენციალურობის პოლიტიკა</string>
+    <string name="policy_1">სამომხმარებლო შეთანხმება</string>
+    <string name="danarekebis_jurnali">დანარეკების კურნალი</string>
+    <string name="tanxmoba">ვეთანხმები</string>
+
+
+
+
+    <string name="policy_text">
+1. კომპანიის ნომრის განთავსება ნომრების ბაზაში
+თუ გსურთ თქვენი კომპანიის ნომერი მარტივად მოსაძებნი იყოს აპლიკაციის სხვა მომხმარებლებისთვის, თქვენ შეგიძლიათ დაამატოთ თქვენი კომპანიის შესახებ ინფორმაცია ჩვენს „ორგანიზაციების ბაზაში“ განცხადების დასამატებლად დააჭირეთ: კომპანიის დამატება
+2. აპლიკაციის მუშაობის პრინციპი
+აპლიკაცია „MBase“ არ ითხოვს წვდომას თქვენს GPS კორდინატებზე, SMS -ზე ან ხმის ჩაწერის ფუნქციაზე, აპლიკაცია არ ინახავს არანაირ GPS კორდინატებს და არ ახდენს არანაირი საუბრის ჩაწერას, არც sms ის წაკითხვას, ნახვას ან შეცვლას, აპლიკაცია არ ინახავს არანაირ ინფორმაციას თქვენს პირად საუბრებზე ან მიმოწერაზე, შესაბამისად არც ითხოვს მობილური მოწყობილობებიდან წვდომას აღნიშნულ სერვისებზე.
+4. შემომავალი და გამავალი ზარები
+იმ შემთხვევაში თუ თქვენ ჩართავთ აპლიკაციის ფუნქციას „ნომრის იდენტიფიკატორი“ აპლიკაცია ავტომატურად მოახდენს შემომავალ და გამავალ ზარებზე ნომრის ძიებას და გამოიტანს შედეგს,
+        იმ შემთხვევაში თუ აპლიკაციას არ აქვს წვდომა ინტენეტთან, აპლიკაცია მოძებნის ნომრის მფლობელს ტელეფონში არსებული ბაზებიდან.
+        ნმერი ავტომატურად იქნება მოძებნილი ბაზაში და მოძებნის შემთხვევაში აპლიკაცია გამოიტანს შედეგს ანუ ამ ნომერზე არსებულ სახელებს რომლებიც აპლიკაციის სხვა მომხმარებლების
+        მობილური მოწყობილობებიდან იქნა დამატებული ბაზაში (მათი თანხმობის შემდგომ), ასევე აპლიკაცია ინახავს შემომავალი და გამავალი ზარების სიას თქვენივე ტელეფონის მეხსიერებაში,
+        რაც საშუალებას გაძლევთ მარტივად მოძებნოთ ნომრის მფლობელი ზარების სიიდან.
+5. კონტაქტების გამოყენება
+აპლიკაცია „MBase“ იყენებს თქვენს მობილურ მოწყობილობაში არსებულ კონტაქტებს თქვენი ნებართვით და უზიარებს მათ აპლიკაციის მომხმარებლებს, ანუ აპლიკაცია მხოლოდ თქვენი თანხმობის შემდგომ
+        აგზავნის თქვენს კონტაქტებს და მასზე მიმაგრებულ ინფორმაციას აპლიკაციის სერვერებზე რის შემდეგაც აპლიკაციის სხვა მომხმარებლებს აქვთ შესაძლებლობა მოძებნონ მობილურის/ტელეფონის
+        ნომრები ერთიან ბაზაში, თქვენ ადასტურებთ რომ თქვენს სატელეფონო წიგნაკში განთავსებული ნომრები და მათი მფლობელების შესახებ ინფორმაცია გაქვთ მოპოვებული კანონიერად,
+        კერძოდ: „საქართველოს კანონი პერსონალურ მონაცემთა დაცვის შესახებ, 5 მუხლის თანახმად“ მონაცემები საჯაროდ ხელმისაწვდომია ან მონაცემთა სუბიექტმა ისინი ხელმისაწვდომი
+        გახადა თქვენთვის და თქვენ გაქვთ მონაცემთა სუბიექტის თანხმობა მისი პერსონალური ინფორმაციის შენახვა, გამოყენება, დამუშავება და მესამე პირისთვის გადაცემაზე.
+        თუ თქვენ არ ეთანხმებით თქვენი კონტაქტების გაზიარებას ან არ გაქვთ მონაცემთა სუბიექტის თანხმობა მისი პერსონალური ინფორმაციის შენახვა/დამუშავება/მესამე პირისთვის გადაცემაზე
+        არ დაეთანხმოთ და არ გამოიყენოთ აპლიკაცია, აპლიკაციის გამოყენებისას თქვენ ადასტურებთ რომ გაქვთ თქვენს ტელეფონში არსებული კონტაქტების კანონიერად
+        შენახვა/დამუშავება/მესამე პირისთვის გადაცემის უფლება, „საქართველოს კანონი პერსონალურ მონაცემთა დაცვის შესახებ, 5 მუხლის თანახმად“ თქვენს მიერ გაზიარებული
+        კონტაქტები აპლიკაციაში არის მოპოვებული კანონიერად. აპლიკაცია ამუშავებს მხოლოდ კანონიერი საჯარო გზით მოპოვებულ ინფორმაციას, მონაცემთა დამუშავება ხდება ამერიკის
+        შეერთებულო შტატების ტერიტორიაზე განთავსებულ სერვერზე საერთაშორისო კანონმდებლობის და უსაფრთხოების წესების დაცვით.
+6. მობილურის/ტელეფონის ნომრის ამოღება აპლიკაციის ბაზიდან
+იმ შემთხვევაში თუ თქვენი მობილურის/ტელეფონის ნომერი იძებნება ამ აპლიკაციის მეშვეობით და თქვენ გსურთ ამოიღოთ თქვენი ნომრის რომელიმე დასახელება აპლიკაციიდან ან
+        გსურთ არ იძებნებოდეს თქვენი ნომერი აპლიკაციაში თქვენ შეგიძლიათ მოგვმართოთ Facebook ის მესენჯერით ან საიტის საშუალებით, იმის შემდგომ როდესაც მოხდება
+        დადასტურება რომ ეს ნომერი ნამდვილად თქვენს კუთვნილებაშია ჩვენ ამოვიღებთ ნომერს ან თქვენი ნომრის რომელიმე კონკრეტულ დასახელებას აპლიკაციიდან.
+</string>
+    <string name="phone">ტელეფონი</string>
+    <string name="company">ორგანიზაცია</string>
+    <string name="battery_optimization">ბატარეის ოპტიმიზაციის გათიშვა</string>
+    <string name="battery_optimization_text" translatable="true">აპლიკაციის გამართული მუშაობისთვის,გთხოვთ გათიშოთ ბატარეის ოპტიმიზაცია</string>
+    <string name="category_bank">ბანკი</string>
+    <string name="category_taxi">ტაქსი</string>
+    <string name="category_pizza">პიცა</string>
+    <string name="category_shawerma">შაურმა</string>
+    <string name="category_totalizator">ტოტალიზატორი</string>
+    <string name="category_restourant">რესტორანი</string>
+    <string name="category_dazgveva">დაზღვევა</string>
+    <string name="category_online_sekhi">ონლაინ სესხი</string>
+    <string name="category_uzravi_qoneba">უძრავი ქონება</string>
+    <string name="category_apotneka">აფთიაქი</string>
+    <string name="category_teqnikis_magazia">ტექნიკის მაღაზია</string>
+    <string name="category_sastumro">სასტუმრო</string>
+    <string name="category_silamazis_saloni">სილამაზის სალონი</string>
+    <string name="category_sadgesascaulo_centri">სადღესასწაულო ცენტრი</string>
+    <string name="category_turistuli_compania">ტურისტული კომპანია</string>
+    <string name="category_internet_provider">ინტერნეტ პროვაიდერი</string>
+    <string name="category_arasamtavrobo">არასამთავრობო ორგანიზაცია</string>
+    <string name="category_clinika">კლინიკა</string>
+    <string name="category_saxelmcifo_dacesebuleba">სახელმწიფო დაწესებულება</string>
+    <string name="category_microsafinanso">მიკროსაფინანსო ორგანიზაცია</string>
+    <string name="category_mshenebloba">მშენებლობა, რემონტი</string>
+    <string name="category_amanati">ამანათი</string>
+    <string name="category_comunaluri">კომუნალური</string>
+    <string name="category_avto_gaqiraveba">ავტომობილების გაქირავება</string>
+    <string name="category_skola">სკოლა</string>
+    <string name="category_sxva">სხვა</string>
+    <string name="category_comp_momsaxureba">კომპიუტერული მომსახურება</string>
+    <string name="category_ziza">ძიძა</string>
+    <string name="category_damlagebeli">დამლაგებელი</string>
+    <string name="category_flaerebis_darigeba">ფლაერების დარიგება</string>
+    <string name="category_ofis_menegeri">ოფისმენეჯერი</string>
+    <string name="category_masajisti">მასაჟისტი</string>
+    <string name="category_mzgoli">მძღოლი</string>
+    <string name="category_diasaxlisi">დიასახლისი, მზარეული</string>
+    <string name="category_ojaxis_eqimi">ოჯახის ექიმი</string>
+    <string name="category_repetitori">რეპეტიტორი</string>
+    <string name="category_bugalteri">ბუღალტერი</string>
+    <string name="category_molare">მოლარე, კონსულტანტი</string>
+    <string name="category_gatboba">გათბობა, კონდიცირება</string>
+    <string name="category_dacva">დაცვის თანამშრომელი</string>
+    <string name="category_iuristi">იურისტი, ადვოკატი</string>
+    <string name="category_tarjimani">თარჯიმანი</string>
+    <string name="category_tvirtis_gadazidva">ტვირთის გადაზიდვა</string>
+    <string name="category_evakuatori">ევაკუატორი, ტექდახმარება</string>
+    <string name="enter_organization_category"> ჩაწერე კატეგორია</string>
+    <string name="else_search_category">ან მოძებნე კატეგორიით</string>
+
 
 </resources>

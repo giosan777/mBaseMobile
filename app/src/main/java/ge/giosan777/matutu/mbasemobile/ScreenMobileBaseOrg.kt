@@ -12,19 +12,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,39 +41,56 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getCategoryStartingNameWithOrg
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getStartingNameWithOrg
+import ge.giosan777.matutu.mbasemobile.banner.BannerFull
 import ge.giosan777.matutu.mbasemobile.models.Organization
-import ge.giosan777.matutu.mbasemobile.screen_components.addCompanyCard
-import ge.giosan777.matutu.mbasemobile.screen_components.orgCard
+import ge.giosan777.matutu.mbasemobile.navigator.Screen
+import ge.giosan777.matutu.mbasemobile.screen_components.AddCompanyCard
+import ge.giosan777.matutu.mbasemobile.screen_components.OrgCard
+import ge.giosan777.matutu.mbasemobile.utils.textTraslation
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun MyViewPreviewOrg() {
-    ScreenMobileBaseOrg(onClick = {})
+fun PrevMobileBaseOrg() {
+    ScreenMobileBaseOrg(navController = rememberNavController())
 }
 
 //@Preview
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun ScreenMobileBaseOrg(onClick: () -> Unit) {
+fun ScreenMobileBaseOrg(navController: NavController) {
+
     val orgState = remember {
         mutableStateOf(mutableListOf<Organization>())
     }
-    val text = remember {
+    val orgSearch = remember {
+        mutableStateOf("")
+    }
+    val orgCategorySearch = remember {
         mutableStateOf("")
     }
     val cardVisible = remember {
         mutableStateOf(false)
     }
 
-    var expanded by remember { mutableStateOf(false) }
+    var companyAddExpanded by remember { mutableStateOf(false) }
+    var companyCategoryExpanded = remember { mutableStateOf(false) }
 
 
     Column(
@@ -89,10 +113,15 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(onClick = {
-                    onClick()
+                    navController.navigate(route = Screen.MBase.route) {
+                        popUpTo(route = Screen.MBaseOrg.route) {
+                            inclusive = true
+                        }
+                    }
                 }, modifier = Modifier) {
                     Text(
-                        text = "MOBILE", style = MaterialTheme.typography.displayMedium
+                        text = stringResource(id = R.string.phone),
+                        style = MaterialTheme.typography.displayMedium
                     )
                 }
                 Button(
@@ -102,7 +131,7 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                     shape = RoundedCornerShape(topStart = 32.dp, bottomEnd = 32.dp)
                 ) {
                     Text(
-                        text = "ORG BASE",
+                        text = stringResource(id = R.string.company),
                         style = MaterialTheme.typography.displayMedium
                     )
                 }
@@ -123,7 +152,7 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                         modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd,
                     ) {
                         OutlinedTextField(
-                            value = text.value,
+                            value = orgSearch.value,
                             leadingIcon = {
                                 Icon(
                                     painter = painterResource(R.drawable.text_field_org_icon),
@@ -132,13 +161,16 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                             },
                             onValueChange = { it
                                 ->
-                                if (it.isNotEmpty()&&it[0] == '*') {
-                                    text.value = it
-                                }else{
+                                if (it.isNotEmpty() && it[0] == '*') {
+                                    orgSearch.value = it
+                                } else {
                                     cardVisible.value = true
-                                    text.value = it
+                                    orgSearch.value = it
                                     GlobalScope.launch(Dispatchers.IO) {
-                                        getStartingNameWithOrg(APP_CONTEXT!!, orgState, text.value)
+                                        getStartingNameWithOrg(
+                                            orgState,
+                                            orgSearch.value
+                                        )
                                     }
                                 }
 
@@ -154,13 +186,13 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
                                 .height(60.dp)
                                 .fillMaxWidth(),
                             textStyle = MaterialTheme.typography.labelSmall
-                            )
+                        )
                         Text(
                             modifier = Modifier
                                 .padding(end = 15.dp)
                                 .clickable {
                                     cardVisible.value = false
-                                    text.value = ""
+                                    orgSearch.value = ""
                                 },
                             text = "Clear",
                             style = MaterialTheme.typography.labelSmall
@@ -170,42 +202,89 @@ fun ScreenMobileBaseOrg(onClick: () -> Unit) {
 
                 }
 
-                Button(onClick = { expanded = !expanded },modifier=Modifier.padding(top = 8.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.else_search_category),
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                    OrgCategorySearch(
+                        companyCategoryExpanded = companyCategoryExpanded.value,
+                        onClick = {
+                            companyCategoryExpanded.value = !companyCategoryExpanded.value
+                        })
+
+
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .clickable {
+                                orgCategorySearch.value = ""
+                                cardVisible.value = false
+                            },
+                        text = "Clear",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+
+                }
+                Text(text = orgCategorySearch.value)
+                if (companyCategoryExpanded.value) {
+                    CategoryChoice(orgCategorySearch, companyCategoryExpanded)
+                }
+
+                if (orgCategorySearch.value.isNotEmpty()) {
+                    val trasleted= textTraslation(orgCategorySearch.value)
+                    cardVisible.value = true
+                    getCategoryStartingNameWithOrg(
+                        orgState,
+                        trasleted
+                    )
+                }
+
+
+                Button(
+                    onClick = { companyAddExpanded = !companyAddExpanded },
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = stringResource(R.string.daamate_organizacia))
-                        OrgAddItemButton(expanded = expanded, onClick = { expanded = !expanded })
+                        Text(text = stringResource(R.string.add_organization))
+                        OrgAddItemButton(
+                            companyAddExpanded = companyAddExpanded,
+                            onClick = { companyAddExpanded = !companyAddExpanded })
                     }
                 }
-                if (expanded) {
-                    addCompanyCard(expanded)
+                if (companyAddExpanded) {
+                    AddCompanyCard(companyAddExpanded)
                 }
 
                 LazyColumn {
                     itemsIndexed(orgState.value) { index, item ->
-                        if (orgState.value.isNotEmpty() && cardVisible.value && !expanded) {
-                            orgCard(orgCard = orgState, rigi = index)
+                        if (orgState.value.isNotEmpty() && cardVisible.value && !companyAddExpanded) {
+                            OrgCard(orgCard = orgState, rigi = index)
                         }
                     }
                 }
             }
 
         }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.2f)
-                .background(Color.Red),
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Reklama ORG")
+            BannerFull()
         }
     }
 }
 
 @Composable
 fun OrgAddItemButton(
-    expanded: Boolean,
+    companyAddExpanded: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -215,9 +294,122 @@ fun OrgAddItemButton(
         modifier = modifier.padding(start = 5.dp, end = 5.dp)
     ) {
         Icon(
-            imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+            imageVector = if (companyAddExpanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
             contentDescription = stringResource(R.string.expand_button_content_description),
         )
+    }
+
+}
+
+@Composable
+fun OrgCategorySearch(
+    companyCategoryExpanded: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    IconButton(
+        onClick = onClick,
+        modifier = modifier.padding(end = 5.dp)
+    ) {
+        Icon(
+            imageVector = if (companyCategoryExpanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+            contentDescription = stringResource(R.string.expand_button_content_description),
+        )
+    }
+
+}
+
+// to create an Outlined Text Field
+// Calling this function as content
+// in the above function
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CategoryChoice(
+    selectedText: MutableState<String>,
+    companyCategoryExpanded: MutableState<Boolean>
+) {
+
+    val options = listOf(
+        stringResource(R.string.category_bank),
+        stringResource(R.string.category_taxi),
+        stringResource(R.string.category_pizza),
+        stringResource(R.string.category_shawerma),
+        stringResource(R.string.category_totalizator),
+        stringResource(R.string.category_restourant),
+        stringResource(R.string.category_dazgveva),
+        stringResource(R.string.category_online_sekhi),
+        stringResource(R.string.category_uzravi_qoneba),
+        stringResource(R.string.category_apotneka),
+        stringResource(R.string.category_teqnikis_magazia),
+        stringResource(R.string.category_sastumro),
+        stringResource(R.string.category_silamazis_saloni),
+        stringResource(R.string.category_sadgesascaulo_centri),
+        stringResource(R.string.category_turistuli_compania),
+        stringResource(R.string.category_internet_provider),
+        stringResource(R.string.category_arasamtavrobo),
+        stringResource(R.string.category_clinika),
+        stringResource(R.string.category_saxelmcifo_dacesebuleba),
+        stringResource(R.string.category_microsafinanso),
+        stringResource(R.string.category_mshenebloba),
+        stringResource(R.string.category_amanati),
+        stringResource(R.string.category_comunaluri),
+        stringResource(R.string.category_avto_gaqiraveba),
+        stringResource(R.string.category_skola),
+        stringResource(R.string.category_comp_momsaxureba),
+        stringResource(R.string.category_ziza),
+        stringResource(R.string.category_damlagebeli),
+        stringResource(R.string.category_flaerebis_darigeba),
+        stringResource(R.string.category_ofis_menegeri),
+        stringResource(R.string.category_masajisti),
+        stringResource(R.string.category_mzgoli),
+        stringResource(R.string.category_diasaxlisi),
+        stringResource(R.string.category_ojaxis_eqimi),
+        stringResource(R.string.category_repetitori),
+        stringResource(R.string.category_bugalteri),
+        stringResource(R.string.category_molare),
+        stringResource(R.string.category_gatboba),
+        stringResource(R.string.category_dacva),
+        stringResource(R.string.category_iuristi),
+        stringResource(R.string.category_tarjimani),
+        stringResource(R.string.category_tvirtis_gadazidva),
+        stringResource(R.string.category_evakuatori),
+        stringResource(R.string.category_sxva)
+    )
+
+    Card(modifier = Modifier.background(Color.White)) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .background(Color.White),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            options.forEach { itString ->
+                ClickableText(
+                    modifier = Modifier,
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontStyle = FontStyle.Italic,
+                                color = Color.Blue,
+                                fontSize = 18.sp
+                            )
+                        ) {
+                            append(itString)
+                        }
+                    }, onClick = {
+                        selectedText.value = itString
+                        companyCategoryExpanded.value = false
+                    })
+                Divider()
+                Divider()
+                Divider()
+                Divider()
+                Divider()
+            }
+        }
     }
 
 }

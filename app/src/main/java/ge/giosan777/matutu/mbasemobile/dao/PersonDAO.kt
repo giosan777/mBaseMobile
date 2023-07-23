@@ -15,12 +15,14 @@ interface PersonDAO {
     @Insert
     fun insertAllPeoples(peopleList:MutableList<Person>)
 
-    @Query("SELECT * FROM persons")
+    @Query("SELECT * FROM person")
     fun getAllPeople(): List<Person>
 
-    @Query("DELETE FROM Persons")
+    @Query("DELETE FROM Person")
     fun deleteAll()
 
-    @Query("SELECT * FROM persons WHERE phone LIKE :startingWith")
+    @Query("SELECT * FROM person WHERE phone LIKE :startingWith || '%'")
     fun findByPhoneStartingWith(startingWith:String ): List<Person>
+
+
 }

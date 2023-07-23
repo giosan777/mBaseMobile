@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -58,10 +59,14 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.R
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.saveNewOrganization
+import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternetFromAddNewOrg
+import ge.giosan777.matutu.mbasemobile.utils.hasConnection
+import ge.giosan777.matutu.mbasemobile.utils.textTraslation
 import ge.giosan777.matutu.mbasemobile.validation.organizationCategoryValidation
 import ge.giosan777.matutu.mbasemobile.validation.organizationNameValidation
 import ge.giosan777.matutu.mbasemobile.validation.organizationPhoneValidation
@@ -80,20 +85,26 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.UUID
 
+
+@Preview
+@Composable
+fun AddCompPreview() {
+    AddCompanyCard(expanded = true)
+}
+
+
 private val newOrganization =
     ge.giosan777.matutu.mbasemobile.models.Organization(0, "", "", "", "", "", "", "")
 
 @Composable
-fun addCompanyCard(expanded: Boolean) {
+fun AddCompanyCard(expanded: Boolean) {
     val companyName = remember {
         mutableStateOf("")
     }
     val companyPhone = remember {
         mutableStateOf("")
     }
-//    val companyCategory = remember {
-//        mutableStateOf("")
-//    }
+
     val companyWebSite = remember {
         mutableStateOf("")
     }
@@ -125,7 +136,7 @@ fun addCompanyCard(expanded: Boolean) {
     val categoryValidation = remember {
         mutableStateOf("")
     }
-    val validationStatus= remember {
+    val validationStatus = remember {
         mutableStateOf(false)
     }
 
@@ -160,8 +171,7 @@ fun addCompanyCard(expanded: Boolean) {
 
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    OutlinedTextField(
-                        value = companyName.value,
+                    OutlinedTextField(value = companyName.value,
                         onValueChange = {
                             companyName.value = it
                             nameValidation.value = organizationNameValidation(companyName.value)
@@ -171,11 +181,9 @@ fun addCompanyCard(expanded: Boolean) {
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Next
                         ),
-                        keyboardActions = KeyboardActions(
-                            onNext = {
-                                focusManager.moveFocus(FocusDirection.Down)
-                            }
-                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
                         label = {
                             Text(
                                 stringResource(R.string.enter_org_name),
@@ -185,22 +193,22 @@ fun addCompanyCard(expanded: Boolean) {
                         supportingText = {
                             if (nameValidation.value != "ok") {
                                 Text(
-                                    text = nameValidation.value,
-                                    color = Color.Red
+                                    text = nameValidation.value, color = Color.Red
                                 )
                             }
-                        }
-                    )
+                        })
                     Image(
-                        modifier = Modifier.offset(y = 5.dp),
+                        modifier = Modifier
+                            .offset(y = 5.dp)
+                            .width(12.dp)
+                            .height(12.dp),
                         painter = painterResource(id = R.drawable.star_ico),
                         contentDescription = "available image"
                     )
                 }
 
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    OutlinedTextField(
-                        value = companyPhone.value,
+                    OutlinedTextField(value = companyPhone.value,
                         onValueChange = {
                             companyPhone.value = it
                             phoneValidation.value = organizationPhoneValidation(companyPhone.value)
@@ -208,11 +216,9 @@ fun addCompanyCard(expanded: Boolean) {
                         },
                         modifier = Modifier.padding(start = 16.dp, bottom = 5.dp),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                        keyboardActions = KeyboardActions(
-                            onNext = {
-                                focusManager.moveFocus(FocusDirection.Down)
-                            }
-                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
                         label = {
                             Text(
                                 stringResource(R.string.enter_company_phone),
@@ -222,62 +228,62 @@ fun addCompanyCard(expanded: Boolean) {
                         supportingText = {
                             if (phoneValidation.value != "ok") {
                                 Text(
-                                    text = phoneValidation.value,
-                                    color = Color.Red
+                                    text = phoneValidation.value, color = Color.Red
                                 )
                             }
                         })
                     Image(
-                        modifier = Modifier.offset(y = 5.dp),
+                        modifier = Modifier
+                            .offset(y = 5.dp)
+                            .width(12.dp)
+                            .height(12.dp),
                         painter = painterResource(id = R.drawable.star_ico),
                         contentDescription = "available image"
                     )
                 }
+
                 Row(modifier = Modifier.fillMaxWidth()) {
                     categoryValidation.value = organizationCategoryValidation(selectedText.value)
                     MyContent(selectedText, color, categoryValidation)
-                    newOrganization.category = selectedText.value
+                    var selectedTextTraslated=textTraslation(selectedText.value)
+                    newOrganization.category = selectedTextTraslated
+
                     Image(
-                        modifier = Modifier.offset(y = 5.dp),
+                        modifier = Modifier
+                            .offset(y = 5.dp)
+                            .width(12.dp)
+                            .height(12.dp),
                         painter = painterResource(id = R.drawable.star_ico),
                         contentDescription = "available image",
 
                         )
                 }
-
-
-                OutlinedTextField(
-                    value = companyAddress.value,
+                OutlinedTextField(value = companyAddress.value,
                     onValueChange = {
                         companyAddress.value = it
                         newOrganization.address = companyAddress.value
                     },
                     modifier = Modifier.padding(start = 16.dp, bottom = 5.dp),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }
-                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }),
                     label = {
                         Text(
                             stringResource(R.string.enter_company_address),
                             style = MaterialTheme.typography.labelSmall
                         )
                     })
-                OutlinedTextField(
-                    value = companyWebSite.value,
+                OutlinedTextField(value = companyWebSite.value,
                     onValueChange = {
                         companyWebSite.value = it
                         newOrganization.webSite = companyWebSite.value
                     },
                     modifier = Modifier.padding(start = 16.dp, bottom = 5.dp),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }
-                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }),
                     label = {
                         Text(
                             stringResource(R.string.enter_company_web_site),
@@ -286,19 +292,16 @@ fun addCompanyCard(expanded: Boolean) {
                     })
 
 
-                OutlinedTextField(
-                    value = companyDescription.value,
+                OutlinedTextField(value = companyDescription.value,
                     onValueChange = {
                         companyDescription.value = it
                         newOrganization.description = companyDescription.value
                     },
                     modifier = Modifier.padding(start = 16.dp, bottom = 15.dp),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }
-                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }),
                     label = {
                         Text(
                             stringResource(R.string.enter_company_description),
@@ -306,9 +309,9 @@ fun addCompanyCard(expanded: Boolean) {
                         )
                     })
                 if (nameValidation.value == "ok" && phoneValidation.value == "ok" && categoryValidation.value == "ok") {
-                    validationStatus.value=true
+                    validationStatus.value = true
                 }
-                RequestContentPermission(firstCardVisible, secondCardVisible,validationStatus)
+                RequestContentPermission(firstCardVisible, secondCardVisible, validationStatus)
 
 
             }
@@ -316,17 +319,18 @@ fun addCompanyCard(expanded: Boolean) {
         }
     }
     if (secondCardVisible.value) {
-        uploadComplate(secondCardVisible)
+        UploadComplate(secondCardVisible)
     }
 
 
 }
 
+
 @Composable
 fun RequestContentPermission(
     firstCardVisible: MutableState<Boolean>,
     secondCardVisible: MutableState<Boolean>,
-    validatorsStatus:MutableState<Boolean>
+    validatorsStatus: MutableState<Boolean>
 ) {
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
@@ -351,8 +355,7 @@ fun RequestContentPermission(
     }
 
     val launcher = rememberLauncherForActivityResult(
-        contract =
-        ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         imageUri = uri
     }
@@ -384,19 +387,16 @@ fun RequestContentPermission(
 
             imageUri?.let {
                 if (Build.VERSION.SDK_INT < 28) {
-                    bitmap.value = MediaStore.Images
-                        .Media.getBitmap(context.contentResolver, it)
+                    bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
 
                 } else {
-                    val source = ImageDecoder
-                        .createSource(context.contentResolver, it)
+                    val source = ImageDecoder.createSource(context.contentResolver, it)
                     bitmap.value = ImageDecoder.decodeBitmap(source)
                 }
                 file = File(getRealPathFromURI(imageUri!!, APP_CONTEXT!!) ?: "")
                 if ((file.length() / 1000) > 1024) {
                     Text(
-                        text = "Logo Max. size 1MB",
-                        color = Color.Red
+                        text = "Logo Max. size 1MB", color = Color.Red
                     )
                 } else {
                     newOrganization.img = uuid.toString()
@@ -412,43 +412,46 @@ fun RequestContentPermission(
         }
 
         if (!completeClicked.value) {
-            Button(onClick = {
-                if (validatorsStatus.value) {
-                    completeClicked.value = true
-                    imagePicker.value = false
-                    val saveOrg = listOf(newOrganization)
-                    val result = GlobalScope.async {
-                        saveNewOrganization(APP_CONTEXT!!, saveOrg)
-                        imageUri?.let {
-                            uploadImage(
-                                getRealPathFromURI(imageUri!!, APP_CONTEXT!!)!!,
-                                uuid.toString()
-                            )
+            if (hasConnection()) {
+                Button(onClick = {
+                    if (validatorsStatus.value) {
+                        completeClicked.value = true
+                        imagePicker.value = false
+                        val saveOrg = listOf(newOrganization)
+                        val result = GlobalScope.async {
+                            saveNewOrganization(APP_CONTEXT!!, saveOrg)
+                            imageUri?.let {
+                                uploadImage(
+                                    getRealPathFromURI(imageUri!!, APP_CONTEXT!!)!!, uuid.toString()
+                                )
+                            }
+                            true
                         }
-                        true
-                    }
-                    GlobalScope.launch {
-                        if (result.await()) {
-                            uploadProgress.value = true
-                            delay(2000)
-                            firstCardVisible.value = false
-                            secondCardVisible.value = true
+                        GlobalScope.launch {
+                            if (result.await()) {
+                                uploadProgress.value = true
+                                delay(2000)
+                                firstCardVisible.value = false
+                                secondCardVisible.value = true
 
+                            }
                         }
                     }
+                }, modifier = Modifier.padding(start = 16.dp, bottom = 10.dp, end = 16.dp)) {
+                    Text(text = "Complete")
                 }
-
-
-            }, modifier = Modifier.padding(start = 16.dp, bottom = 10.dp, end = 16.dp)) {
-                Text(text = "Complete")
+            }else{
+                AlertDialogInternetFromAddNewOrg()
             }
+
         }
 
     }
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 5.dp, bottom = 5.dp), horizontalArrangement = Arrangement.Center
+            .padding(top = 5.dp, bottom = 5.dp),
+        horizontalArrangement = Arrangement.Center
     ) {
         if (uploadProgress.value) {
             CircularProgressIndicator()
@@ -462,18 +465,11 @@ fun uploadImage(imageUri: String, imageName: String) {
     val client = OkHttpClient()
 
 
-    val requestBody = MultipartBody.Builder()
-        .setType(MultipartBody.FORM)
-        .addFormDataPart(
-            "file", imageName,
-            File(imageUri).asRequestBody(MEDIA_TYPE_JPG)
-        )
-        .build()
+    val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart(
+            "file", imageName, File(imageUri).asRequestBody(MEDIA_TYPE_JPG)
+        ).build()
 
-    val request = Request.Builder()
-        .url("http://162.55.141.130:1990/")
-        .post(requestBody)
-        .build()
+    val request = Request.Builder().url("http://162.55.141.130:1990/").post(requestBody).build()
 
     client.newCall(request).execute().use { response ->
         if (!response.isSuccessful) throw IOException("Unexpected code $response")
@@ -517,7 +513,7 @@ fun getRealPathFromURI(uri: Uri, context: Context): String? {
 }
 
 @Composable
-fun uploadComplate(secondCardVisible: MutableState<Boolean>) {
+fun UploadComplate(secondCardVisible: MutableState<Boolean>) {
 
     Card(
         modifier = Modifier
@@ -556,29 +552,69 @@ fun uploadComplate(secondCardVisible: MutableState<Boolean>) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyContent(
-    selectedText: MutableState<String>,
-    color: Color,
-    categoryValidation: MutableState<String>
+    selectedText: MutableState<String>, color: Color, categoryValidation: MutableState<String>
 ) {
 
-    val options = listOf("Category", "Option 2", "Option 3", "Option 4", "Option 5")
+    val options = listOf(
+        stringResource(R.string.category),
+        stringResource(R.string.category_bank),
+        stringResource(R.string.category_taxi),
+        stringResource(R.string.category_pizza),
+        stringResource(R.string.category_shawerma),
+        stringResource(R.string.category_totalizator),
+        stringResource(R.string.category_restourant),
+        stringResource(R.string.category_dazgveva),
+        stringResource(R.string.category_online_sekhi),
+        stringResource(R.string.category_uzravi_qoneba),
+        stringResource(R.string.category_apotneka),
+        stringResource(R.string.category_teqnikis_magazia),
+        stringResource(R.string.category_sastumro),
+        stringResource(R.string.category_silamazis_saloni),
+        stringResource(R.string.category_sadgesascaulo_centri),
+        stringResource(R.string.category_turistuli_compania),
+        stringResource(R.string.category_internet_provider),
+        stringResource(R.string.category_arasamtavrobo),
+        stringResource(R.string.category_clinika),
+        stringResource(R.string.category_saxelmcifo_dacesebuleba),
+        stringResource(R.string.category_microsafinanso),
+        stringResource(R.string.category_mshenebloba),
+        stringResource(R.string.category_amanati),
+        stringResource(R.string.category_comunaluri),
+        stringResource(R.string.category_avto_gaqiraveba),
+        stringResource(R.string.category_skola),
+        stringResource(R.string.category_comp_momsaxureba),
+        stringResource(R.string.category_ziza),
+        stringResource(R.string.category_damlagebeli),
+        stringResource(R.string.category_flaerebis_darigeba),
+        stringResource(R.string.category_ofis_menegeri),
+        stringResource(R.string.category_masajisti),
+        stringResource(R.string.category_mzgoli),
+        stringResource(R.string.category_diasaxlisi),
+        stringResource(R.string.category_ojaxis_eqimi),
+        stringResource(R.string.category_repetitori),
+        stringResource(R.string.category_bugalteri),
+        stringResource(R.string.category_molare),
+        stringResource(R.string.category_gatboba),
+        stringResource(R.string.category_dacva),
+        stringResource(R.string.category_iuristi),
+        stringResource(R.string.category_tarjimani),
+        stringResource(R.string.category_tvirtis_gadazidva),
+        stringResource(R.string.category_evakuatori),
+        stringResource(R.string.category_sxva)
+    )
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(options[0]) }
 
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }
-    ) {
-        OutlinedTextField(
-            modifier = Modifier
-                .menuAnchor()
-                .background(color)
-                .padding(start = 16.dp, bottom = 5.dp),
+    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
+        expanded = !expanded
+    }) {
+        OutlinedTextField(modifier = Modifier
+            .menuAnchor()
+            .background(color)
+            .padding(start = 16.dp, bottom = 5.dp),
             readOnly = true,
             value = selectedOptionText,
-            onValueChange = { },
+            onValueChange = {},
             label = { Text(stringResource(R.string.category)) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
@@ -589,23 +625,16 @@ fun MyContent(
                 if (categoryValidation.value != "ok") {
                     Text(text = categoryValidation.value, color = Color.Red)
                 }
-            }
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {
-                expanded = false
-            }
-        ) {
+            })
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = {
+            expanded = false
+        }) {
             options.forEach { selectionOption ->
-                DropdownMenuItem(
-                    text = { Text(text = selectionOption) },
-                    onClick = {
-                        selectedText.value = selectionOption
-                        selectedOptionText = selectionOption
-                        expanded = false
-                    }
-                )
+                DropdownMenuItem(text = { Text(text = selectionOption) }, onClick = {
+                    selectedText.value = selectionOption
+                    selectedOptionText = selectionOption
+                    expanded = false
+                })
             }
         }
     }

@@ -202,7 +202,7 @@ fun ExtraJournalButtons(
         }
 
         Box() {
-            Image(painter = painterResource(id = R.drawable.call_card), contentDescription = null,
+            Image(painter = painterResource(id = R.drawable.add_user_ico), contentDescription = null,
                 modifier = Modifier
                     .size(48.dp)
                     .clickable {

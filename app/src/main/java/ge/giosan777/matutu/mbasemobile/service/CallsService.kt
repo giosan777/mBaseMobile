@@ -34,7 +34,6 @@ class CallsService : Service() {
                 when (state) {
                     TelephonyManager.EXTRA_STATE_RINGING -> {
                         // Звонок входящий
-                        Log.d("MyLog", "gvirekaven")
                         val incomingNumber =
                             intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
                         incomingNumber?.let {
@@ -43,42 +42,44 @@ class CallsService : Service() {
                                 val i = Intent()
                                 i.setClassName(
                                     "ge.giosan777.matutu.mbasemobile",
-                                    "ge.giosan777.matutu.mbasemobile.SecondActivity"
+                                    "ge.giosan777.matutu.mbasemobile.DialogActivity"
                                 )
+
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 i.putExtra("user", it)
                                 context.startActivity(i)
                             }
                         }
                     }
-
-//                    TelephonyManager.EXTRA_STATE_OFFHOOK -> {
-//                        val outGoingNumber=intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-//                        Log.d("MyLog", "Звонок начат")
-//                        outGoingNumber?.let { it ->
-//                            getOneContactExcept(it, context) {itUser->
-//                                val i = Intent()
-//                                i.setClassName(
-//                                    "ge.giosan777.matutu.mbasemobile",
-//                                    "ge.giosan777.matutu.mbasemobile.SecondActivity"
-//                                )
-//                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                                i.putExtra("startCall", true)
-//                                i.putExtra("user", itUser)
-//                                context.startActivity(i)
-//                            }
-//                        }
 //
-//                    }
+                    TelephonyManager.EXTRA_STATE_OFFHOOK -> {
+                        val outGoingNumber =
+                            intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
+                        Log.d("MyLog", "Звонок начат")
+                        outGoingNumber?.let { it ->
+                            getOneContactExcept(it, context) { itUser ->
+                                val i = Intent()
+                                i.setClassName(
+                                    "ge.giosan777.matutu.mbasemobile",
+                                    "ge.giosan777.matutu.mbasemobile.DialogActivity"
+                                )
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                i.putExtra("startCall", true)
+                                i.putExtra("user", itUser)
+                                context.startActivity(i)
+                            }
+                        }
+
+                    }
 //
 //                    TelephonyManager.EXTRA_STATE_IDLE -> {
 //                        Log.d("MyLog", "Звонок заершен")
 //                        val i = Intent()
 //                        i.setClassName(
 //                            "ge.giosan777.matutu.mbasemobile",
-//                            "ge.giosan777.matutu.mbasemobile.SecondActivity"
+//                            "ge.giosan777.matutu.mbasemobile.DialogActivity"
 //                        )
-//                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+////                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 //                        i.putExtra("endCall", true)
 //                        context.startActivity(i)
 //                    }
@@ -120,7 +121,7 @@ class CallsService : Service() {
             val filter = IntentFilter()
             filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
             registerReceiver(MyServiceReceiver, filter)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
 
         handler = Handler()

@@ -18,6 +18,11 @@
         <item name="android:windowBackground">#004CAF50</item>
     </style>
 
+    <style name="TestMy" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="android:windowIsTranslucent">true</item>
+
+    </style>
+
 
     <style name="Theme.DialogStyleMy" parent="Theme.AppCompat.Dialog.Alert">
 <!--        <item name="android:windowMinWidthMajor">3%</item>-->

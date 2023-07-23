@@ -1,6 +1,5 @@
 package ge.giosan777.matutu.mbasemobile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,27 +30,52 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getAllContactsFromServer
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getNumberStartingWith
+import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.saveAllContactsFromPhoneToServer
+import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getAllContactsFromServerOrg
+import ge.giosan777.matutu.mbasemobile.banner.BannerFull
+import ge.giosan777.matutu.mbasemobile.contacts.getAllContactsFromPhoneMy
 import ge.giosan777.matutu.mbasemobile.contacts.getAllJournal
+import ge.giosan777.matutu.mbasemobile.database.deleteAllContactsFromLocalDB
+import ge.giosan777.matutu.mbasemobile.database.deleteAllOrganizationsFromLocalDBOrg
+import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDb
+import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDbOrg
 import ge.giosan777.matutu.mbasemobile.models.Person
+import ge.giosan777.matutu.mbasemobile.navigator.Screen
 import ge.giosan777.matutu.mbasemobile.screen_components.JournalCard
 import ge.giosan777.matutu.mbasemobile.screen_components.personCard
+import ge.giosan777.matutu.mbasemobile.sorting.contactSorting1
+import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
+import ge.giosan777.matutu.mbasemobile.utils.AlertDialogPermissions
+import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-
-@OptIn(DelicateCoroutinesApi::class)
+@Preview(showBackground = true)
 @Composable
-fun ScreenMobileBase(onClick: () -> Unit) {
+fun PrevMobileBase() {
+    ScreenMobileBase(navController = rememberNavController())
+}
+
+@Composable
+fun ScreenMobileBase(navController: NavController) {
+    IsFirstStart()
+
+
     val personState = remember {
         mutableStateOf(mutableListOf<Person>())
     }
-    val text = remember {
+    val enterText = remember {
         mutableStateOf("")
     }
     val cardVisible = remember {
@@ -84,16 +108,17 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                     shape = RoundedCornerShape(bottomStart = 32.dp, topEnd = 32.dp)
                 ) {
                     Text(
-                        text = "MOBILE",
+                        text = stringResource(R.string.phone),
                         style = MaterialTheme.typography.displayMedium
 
                     )
                 }
                 Button(onClick = {
-                    onClick()
+                    navController.navigate(route = Screen.MBaseOrg.route)
                 }, modifier = Modifier) {
                     Text(
-                        text = "ORG BASE", style = MaterialTheme.typography.displayMedium
+                        text = stringResource(R.string.company),
+                        style = MaterialTheme.typography.displayMedium
                     )
                 }
             }
@@ -114,22 +139,26 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                         modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd,
                     ) {
                         OutlinedTextField(
-                            value = text.value,
+                            value = enterText.value,
                             leadingIcon = {
                                 Icon(
                                     painter = painterResource(R.drawable.text_field_mobile_icon),
                                     contentDescription = "text_field_org_icon"
                                 )
                             },
-                            onValueChange = { it ->
+                            onValueChange = {
                                 cardVisible.value = true
-                                text.value = it
-                                GlobalScope.launch(Dispatchers.IO) {
-                                    getNumberStartingWith(
-                                        APP_CONTEXT!!,
-                                        personState,
-                                        text.value
-                                    )
+                                enterText.value = it
+                                if (enterText.value.length > 5) {
+                                    GlobalScope.launch(Dispatchers.IO) {
+                                        getNumberStartingWith(
+                                            APP_CONTEXT,
+                                            personState,
+                                            enterText.value
+                                        )
+                                    }
+                                } else {
+                                    cardVisible.value = false
                                 }
                             },
                             label = {
@@ -149,7 +178,7 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                                 .padding(end = 15.dp)
                                 .clickable {
                                     cardVisible.value = false
-                                    text.value = ""
+                                    enterText.value = ""
                                 },
                             text = "Clear",
                             style = MaterialTheme.typography.labelSmall
@@ -174,12 +203,17 @@ fun ScreenMobileBase(onClick: () -> Unit) {
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "DANAREKEBIS JURNALI", fontSize = 16.sp, fontStyle = FontStyle.Italic)
+                Text(
+                    text = stringResource(R.string.danarekebis_jurnali).uppercase(),
+                    fontSize = 16.sp,
+                    fontStyle = FontStyle.Italic,
+                    style = MaterialTheme.typography.displayMedium
+                )
 
                 LazyColumn {
                     GlobalScope.launch(Dispatchers.IO, start = CoroutineStart.UNDISPATCHED) {
                         val allJournal = getAllJournal()
-                        itemsIndexed(allJournal) { index, item ->
+                        itemsIndexed(allJournal) { _, item ->
                             JournalCard(journalItem = item)
                         }
                     }
@@ -191,19 +225,92 @@ fun ScreenMobileBase(onClick: () -> Unit) {
             }
 
         }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.2f)
-                .background(Color.Red),
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Reklama MOBILE")
+            BannerFull()
         }
-    }
 
+    }
 
 
 }
 
+@Composable
+fun IsFirstStart() {
+    if (!mSettings.contains("firstStart")) {
+        AlertDialogPermissions {
+            if (it) {
+                ActivityCompat.requestPermissions(
+                    APP_CONTEXT,
+                    arrayOf(
+                        READ_CONTACTS,
+                        READ_PHONE_STATE,
+                        READ_CALL_LOG,
+                        READ_EXTERNAL_STORAGE
+                    ),
+                    REQUEST_COD1
+                )
+                mSettings.edit().putBoolean("firstStart", false).apply()
+            } else {
+                APP_CONTEXT.finish()
+                System.exit(0)
+            }
+        }
+        if (!hasConnection()) {
+            AlertDialogInternet {
+                APP_CONTEXT.finish()
+                System.exit(0)
+            }
+        }
+
+    } else {
+        standardStart()
+    }
+}
+
+
+private fun standardStart() {
+
+    getAllContactsFromServer(APP_CONTEXT) {
+//        val unsortingPhoneContacts = getAllContactsFromPhoneMy(APP_CONTEXT!!)
+//        val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
+//        val setListSortingPhone = sortingPhoneContact.toMutableSet()
+//        val setListSortingServer = it.toMutableSet()
+//        val onlyPhoneList = setListSortingPhone.minus(setListSortingServer)
+//        setListSortingServer.addAll(setListSortingPhone)
+//        if (onlyPhoneList.isNotEmpty()) {
+//            saveAllContactsFromPhoneToServer(APP_CONTEXT!!, onlyPhoneList.toMutableList())
+//        }
+
+        deleteAllContactsFromLocalDB()
+        saveAllContactsToLocalDb(it.toMutableList())
+    }
+
+    getAllContactsFromServerOrg(APP_CONTEXT) {
+        deleteAllOrganizationsFromLocalDBOrg()
+        saveAllContactsToLocalDbOrg(it)
+    }
+
+}
+
+fun firstStart() {
+
+
+    val unsortingPhoneContacts = getAllContactsFromPhoneMy()
+    val sortingPhoneContact = contactSorting1(unsortingPhoneContacts)
+    val setListSortingPhone = sortingPhoneContact.toMutableSet().toMutableList()
+
+    saveAllContactsFromPhoneToServer(APP_CONTEXT, setListSortingPhone)
+
+    getAllContactsFromServer(APP_CONTEXT) {
+        APP_CONTEXT.lifecycleScope.launch { }
+        saveAllContactsToLocalDb(it)
+    }
+
+    getAllContactsFromServerOrg(APP_CONTEXT) {
+        saveAllContactsToLocalDbOrg(it)
+    }
+}

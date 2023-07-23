@@ -21,6 +21,10 @@ interface OrgDAO {
     @Query("DELETE FROM organizations")
     fun deleteAll()
 
-    @Query("SELECT * FROM organizations WHERE phone LIKE :startingWith")
-    fun findByPhoneStartingWith(startingWith:String ): List<Organization>
+    @Query("SELECT * FROM organizations WHERE organization_name LIKE :startingNameWith || '%'")
+    fun findByNameStartingWith(startingNameWith:String ): List<Organization>
+
+
+    @Query("SELECT * FROM organizations WHERE category LIKE :startingCategoryWith || '%'")
+    fun findByCategoryStartingWith(startingCategoryWith:String ): List<Organization>
 }

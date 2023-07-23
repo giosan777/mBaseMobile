@@ -4,11 +4,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
+import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 
 
-fun hasConnection(context:Context): Boolean {
+fun hasConnection(): Boolean {
     val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        APP_CONTEXT.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     if (connectivityManager != null) {
         val capabilities =
             connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)

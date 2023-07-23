@@ -27,7 +27,7 @@ fun getAllContactsFromServer(context: Context, callbacks: (MutableList<Person>) 
 
             },
             { error ->
-                Log.d("MyLog", error.toString())
+                Log.d("MyLog", "${error.toString()}   aqaaaaaaaaaaaa")
             }
         )
         queue.add(stringRequest)
