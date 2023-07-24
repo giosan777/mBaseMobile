@@ -4,8 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -110,17 +113,28 @@ fun personCard(personState: MutableState<MutableList<Person>>, rigi: Int) {
                         maxLines = if (isExpanded)2 else 1,
                     )
                     Spacer(Modifier.width(16.dp))
-                    Button(elevation = ButtonDefaults.buttonElevation(),
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_DIAL)
-                            intent.data = Uri.parse("tel:${personState.value[rigi].phone}")
-                            startActivity(APP_CONTEXT!!,intent, Bundle())
-                        }) {
-                        Image(
-                            painterResource(id = R.drawable.call_ico),
-                            contentDescription = "Call",
-                            modifier = Modifier.width(30.dp)
-                        )
+                    Box() {
+                        Image(painter = painterResource(id = R.drawable.call_card), contentDescription = null,
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clickable {
+                                    val intent = Intent(Intent.ACTION_DIAL)
+                                    intent.data = Uri.parse("tel:${personState.value[rigi].phone}")
+                                    startActivity(APP_CONTEXT!!, intent, Bundle())
+                                })
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    Box() {
+                        Image(painter = painterResource(id = R.drawable.message_card), contentDescription = null,
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clickable {
+                                    val toSms = "smsto:${personState.value[rigi].phone}"
+                                    val messageText = ""
+                                    val sms = Intent(Intent.ACTION_SENDTO, Uri.parse(toSms))
+                                    sms.putExtra("sms_body", messageText)
+                                    startActivity(APP_CONTEXT, sms, Bundle())
+                                })
                     }
 
                 }

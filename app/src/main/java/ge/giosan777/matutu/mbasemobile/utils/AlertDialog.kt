@@ -97,7 +97,7 @@ fun AlertDialogInternet(callbacks:(Boolean) -> Unit) {
 
 
 @Composable
-fun AlertDialogBattery(callbacks:(Boolean) -> Unit) {
+fun AlertDialogBattery() {
     MaterialTheme {
         Column {
             val openDialog = remember { mutableStateOf(true) }
@@ -120,7 +120,6 @@ fun AlertDialogBattery(callbacks:(Boolean) -> Unit) {
                         Button(
                             onClick = {
                                 openDialog.value = false
-                                callbacks(true)
                             }) {
                             Text(stringResource(R.string.ok))
                         }

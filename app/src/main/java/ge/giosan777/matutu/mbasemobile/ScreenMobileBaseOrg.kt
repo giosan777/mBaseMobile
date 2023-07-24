@@ -210,8 +210,11 @@ fun ScreenMobileBaseOrg(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
+                        modifier = Modifier.clickable {
+                            companyCategoryExpanded.value = !companyCategoryExpanded.value
+                        },
                         text = stringResource(R.string.else_search_category),
-                        style = MaterialTheme.typography.labelSmall
+                        style = MaterialTheme.typography.labelSmall,
                     )
                     OrgCategorySearch(
                         companyCategoryExpanded = companyCategoryExpanded.value,
@@ -238,7 +241,7 @@ fun ScreenMobileBaseOrg(navController: NavController) {
                 }
 
                 if (orgCategorySearch.value.isNotEmpty()) {
-                    val trasleted= textTraslation(orgCategorySearch.value)
+                    val trasleted = textTraslation(orgCategorySearch.value)
                     cardVisible.value = true
                     getCategoryStartingNameWithOrg(
                         orgState,
@@ -277,7 +280,7 @@ fun ScreenMobileBaseOrg(navController: NavController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BannerFull()
+//            BannerFull()
         }
     }
 }

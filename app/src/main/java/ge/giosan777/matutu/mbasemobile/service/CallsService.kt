@@ -18,12 +18,12 @@ import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getOneContactExcept
 
 class CallsService : Service() {
     var context: Context = this
-    var handler: Handler? = null
-    var runnable: Runnable? = null
-    var running = false
+    private var handler: Handler? = null
+    private var runnable: Runnable? = null
+    private var running = false
 
 
-    private var MyServiceReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+    private var myServiceReceiver: BroadcastReceiver = object : BroadcastReceiver() {
 
 
         override fun onReceive(context: Context, intent: Intent) {
@@ -52,25 +52,25 @@ class CallsService : Service() {
                         }
                     }
 //
-                    TelephonyManager.EXTRA_STATE_OFFHOOK -> {
-                        val outGoingNumber =
-                            intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-                        Log.d("MyLog", "Звонок начат")
-                        outGoingNumber?.let { it ->
-                            getOneContactExcept(it, context) { itUser ->
-                                val i = Intent()
-                                i.setClassName(
-                                    "ge.giosan777.matutu.mbasemobile",
-                                    "ge.giosan777.matutu.mbasemobile.DialogActivity"
-                                )
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                i.putExtra("startCall", true)
-                                i.putExtra("user", itUser)
-                                context.startActivity(i)
-                            }
-                        }
-
-                    }
+//                    TelephonyManager.EXTRA_STATE_OFFHOOK -> {
+//                        val outGoingNumber =
+//                            intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
+//                        Log.d("MyLog", "Звонок начат")
+//                        outGoingNumber?.let { it ->
+//                            getOneContactExcept(it, context) { itUser ->
+//                                val i = Intent()
+//                                i.setClassName(
+//                                    "ge.giosan777.matutu.mbasemobile",
+//                                    "ge.giosan777.matutu.mbasemobile.DialogActivity"
+//                                )
+//                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                                i.putExtra("startCall", true)
+//                                i.putExtra("user", itUser)
+//                                context.startActivity(i)
+//                            }
+//                        }
+//
+//                    }
 //
 //                    TelephonyManager.EXTRA_STATE_IDLE -> {
 //                        Log.d("MyLog", "Звонок заершен")
@@ -120,7 +120,7 @@ class CallsService : Service() {
         try {
             val filter = IntentFilter()
             filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
-            registerReceiver(MyServiceReceiver, filter)
+            registerReceiver(myServiceReceiver, filter)
         } catch (_: Exception) {
         }
 
@@ -141,8 +141,8 @@ class CallsService : Service() {
         Log.d("MyLog", "gaitisha servisiii")
         try {
             running = false
-            unregisterReceiver(MyServiceReceiver)
-        } catch (e: java.lang.Exception) {
+            unregisterReceiver(myServiceReceiver)
+        } catch (_: java.lang.Exception) {
         }
         super.onDestroy()
     }

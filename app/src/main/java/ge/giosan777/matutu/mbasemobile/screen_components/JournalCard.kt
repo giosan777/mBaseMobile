@@ -104,7 +104,7 @@ fun JournalCard(journalItem: Journal) {
                 )
                 val numberRegex =
                     journalItem.number.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
-                getOneContactExcept(numberRegex, APP_CONTEXT!!) {
+                getOneContactExcept(numberRegex, APP_CONTEXT) {
                     firstNameFromServer = it
                 }
                 Row(
@@ -197,7 +197,7 @@ fun ExtraJournalButtons(
                         val messageText = ""
                         val sms = Intent(Intent.ACTION_SENDTO, Uri.parse(toSms))
                         sms.putExtra("sms_body", messageText)
-                        startActivity(APP_CONTEXT!!, sms, Bundle())
+                        startActivity(APP_CONTEXT, sms, Bundle())
                     })
         }
 
@@ -212,7 +212,7 @@ fun ExtraJournalButtons(
                         intent.putExtra(ContactsContract.Intents.Insert.NAME, firstName)
                         intent.putExtra(ContactsContract.Intents.Insert.PHONE, journalItem.number)
 
-                        startActivity(APP_CONTEXT!!,intent, Bundle())
+                        startActivity(APP_CONTEXT,intent, Bundle())
                     })
         }
     }

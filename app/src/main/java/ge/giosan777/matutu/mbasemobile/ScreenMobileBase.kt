@@ -230,7 +230,7 @@ fun ScreenMobileBase(navController: NavController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BannerFull()
+//            BannerFull()
         }
 
     }

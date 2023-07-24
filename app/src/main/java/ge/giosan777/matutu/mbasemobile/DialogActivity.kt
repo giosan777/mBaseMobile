@@ -49,13 +49,13 @@ class DialogActivity : ComponentActivity() {
         super.onNewIntent(intent)
         if (intent != null) {
             if (intent.getBooleanExtra("endCall", false)) {
-//                windowManager.removeView(dialogView)
-//                dialog.dismiss()
+                windowManager.removeView(dialogView)
+                dialog.dismiss()
                 this.finish()
             } else
                 if (intent.getBooleanExtra("startCall", false)) {
                     val user = intent.getStringExtra("user")
-//                    windowManager.removeView(dialogView)
+                    windowManager.removeView(dialogView)
                 }
         }
     }

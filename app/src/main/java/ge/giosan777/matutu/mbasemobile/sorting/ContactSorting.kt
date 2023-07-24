@@ -11,7 +11,7 @@ fun contactSorting1(unsortingList: MutableList<Person>): MutableList<Person> {
 //        firstNameTMP= translateFromGe(firstNameTMP)
 //        firstNameTMP= translateFromRu(firstNameTMP)
 //        firstNameTMP= translateEnToEn(firstNameTMP)
-        if (phoneTMP.count() in 9..9 && phoneTMP.isDigitsOnly()) {
+        if (phoneTMP.count() in 9..16 ) {
             sortingList.add(
                 Person(
                     null,

@@ -21,6 +21,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +33,7 @@ import ge.giosan777.matutu.mbasemobile.navigator.SetUpNavGraph
 import ge.giosan777.matutu.mbasemobile.screen_components.TopAppBarMy
 import ge.giosan777.matutu.mbasemobile.service.CallsService
 import ge.giosan777.matutu.mbasemobile.ui.theme.MBaseTheme
+import ge.giosan777.matutu.mbasemobile.utils.AlertDialogBattery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -54,20 +57,11 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var navController: NavHostController
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         APP_CONTEXT = this@MainActivity
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
-//        val intent = Intent()
-//        intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
-//        startActivity(intent)
-
-
         setLanguage()
-
-
-
 
         overlayPermissionContract = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -86,14 +80,14 @@ class MainActivity : ComponentActivity() {
                 }
                 mSettings.edit().putBoolean("canDrawOverlays", true).apply()
                 val intent = Intent()
-                val pm : PowerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-                if (pm.isIgnoringBatteryOptimizations(APP_CONTEXT.packageName)) {
+                val pm: PowerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+                if (pm.isIgnoringBatteryOptimizations(packageName)) {
                     intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
                 } else {
                     intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-                    intent.data = Uri.parse("package:${APP_CONTEXT.packageName}")
+                    intent.data = Uri.parse("package:${packageName}")
                 }
-                APP_CONTEXT.startActivity(intent)
+                startActivity(intent)
                 Log.d("MyLog", "ARIIIIIIIIIIIIIIIIIIS")
             } else {
                 mSettings.edit().putBoolean("canDrawOverlays", false).apply()
@@ -104,7 +98,6 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-
             MBaseTheme() {
                 Surface(
                     modifier = Modifier.fillMaxSize()
