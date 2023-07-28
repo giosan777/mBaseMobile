@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="add_mob_giigle" translatable="false">ca-app-pub-7766146936543732/4849684881</string>
+    <string name="add_mob_google" translatable="false">ca-app-pub-7766146936543732/4849684881</string>
 
     <string name="app_name">mBaseMobile</string>
     <string name="enter_phone_number">Enter Phone Number</string>

@@ -54,7 +54,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getCategoryStartingNameWithOrg
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getStartingNameWithOrg
-import ge.giosan777.matutu.mbasemobile.banner.BannerFull
+import ge.giosan777.matutu.mbasemobile.banner.Banner
 import ge.giosan777.matutu.mbasemobile.models.Organization
 import ge.giosan777.matutu.mbasemobile.navigator.Screen
 import ge.giosan777.matutu.mbasemobile.screen_components.AddCompanyCard
@@ -90,7 +90,7 @@ fun ScreenMobileBaseOrg(navController: NavController) {
     }
 
     var companyAddExpanded by remember { mutableStateOf(false) }
-    var companyCategoryExpanded = remember { mutableStateOf(false) }
+    val companyCategoryExpanded = remember { mutableStateOf(false) }
 
 
     Column(
@@ -280,7 +280,7 @@ fun ScreenMobileBaseOrg(navController: NavController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-//            BannerFull()
+            Banner()
         }
     }
 }

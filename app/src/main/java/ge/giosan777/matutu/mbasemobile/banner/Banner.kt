@@ -5,14 +5,15 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import ge.giosan777.matutu.mbasemobile.R
 
 @Composable
 fun Banner() {
     AndroidView(factory = {context ->
         AdView(context).apply {
-            setAdSize(AdSize(120,40))
-//            adUnitId =context.getString(R.string.add_mob_giigle)
-            adUnitId ="ca-app-pub-3940256099942544/6300978111"
+            setAdSize(AdSize.BANNER)
+            adUnitId =context.getString(R.string.add_mob_google)
+//            adUnitId ="ca-app-pub-3940256099942544/6300978111"
             val addRequest=AdRequest.Builder().build()
 //            adListener = object : AdListener() {
 //                override fun onAdLoaded() {

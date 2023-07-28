@@ -245,7 +245,7 @@ fun AddCompanyCard(expanded: Boolean) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     categoryValidation.value = organizationCategoryValidation(selectedText.value)
                     MyContent(selectedText, color, categoryValidation)
-                    var selectedTextTraslated=textTraslation(selectedText.value)
+                    val selectedTextTraslated=textTraslation(selectedText.value)
                     newOrganization.category = selectedTextTraslated
 
                     Image(
@@ -341,9 +341,7 @@ fun RequestContentPermission(
     val bitmap = remember {
         mutableStateOf<Bitmap?>(null)
     }
-    var file = remember {
-        File("")
-    }
+    var file: File
     val uploadProgress = remember {
         mutableStateOf(false)
     }
@@ -393,7 +391,7 @@ fun RequestContentPermission(
                     val source = ImageDecoder.createSource(context.contentResolver, it)
                     bitmap.value = ImageDecoder.decodeBitmap(source)
                 }
-                file = File(getRealPathFromURI(imageUri!!, APP_CONTEXT!!) ?: "")
+                file = File(getRealPathFromURI(imageUri!!, APP_CONTEXT) ?: "")
                 if ((file.length() / 1000) > 1024) {
                     Text(
                         text = "Logo Max. size 1MB", color = Color.Red
@@ -419,10 +417,10 @@ fun RequestContentPermission(
                         imagePicker.value = false
                         val saveOrg = listOf(newOrganization)
                         val result = GlobalScope.async {
-                            saveNewOrganization(APP_CONTEXT!!, saveOrg)
+                            saveNewOrganization(APP_CONTEXT, saveOrg)
                             imageUri?.let {
                                 uploadImage(
-                                    getRealPathFromURI(imageUri!!, APP_CONTEXT!!)!!, uuid.toString()
+                                    getRealPathFromURI(imageUri!!, APP_CONTEXT)!!, uuid.toString()
                                 )
                             }
                             true

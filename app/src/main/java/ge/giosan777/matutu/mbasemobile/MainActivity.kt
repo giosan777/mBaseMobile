@@ -1,7 +1,8 @@
 package ge.giosan777.matutu.mbasemobile
 
 import android.Manifest
-import android.Manifest.permission.POST_NOTIFICATIONS
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -21,10 +22,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -33,7 +35,6 @@ import ge.giosan777.matutu.mbasemobile.navigator.SetUpNavGraph
 import ge.giosan777.matutu.mbasemobile.screen_components.TopAppBarMy
 import ge.giosan777.matutu.mbasemobile.service.CallsService
 import ge.giosan777.matutu.mbasemobile.ui.theme.MBaseTheme
-import ge.giosan777.matutu.mbasemobile.utils.AlertDialogBattery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -44,6 +45,7 @@ const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
 const val READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE
 const val READ_CALL_LOG = Manifest.permission.READ_CALL_LOG
 const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
+const val POST_NOTIFICATIONS = Manifest.permission.POST_NOTIFICATIONS
 const val APP_PREFERENCES = "mBaseSettings"
 
 lateinit var APP_CONTEXT: MainActivity
@@ -116,6 +118,42 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    private fun showNotification(context: Context) {
+        val channelId = "my_channel_id"
+        val notificationId=1111
+        val notificationManager = ContextCompat.getSystemService(
+            context,
+            NotificationManager::class.java
+        ) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "My Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val builder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.drawable.m)
+            .setContentTitle("")
+            .setContentText("")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    this@MainActivity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+            notify(notificationId, builder.build())
+        }
+    }
+
+
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -131,6 +169,7 @@ class MainActivity : ComponentActivity() {
                     && (grantResults[2] == PackageManager.PERMISSION_GRANTED)
                 ) {
                     lifecycleScope.launch(Dispatchers.IO) {
+                        showNotification(this@MainActivity)
                         firstStart()
                     }
                 }
@@ -139,7 +178,7 @@ class MainActivity : ComponentActivity() {
             else -> {
                 ActivityCompat.requestPermissions(
                     this@MainActivity,
-                    arrayOf(READ_CONTACTS, READ_PHONE_STATE, READ_CALL_LOG),
+                    arrayOf(READ_CONTACTS, READ_PHONE_STATE, READ_CALL_LOG, POST_NOTIFICATIONS),
                     REQUEST_COD1
                 )
             }

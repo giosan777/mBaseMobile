@@ -41,7 +41,7 @@ import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getAllContactsFromServe
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getNumberStartingWith
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.saveAllContactsFromPhoneToServer
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getAllContactsFromServerOrg
-import ge.giosan777.matutu.mbasemobile.banner.BannerFull
+import ge.giosan777.matutu.mbasemobile.banner.Banner
 import ge.giosan777.matutu.mbasemobile.contacts.getAllContactsFromPhoneMy
 import ge.giosan777.matutu.mbasemobile.contacts.getAllJournal
 import ge.giosan777.matutu.mbasemobile.database.deleteAllContactsFromLocalDB
@@ -57,9 +57,11 @@ import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogPermissions
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlin.system.exitProcess
 
 @Preview(showBackground = true)
 @Composable
@@ -67,6 +69,7 @@ fun PrevMobileBase() {
     ScreenMobileBase(navController = rememberNavController())
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun ScreenMobileBase(navController: NavController) {
     IsFirstStart()
@@ -230,7 +233,7 @@ fun ScreenMobileBase(navController: NavController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-//            BannerFull()
+            Banner()
         }
 
     }
@@ -249,20 +252,21 @@ fun IsFirstStart() {
                         READ_CONTACTS,
                         READ_PHONE_STATE,
                         READ_CALL_LOG,
-                        READ_EXTERNAL_STORAGE
+                        READ_EXTERNAL_STORAGE,
+                        POST_NOTIFICATIONS
                     ),
                     REQUEST_COD1
                 )
                 mSettings.edit().putBoolean("firstStart", false).apply()
             } else {
                 APP_CONTEXT.finish()
-                System.exit(0)
+                exitProcess(0)
             }
         }
         if (!hasConnection()) {
             AlertDialogInternet {
                 APP_CONTEXT.finish()
-                System.exit(0)
+                exitProcess(0)
             }
         }
 

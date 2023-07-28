@@ -5,12 +5,11 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
-import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.database.AppDatabase
 import ge.giosan777.matutu.mbasemobile.models.Person
 import kotlin.concurrent.thread
 
-fun getOneContactExcept(
+suspend fun getOneContactExcept(
     phone: String,
     context: Context,
     result: (user:String) -> Unit

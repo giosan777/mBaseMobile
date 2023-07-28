@@ -13,7 +13,11 @@ import android.telephony.TelephonyManager
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import ge.giosan777.matutu.mbasemobile.R
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getOneContactExcept
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class CallsService : Service() {
@@ -21,6 +25,7 @@ class CallsService : Service() {
     private var handler: Handler? = null
     private var runnable: Runnable? = null
     private var running = false
+    private var countCall=0
 
 
     private var myServiceReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -37,21 +42,27 @@ class CallsService : Service() {
                         val incomingNumber =
                             intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
                         incomingNumber?.let {
-                            getOneContactExcept(incomingNumber, context) {
-                                Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
-                                val i = Intent()
-                                i.setClassName(
-                                    "ge.giosan777.matutu.mbasemobile",
-                                    "ge.giosan777.matutu.mbasemobile.DialogActivity"
-                                )
+                            val sortedNumber =
+                                it.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
 
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                i.putExtra("user", it)
-                                context.startActivity(i)
+                            GlobalScope.launch(Dispatchers.IO) {
+                                getOneContactExcept(sortedNumber, context) {
+                                    Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
+                                    val i = Intent()
+                                    i.setClassName(
+                                        "ge.giosan777.matutu.mbasemobile",
+                                        "ge.giosan777.matutu.mbasemobile.DialogActivity"
+                                    )
+
+                                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    i.putExtra("user", it)
+                                    context.startActivity(i)
+                                }
                             }
+
                         }
                     }
-//
+
 //                    TelephonyManager.EXTRA_STATE_OFFHOOK -> {
 //                        val outGoingNumber =
 //                            intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
@@ -71,18 +82,14 @@ class CallsService : Service() {
 //                        }
 //
 //                    }
-//
-//                    TelephonyManager.EXTRA_STATE_IDLE -> {
-//                        Log.d("MyLog", "Звонок заершен")
-//                        val i = Intent()
-//                        i.setClassName(
-//                            "ge.giosan777.matutu.mbasemobile",
-//                            "ge.giosan777.matutu.mbasemobile.DialogActivity"
-//                        )
-////                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                        i.putExtra("endCall", true)
-//                        context.startActivity(i)
-//                    }
+
+                    TelephonyManager.EXTRA_STATE_IDLE -> {
+                        if (countCall % 2 == 0) {
+                            val intent1 = Intent("ACTION_DAKETVA_ACTIVITY")
+                            sendBroadcast(intent1)
+                        }
+                        countCall++
+                    }
                 }
             } else if (action == "android.intent.action.NEW_OUTGOING_CALL") {
                 Log.d("MyLog", "Обработка исходящего звонка")
@@ -110,8 +117,9 @@ class CallsService : Service() {
             channel
         )
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("")
-            .setContentText("").build()
+            .setSmallIcon(R.drawable.m)
+            .setContentTitle("MBase")
+            .setContentText("MBase აქტიურია").build()
         startForeground(1, notification)
         // конец отличия
 

@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -61,6 +62,7 @@ fun JournalCard(journalItem: Journal) {
     val color by animateColorAsState(
         targetValue = if (expanded) MaterialTheme.colorScheme.tertiaryContainer
         else MaterialTheme.colorScheme.primaryContainer,
+        label = "",
     )
 
     when (journalItem.type) {
@@ -77,17 +79,20 @@ fun JournalCard(journalItem: Journal) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp).clickable { expanded = !expanded },
+            .padding(5.dp)
+            .clickable { expanded = !expanded },
         elevation = CardDefaults.cardElevation(),
         shape = RoundedCornerShape(bottomStart = 16.dp, topEnd = 16.dp)
     ) {
         Column(
-            modifier = Modifier.animateContentSize(
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessMedium
+            modifier = Modifier
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessMedium
+                    )
                 )
-            ).background(color=color)
+                .background(color = color)
         ) {
             Row(
                 modifier = Modifier.fillMaxSize(),
@@ -104,9 +109,14 @@ fun JournalCard(journalItem: Journal) {
                 )
                 val numberRegex =
                     journalItem.number.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
-                getOneContactExcept(numberRegex, APP_CONTEXT) {
-                    firstNameFromServer = it
+                produceState(initialValue = ""){
+                    getOneContactExcept(numberRegex, APP_CONTEXT) {
+                        firstNameFromServer = it
+                    }
+                    value=""
                 }
+
+
                 Row(
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -212,7 +222,7 @@ fun ExtraJournalButtons(
                         intent.putExtra(ContactsContract.Intents.Insert.NAME, firstName)
                         intent.putExtra(ContactsContract.Intents.Insert.PHONE, journalItem.number)
 
-                        startActivity(APP_CONTEXT,intent, Bundle())
+                        startActivity(APP_CONTEXT, intent, Bundle())
                     })
         }
     }
