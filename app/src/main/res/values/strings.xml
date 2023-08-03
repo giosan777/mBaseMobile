@@ -7,13 +7,21 @@
     <string name="enter_phone_number">Enter Phone Number</string>
     <string name="enter_org_name">Enter Organization Name</string>
     <string name="example_org">exam: tbc</string>
-    <string name="permissions">Permissions</string>
-    <string name="all_permissions_are_required_for_the_app_to_work_properly">All permissions are required for \nthe App to work properly!</string>
+    <string name="permissions">Contacts permission</string>
+    <string name="all_permissions_are_required_for_the_app_to_work_properly">The application requires permission to upload contacts to the server,after permission your contacts will be used\n\n1.To improve number search\n\n2.For better spam detector performance\n\n3.To synchronize contacts</string>
+    <string name="permissions_are_not_granted">In this case, you will not be able to use the application,\nwould you like to close the application?</string>
+    <string name="permissions_are_not_granted1">Without permission, the application will not identify incoming calls!</string>
+    <string name="permissions_need">Permission required to identify incoming calls!</string>
+    <string name="battery">For this feature to work properly, you must turn off battery saver!</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="agree">Agree</string>
     <string name="internet_connection">Internet connection</string>
     <string name="internet_required_for_first_launch">internet required for first launch</string>
     <string name="internet_required_for_add_new_org">internet required for add new Organization</string>
-    <string name="ok">Ok</string>
-    <string name="cancel">Cancel</string>
+    <string name="giving_permission">Giving permission</string>
+    <string name="close">Close</string>
     <string name="expand_button_content_description">expand button content description</string>
     <string name="add_organization">Add organization</string>
     <string name="enter_company_phone">Enter Company Phone</string>
@@ -111,5 +119,7 @@ In case you are searching for your mobile/phone number within the application an
     <string name="category_evakuatori">Evacuate, technical assistance</string>
     <string name="enter_organization_category">Enter Organization Category</string>
     <string name="else_search_category">Or search by Category</string>
+    <string name="ok">Ok</string>
+    <string name="disable">Disable economy</string>
 
 </resources>

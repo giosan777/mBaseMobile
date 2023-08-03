@@ -396,7 +396,7 @@ fun CategoryChoice(
                             style = SpanStyle(
                                 fontWeight = FontWeight.Bold,
                                 fontStyle = FontStyle.Italic,
-                                color = Color.Blue,
+                                color = Color.Black,
                                 fontSize = 18.sp
                             )
                         ) {

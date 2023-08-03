@@ -37,7 +37,7 @@ fun AlertDialogPermissions(callbacks:(Boolean) -> Unit) {
                                 openDialog.value = false
                                 callbacks(true)
                             }) {
-                            Text(stringResource(R.string.ok))
+                            Text(stringResource(R.string.giving_permission))
                         }
                     },
                     dismissButton = {
@@ -46,7 +46,7 @@ fun AlertDialogPermissions(callbacks:(Boolean) -> Unit) {
                                 openDialog.value = false
                                 callbacks(false)
                             }) {
-                            Text(stringResource(R.string.cancel))
+                            Text(stringResource(R.string.close))
                         }
                     }
                 )
@@ -97,44 +97,6 @@ fun AlertDialogInternet(callbacks:(Boolean) -> Unit) {
 
 
 @Composable
-fun AlertDialogBattery() {
-    MaterialTheme {
-        Column {
-            val openDialog = remember { mutableStateOf(true) }
-            if (openDialog.value) {
-
-                AlertDialog(
-                    onDismissRequest = {
-                        // Dismiss the dialog when the user clicks outside the dialog or on the back
-                        // button. If you want to disable that functionality, simply use an empty
-                        // onCloseRequest.
-//                        openDialog.value = false
-                    },
-                    title = {
-                        Text(text = stringResource(R.string.battery_optimization))
-                    },
-                    text = {
-                        Text(stringResource(R.string.battery_optimization_text))
-                    },
-                    confirmButton = {
-                        Button(
-                            onClick = {
-                                openDialog.value = false
-                            }) {
-                            Text(stringResource(R.string.ok))
-                        }
-                    },
-                    dismissButton = {
-
-                    }
-                )
-            }
-        }
-
-    }
-}
-
-@Composable
 fun AlertDialogInternetFromAddNewOrg() {
     MaterialTheme {
         Column {
@@ -165,6 +127,172 @@ fun AlertDialogInternetFromAddNewOrg() {
                     },
                     dismissButton = {
 
+                    }
+                )
+            }
+        }
+
+    }
+}
+
+
+@Composable
+fun AlertDialogCloseApplication(callbacks:(Boolean) -> Unit) {
+    MaterialTheme {
+        Column {
+            val openDialog = remember { mutableStateOf(true) }
+            if (openDialog.value) {
+
+                AlertDialog(
+                    onDismissRequest = {
+                        // Dismiss the dialog when the user clicks outside the dialog or on the back
+                        // button. If you want to disable that functionality, simply use an empty
+                        // onCloseRequest.
+//                        openDialog.value = false
+                    },
+                    text = {
+                        Text(stringResource(R.string.permissions_are_not_granted))
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                openDialog.value = false
+                                callbacks(true)
+                            }) {
+                            Text(stringResource(R.string.yes))
+                        }
+                    },
+                    dismissButton = {
+                        Button(
+                            onClick = {
+                                openDialog.value = false
+                                callbacks(false)
+                            }) {
+                            Text(stringResource(R.string.no))
+                        }
+                    }
+                )
+            }
+        }
+
+    }
+}
+
+
+
+@Composable
+fun AlertDialogCallLogPermission(callbacks:(Boolean) -> Unit) {
+    MaterialTheme {
+        Column {
+            val openDialog = remember { mutableStateOf(true) }
+            if (openDialog.value) {
+
+                AlertDialog(
+                    onDismissRequest = {
+                        // Dismiss the dialog when the user clicks outside the dialog or on the back
+                        // button. If you want to disable that functionality, simply use an empty
+                        // onCloseRequest.
+//                        openDialog.value = false
+                    },
+                    text = {
+                        Text(stringResource(R.string.permissions_are_not_granted1))
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                openDialog.value = false
+                                callbacks(true)
+                            }) {
+                            Text(stringResource(R.string.ok))
+                        }
+                    },
+                    dismissButton = {
+                        Button(
+                            onClick = {
+                                openDialog.value = false
+                                callbacks(false)
+                            }) {
+                            Text(stringResource(R.string.no))
+                        }
+                    }
+                )
+            }
+        }
+
+    }
+}
+
+
+@Composable
+fun AlertDialogCallLogPermissionNeed(callbacks:(Boolean) -> Unit) {
+    MaterialTheme {
+        Column {
+            val openDialog = remember { mutableStateOf(true) }
+            if (openDialog.value) {
+
+                AlertDialog(
+                    onDismissRequest = {
+                        // Dismiss the dialog when the user clicks outside the dialog or on the back
+                        // button. If you want to disable that functionality, simply use an empty
+                        // onCloseRequest.
+//                        openDialog.value = false
+                    },
+                    text = {
+                        Text(stringResource(R.string.permissions_are_not_granted1))
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                openDialog.value = false
+                                callbacks(true)
+                            }) {
+                            Text(stringResource(R.string.ok))
+                        }
+                    },
+
+                )
+            }
+        }
+
+    }
+}
+
+
+
+@Composable
+fun AlertDialogBattery(callbacks:(Boolean) -> Unit) {
+    MaterialTheme {
+        Column {
+            val openDialog = remember { mutableStateOf(true) }
+            if (openDialog.value) {
+
+                AlertDialog(
+                    onDismissRequest = {
+                        // Dismiss the dialog when the user clicks outside the dialog or on the back
+                        // button. If you want to disable that functionality, simply use an empty
+                        // onCloseRequest.
+//                        openDialog.value = false
+                    },
+                    text = {
+                        Text(stringResource(R.string.battery))
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                openDialog.value = false
+                                callbacks(true)
+                            }) {
+                            Text(stringResource(R.string.disable))
+                        }
+                    },
+                    dismissButton = {
+                        Button(
+                            onClick = {
+                                openDialog.value = false
+                                callbacks(false)
+                            }) {
+                            Text(stringResource(R.string.close))
+                        }
                     }
                 )
             }

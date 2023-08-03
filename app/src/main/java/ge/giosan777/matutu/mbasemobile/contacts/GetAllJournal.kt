@@ -7,24 +7,24 @@ import android.provider.CallLog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
+import ge.giosan777.matutu.mbasemobile.READ_PHONE_STATE_AND_CALL_LOG_REQUEST_COD
 import ge.giosan777.matutu.mbasemobile.models.Journal
 
 
 fun getAllJournal(): MutableList<Journal> {
-    val CALL_LOG_PERMISSION_REQUEST_CODE = 1
 
     if (ContextCompat.checkSelfPermission(
-            APP_CONTEXT!!,
+            APP_CONTEXT,
             Manifest.permission.READ_CALL_LOG
         ) != PackageManager.PERMISSION_GRANTED
     ) {
         ActivityCompat.requestPermissions(
-            APP_CONTEXT!!,
+            APP_CONTEXT,
             arrayOf(Manifest.permission.READ_CALL_LOG),
-            CALL_LOG_PERMISSION_REQUEST_CODE
+            READ_PHONE_STATE_AND_CALL_LOG_REQUEST_COD
         )
     } else {
-        val journalList = getCallLog(APP_CONTEXT!!).toMutableList()
+        val journalList = getCallLog(APP_CONTEXT).toMutableList()
         journalList.sortByDescending { it.date }
 
 

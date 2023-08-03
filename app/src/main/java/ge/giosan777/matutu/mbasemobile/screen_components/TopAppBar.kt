@@ -67,21 +67,21 @@ fun TopAppBarMy() {
 
 @Composable
 fun LocaleDropdownMenu() {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded = remember { mutableStateOf(false) }
 
     Box {
-        IconButton(onClick = { expanded = true }) {
+        IconButton(onClick = { expanded.value = true }) {
             Icon(Icons.Filled.Language, contentDescription = "Показать меню")
         }
         DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
+            expanded = expanded.value,
+            onDismissRequest = { expanded.value = false }
         ) {
             Text(
                 stringResource(id = R.string.ge), fontSize = 18.sp, modifier = Modifier
                     .padding(10.dp)
                     .clickable(onClick = {
-                        expanded = false
+                        expanded.value = false
                         val locale = Locale("ka")
                         Locale.setDefault(locale)
                         val resources = APP_CONTEXT.resources
@@ -99,7 +99,7 @@ fun LocaleDropdownMenu() {
                 stringResource(id = R.string.en), fontSize = 18.sp, modifier = Modifier
                     .padding(10.dp)
                     .clickable(onClick = {
-                        expanded = false
+                        expanded.value = false
                         val locale = Locale("en")
                         Locale.setDefault(locale)
                         val resources = APP_CONTEXT.resources

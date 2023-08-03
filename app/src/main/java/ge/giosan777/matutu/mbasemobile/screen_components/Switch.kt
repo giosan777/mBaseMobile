@@ -15,7 +15,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.core.app.ActivityCompat
 import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
+import ge.giosan777.matutu.mbasemobile.READ_CALL_LOG
+import ge.giosan777.matutu.mbasemobile.READ_PHONE_STATE
+import ge.giosan777.matutu.mbasemobile.READ_PHONE_STATE_AND_CALL_LOG_REQUEST_COD
 import ge.giosan777.matutu.mbasemobile.checkedState
 import ge.giosan777.matutu.mbasemobile.mSettings
 import ge.giosan777.matutu.mbasemobile.overlayPermissionContract
@@ -44,6 +48,7 @@ fun SwitchMy() {
     Switch(
         checked = checkedState.value,
         onCheckedChange = {
+
             checkedState.value = it
             if (checkedState.value) {
                 if (!Settings.canDrawOverlays(APP_CONTEXT)) {

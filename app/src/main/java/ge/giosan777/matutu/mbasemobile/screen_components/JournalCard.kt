@@ -194,7 +194,7 @@ fun ExtraJournalButtons(
                     .clickable {
                         val intent = Intent(Intent.ACTION_DIAL)
                         intent.data = Uri.parse("tel:${journalItem.number}")
-                        startActivity(APP_CONTEXT!!, intent, Bundle())
+                        startActivity(APP_CONTEXT, intent, Bundle())
                     })
         }
 

@@ -32,9 +32,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.navigator.Screen
+import ge.giosan777.matutu.mbasemobile.utils.AlertDialogPermissions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Preview
 @Composable
@@ -44,6 +48,10 @@ fun prev() {
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
+
+    val started = remember {
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier
@@ -145,11 +153,7 @@ fun WelcomeScreen(navController: NavController) {
                     Button(
                         modifier = Modifier,
                         onClick = {
-                            navController.navigate(Screen.MBase.route){
-                                popUpTo(route = Screen.WelcomeScreen.route){
-                                    inclusive=true
-                                }
-                            }
+                            started.value = true
                         },
                     ) {
                         Text(text = "Start", style = MaterialTheme.typography.displaySmall)
@@ -167,6 +171,24 @@ fun WelcomeScreen(navController: NavController) {
             }
         }
     }
+
+    if (started.value) {
+        AlertDialogPermissions() {
+            if (it) {
+                navController.navigate(Screen.MBase.route) {
+                    popUpTo(route = Screen.WelcomeScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }
+            else{
+                APP_CONTEXT.finish()
+            }
+        }
+    }
+
+
+
 }
 
 

@@ -214,14 +214,14 @@ fun ScreenMobileBase(navController: NavController) {
                 )
 
                 LazyColumn {
-                    GlobalScope.launch(Dispatchers.IO, start = CoroutineStart.UNDISPATCHED) {
-                        val allJournal = getAllJournal()
-                        itemsIndexed(allJournal) { _, item ->
-                            JournalCard(journalItem = item)
+                    if (checkedState.value && callLogShow.value) {
+                        GlobalScope.launch(Dispatchers.IO, start = CoroutineStart.UNDISPATCHED) {
+                            val allJournal = getAllJournal()
+                            itemsIndexed(allJournal) { _, item ->
+                                JournalCard(journalItem = item)
+                            }
                         }
                     }
-
-
                 }
 
 
@@ -244,31 +244,25 @@ fun ScreenMobileBase(navController: NavController) {
 @Composable
 fun IsFirstStart() {
     if (!mSettings.contains("firstStart")) {
-        AlertDialogPermissions {
-            if (it) {
-                ActivityCompat.requestPermissions(
-                    APP_CONTEXT,
-                    arrayOf(
-                        READ_CONTACTS,
-                        READ_PHONE_STATE,
-                        READ_CALL_LOG,
-                        READ_EXTERNAL_STORAGE,
-                        POST_NOTIFICATIONS
-                    ),
-                    REQUEST_COD1
-                )
-                mSettings.edit().putBoolean("firstStart", false).apply()
-            } else {
-                APP_CONTEXT.finish()
-                exitProcess(0)
-            }
-        }
         if (!hasConnection()) {
             AlertDialogInternet {
                 APP_CONTEXT.finish()
                 exitProcess(0)
             }
         }
+        ActivityCompat.requestPermissions(
+            APP_CONTEXT,
+            arrayOf(
+                READ_CONTACTS,
+//                READ_PHONE_STATE,
+//                READ_CALL_LOG,
+//                READ_EXTERNAL_STORAGE,
+//                POST_NOTIFICATIONS
+            ),
+            READ_CONTACTS_REQUEST_COD
+        )
+        mSettings.edit().putBoolean("firstStart", false).apply()
+
 
     } else {
         standardStart()
@@ -277,7 +271,7 @@ fun IsFirstStart() {
 
 
 private fun standardStart() {
-
+    callLogShow.value=true
     getAllContactsFromServer(APP_CONTEXT) {
 //        val unsortingPhoneContacts = getAllContactsFromPhoneMy(APP_CONTEXT!!)
 //        val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
