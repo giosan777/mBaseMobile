@@ -159,8 +159,7 @@ fun ScreenMobileBaseOrg(navController: NavController) {
                                     contentDescription = "text_field_org_icon"
                                 )
                             },
-                            onValueChange = { it
-                                ->
+                            onValueChange = {
                                 if (it.isNotEmpty() && it[0] == '*') {
                                     orgSearch.value = it
                                 } else {
@@ -266,7 +265,7 @@ fun ScreenMobileBaseOrg(navController: NavController) {
                 }
 
                 LazyColumn {
-                    itemsIndexed(orgState.value) { index, item ->
+                    itemsIndexed(orgState.value) { index, _ ->
                         if (orgState.value.isNotEmpty() && cardVisible.value && !companyAddExpanded) {
                             OrgCard(orgCard = orgState, rigi = index)
                         }
@@ -323,10 +322,6 @@ fun OrgCategorySearch(
 
 }
 
-// to create an Outlined Text Field
-// Calling this function as content
-// in the above function
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryChoice(
     selectedText: MutableState<String>,

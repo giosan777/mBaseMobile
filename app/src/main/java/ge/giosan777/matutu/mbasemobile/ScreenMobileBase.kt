@@ -1,5 +1,8 @@
 package ge.giosan777.matutu.mbasemobile
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -54,7 +58,6 @@ import ge.giosan777.matutu.mbasemobile.screen_components.JournalCard
 import ge.giosan777.matutu.mbasemobile.screen_components.personCard
 import ge.giosan777.matutu.mbasemobile.sorting.contactSorting1
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
-import ge.giosan777.matutu.mbasemobile.utils.AlertDialogPermissions
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -62,6 +65,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
+
 
 @Preview(showBackground = true)
 @Composable
@@ -213,15 +217,37 @@ fun ScreenMobileBase(navController: NavController) {
                     style = MaterialTheme.typography.displayMedium
                 )
 
-                LazyColumn {
-                    if (checkedState.value && callLogShow.value) {
-                        GlobalScope.launch(Dispatchers.IO, start = CoroutineStart.UNDISPATCHED) {
-                            val allJournal = getAllJournal()
-                            itemsIndexed(allJournal) { _, item ->
-                                JournalCard(journalItem = item)
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.SpaceAround,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    LazyColumn(modifier = Modifier.weight(0.95f)) {
+                        if (checkedState.value && callLogShow.value) {
+                            GlobalScope.launch(
+                                Dispatchers.IO,
+                                start = CoroutineStart.UNDISPATCHED
+                            ) {
+                                val allJournal = getAllJournal()
+                                itemsIndexed(allJournal) { _, item ->
+                                    JournalCard(journalItem = item)
+                                }
                             }
                         }
                     }
+                    Text(
+                        modifier = Modifier
+                            .weight(0.05f)
+                            .clickable {
+                                val intent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://docs.google.com/document/d/1rPzjZr67Ay0vSotD0STCn3AHCkn6b2bxlBrOycGmjz8/edit?pli=1")
+                                )
+                                startActivity(APP_CONTEXT, intent, Bundle())
+                            }, text = "Privacy policy", color = Color.Blue
+                    )
+
                 }
 
 
@@ -271,7 +297,7 @@ fun IsFirstStart() {
 
 
 private fun standardStart() {
-    callLogShow.value=true
+    callLogShow.value = true
     getAllContactsFromServer(APP_CONTEXT) {
 //        val unsortingPhoneContacts = getAllContactsFromPhoneMy(APP_CONTEXT!!)
 //        val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
