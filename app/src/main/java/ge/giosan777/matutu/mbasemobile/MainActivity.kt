@@ -250,7 +250,7 @@ class MainActivity : ComponentActivity() {
             }
 
             READ_PHONE_STATE_AND_CALL_LOG_REQUEST_COD -> {
-                if (grantResults.isNotEmpty() &&
+                if (grantResults.isNotEmpty() && grantResults.size >= 2 &&
                     (grantResults[0] == PackageManager.PERMISSION_GRANTED) &&
                     (grantResults[1] == PackageManager.PERMISSION_GRANTED)
                 ) {

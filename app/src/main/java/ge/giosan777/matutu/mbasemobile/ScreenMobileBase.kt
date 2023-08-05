@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -245,7 +246,7 @@ fun ScreenMobileBase(navController: NavController) {
                                     Uri.parse("https://docs.google.com/document/d/1rPzjZr67Ay0vSotD0STCn3AHCkn6b2bxlBrOycGmjz8/edit?pli=1")
                                 )
                                 startActivity(APP_CONTEXT, intent, Bundle())
-                            }, text = "Privacy policy", color = Color.Blue
+                            }, text = "Privacy policy", color = Color.Blue, textDecoration = TextDecoration.Underline
                     )
 
                 }
