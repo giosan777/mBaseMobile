@@ -90,7 +90,7 @@ fun OrgCard(orgCard: MutableState<MutableList<Organization>>, rigi: Int) {
 
                         if (!orgCard.value[rigi].img.isNullOrEmpty()) {
                             AsyncImage(
-                                model = "http://162.55.141.130:1990/files/${orgCard.value[rigi].img}",
+                                model = "https://mbase.ge/files/${orgCard.value[rigi].img}",
                                 contentDescription = "Organization logo",
                                 modifier = Modifier
                                     .size(64.dp)

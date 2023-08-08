@@ -6,6 +6,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import ge.giosan777.matutu.mbasemobile.Volley.MyHurlStack
 import ge.giosan777.matutu.mbasemobile.models.Organization
 import java.nio.charset.Charset
 import kotlin.concurrent.thread
@@ -15,8 +16,8 @@ fun saveNewOrganization(
     organizationList: List<Organization>
 ) {
     thread {
-        val queue = Volley.newRequestQueue(context)
-        val url = "http://162.55.141.130:1990/user_organization_base/saveAll"
+        val queue = Volley.newRequestQueue(context, MyHurlStack())
+        val url = "https://mbase.ge/user_organization_base/saveAll"
 
         val personListString = Gson().toJson(organizationList)
         val stringReq: StringRequest =

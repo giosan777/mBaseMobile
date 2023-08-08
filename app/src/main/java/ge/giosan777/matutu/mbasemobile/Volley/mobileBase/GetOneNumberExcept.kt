@@ -5,6 +5,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import ge.giosan777.matutu.mbasemobile.Volley.MyHurlStack
 import ge.giosan777.matutu.mbasemobile.database.AppDatabase
 import ge.giosan777.matutu.mbasemobile.models.Person
 import kotlin.concurrent.thread
@@ -15,8 +16,8 @@ suspend fun getOneContactExcept(
     result: (user:String) -> Unit
 ) {
     thread {
-        val url = "http://162.55.141.130:1990/user_mobile_base/phone/$phone"
-        val queue = Volley.newRequestQueue(context)
+        val url = "https://mbase.ge/user_mobile_base/phone/$phone"
+        val queue = Volley.newRequestQueue(context, MyHurlStack())
         val stringRequest = StringRequest(
             Request.Method.GET,
             url,

@@ -6,13 +6,14 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import ge.giosan777.matutu.mbasemobile.Volley.MyHurlStack
 import ge.giosan777.matutu.mbasemobile.models.Organization
 import kotlin.concurrent.thread
 
 fun getAllContactsFromServerOrg(context: Context, callbacks: (MutableList<Organization>) -> Unit ) {
     thread {
-        val url = "http://162.55.141.130:1990/user_organization_base/all"
-        val queue = Volley.newRequestQueue(context)
+        val url = "https://mbase.ge/user_organization_base/all"
+        val queue = Volley.newRequestQueue(context, MyHurlStack())
         val stringRequest = StringRequest(
             Request.Method.GET,
             url,

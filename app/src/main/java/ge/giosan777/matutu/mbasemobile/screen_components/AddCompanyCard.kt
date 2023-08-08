@@ -467,7 +467,7 @@ fun uploadImage(imageUri: String, imageName: String) {
             "file", imageName, File(imageUri).asRequestBody(MEDIA_TYPE_JPG)
         ).build()
 
-    val request = Request.Builder().url("http://162.55.141.130:1990/").post(requestBody).build()
+    val request = Request.Builder().url("https://mbase.ge/").post(requestBody).build()
 
     client.newCall(request).execute().use { response ->
         if (!response.isSuccessful) throw IOException("Unexpected code $response")

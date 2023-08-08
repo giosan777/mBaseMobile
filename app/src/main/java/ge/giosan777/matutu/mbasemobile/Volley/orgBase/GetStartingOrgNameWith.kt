@@ -6,6 +6,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
+import ge.giosan777.matutu.mbasemobile.Volley.MyHurlStack
 import ge.giosan777.matutu.mbasemobile.database.AppDatabaseOrg
 import ge.giosan777.matutu.mbasemobile.database.getAllOrganizationsWithNameOrg
 import ge.giosan777.matutu.mbasemobile.models.Organization
@@ -15,8 +16,8 @@ fun getStartingNameWithOrg(
     mutableState: MutableState<MutableList<Organization>>,
     orgName: String,
 ) {
-    val url = "http://162.55.141.130:1990/user_organization_base/StartingWith/$orgName"
-    val queue = Volley.newRequestQueue(APP_CONTEXT)
+    val url = "https://mbase.ge/user_organization_base/StartingWith/$orgName"
+    val queue = Volley.newRequestQueue(APP_CONTEXT, MyHurlStack())
     val stringRequest = StringRequest(
         Request.Method.GET,
         url,
@@ -40,7 +41,7 @@ fun getCategoryStartingNameWithOrg(
     mutableState: MutableState<MutableList<Organization>>,
     orgCategory: String,
 ) {
-    val url = "http://162.55.141.130:1990/user_organization_base/StartingCategoryWith/$orgCategory"
+    val url = "http://mbase.ge/user_organization_base/StartingCategoryWith/$orgCategory"
     val queue = Volley.newRequestQueue(APP_CONTEXT)
     val stringRequest = StringRequest(
         Request.Method.GET,
