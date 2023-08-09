@@ -41,7 +41,7 @@ fun getCategoryStartingNameWithOrg(
     mutableState: MutableState<MutableList<Organization>>,
     orgCategory: String,
 ) {
-    val url = "http://mbase.ge/user_organization_base/StartingCategoryWith/$orgCategory"
+    val url = "https://mbase.ge/user_organization_base/StartingCategoryWith/$orgCategory"
     val queue = Volley.newRequestQueue(APP_CONTEXT)
     val stringRequest = StringRequest(
         Request.Method.GET,
