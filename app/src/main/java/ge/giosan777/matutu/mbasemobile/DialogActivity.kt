@@ -32,11 +32,11 @@ class DialogActivity : ComponentActivity() {
             }
 
             setFinishOnTouchOutside(false)
+
             intent.extras?.getString("user")?.let {
                 phoneAndUser.value = it
                 newDialog(phoneAndUser.value)
                 Log.d("MyLog","sdadsadsadsad")
-//                finish()
             }
 
 

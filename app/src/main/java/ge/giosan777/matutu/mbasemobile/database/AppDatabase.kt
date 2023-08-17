@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import ge.giosan777.matutu.mbasemobile.dao.JournalDAO
 import ge.giosan777.matutu.mbasemobile.dao.OrgDAO
 import ge.giosan777.matutu.mbasemobile.dao.PersonDAO
+import ge.giosan777.matutu.mbasemobile.models.Journal
 import ge.giosan777.matutu.mbasemobile.models.Organization
 import ge.giosan777.matutu.mbasemobile.models.Person
 
@@ -35,6 +37,21 @@ abstract class AppDatabaseOrg : RoomDatabase() {
                 context.applicationContext,
                 AppDatabaseOrg::class.java,
                 "o_base.db"
+            ).allowMainThreadQueries().build()
+        }
+    }
+}
+
+@Database(entities = [Journal::class], version = 1)
+abstract class AppDatabaseJournal : RoomDatabase() {
+    abstract fun getDao(): JournalDAO
+
+    companion object {
+        fun getDb(context: Context): AppDatabaseJournal {
+            return Room.databaseBuilder(
+                context.applicationContext,
+                AppDatabaseJournal::class.java,
+                "j_base.db"
             ).allowMainThreadQueries().build()
         }
     }

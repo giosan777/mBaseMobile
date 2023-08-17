@@ -48,9 +48,9 @@ import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.saveAllContactsFromPhon
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getAllContactsFromServerOrg
 import ge.giosan777.matutu.mbasemobile.banner.Banner
 import ge.giosan777.matutu.mbasemobile.contacts.getAllContactsFromPhoneMy
-import ge.giosan777.matutu.mbasemobile.contacts.getAllJournal
 import ge.giosan777.matutu.mbasemobile.database.deleteAllContactsFromLocalDB
 import ge.giosan777.matutu.mbasemobile.database.deleteAllOrganizationsFromLocalDBOrg
+import ge.giosan777.matutu.mbasemobile.database.getAllJournalFromLocalDbJournal
 import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDb
 import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDbOrg
 import ge.giosan777.matutu.mbasemobile.models.Person
@@ -230,7 +230,7 @@ fun ScreenMobileBase(navController: NavController) {
                                 Dispatchers.IO,
                                 start = CoroutineStart.UNDISPATCHED
                             ) {
-                                val allJournal = getAllJournal()
+                                val allJournal = getAllJournalFromLocalDbJournal(APP_CONTEXT).reversed()
                                 itemsIndexed(allJournal) { _, item ->
                                     JournalCard(journalItem = item)
                                 }
@@ -243,10 +243,13 @@ fun ScreenMobileBase(navController: NavController) {
                             .clickable {
                                 val intent = Intent(
                                     Intent.ACTION_VIEW,
-                                    Uri.parse("https://docs.google.com/document/d/1rPzjZr67Ay0vSotD0STCn3AHCkn6b2bxlBrOycGmjz8/edit?pli=1")
+                                    Uri.parse("https://mbase.ge/policy")
                                 )
                                 startActivity(APP_CONTEXT, intent, Bundle())
-                            }, text = "Privacy policy", color = Color.Blue, textDecoration = TextDecoration.Underline
+                            },
+                        text = "Privacy policy",
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.Underline
                     )
 
                 }

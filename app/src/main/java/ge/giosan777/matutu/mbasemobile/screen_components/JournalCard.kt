@@ -1,6 +1,7 @@
 package ge.giosan777.matutu.mbasemobile.screen_components
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -50,6 +51,9 @@ import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.R
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getOneContactExcept
 import ge.giosan777.matutu.mbasemobile.models.Journal
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
 
 
 @Composable
@@ -98,6 +102,14 @@ fun JournalCard(journalItem: Journal) {
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+
+                val date = Date(journalItem.date)
+                val sdf = SimpleDateFormat("HH:mm")
+                sdf.timeZone = TimeZone.getTimeZone("GMT+4")
+
+                val formattedDate: String = sdf.format(date)
+                Text(modifier = Modifier.padding(start = 4.dp), text = formattedDate)
+
                 Image(
                     painter = painterResource(type),
                     contentDescription = "Photo",
@@ -109,37 +121,42 @@ fun JournalCard(journalItem: Journal) {
                 )
                 val numberRegex =
                     journalItem.number.removePrefix("+995").replace("[^\\w+]".toRegex(), "")
-                produceState(initialValue = ""){
+                produceState(initialValue = "") {
                     getOneContactExcept(numberRegex, APP_CONTEXT) {
                         firstNameFromServer = it
                     }
-                    value=""
+                    value = ""
                 }
 
 
                 Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(modifier = Modifier.padding(start = 5.dp), text = numberRegex)
+                    Column(modifier = Modifier.fillMaxWidth().weight(0.9F),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
 
-                    Row(modifier = Modifier.width(180.dp)) {
-                        Text(
-                            modifier = Modifier.padding(end = 15.dp),
-                            text = "- $firstNameFromServer"
+                    ) {
+                            Text(modifier = Modifier, text = numberRegex)
+                            Text(
+                                modifier = Modifier,
+                                text = "- $firstNameFromServer"
+                            )
+                    }
+                    Column (modifier = Modifier.fillMaxWidth().weight(0.1F)){
+                        JournalItemButton(
+                            expanded = expanded,
+                            onClick = { expanded = !expanded }
                         )
                     }
-                    JournalItemButton(
-                        expanded = expanded,
-                        onClick = { expanded = !expanded }
-                    )
-
                 }
+
+
             }
             if (expanded) {
-                ExtraJournalButtons(journalItem,firstNameFromServer,
+                ExtraJournalButtons(
+                    journalItem, firstNameFromServer,
                     modifier = Modifier.padding(
                         start = dimensionResource(R.dimen.padding_small),
                         top = dimensionResource(R.dimen.padding_small),
@@ -177,8 +194,8 @@ fun JournalItemButton(
 
 @Composable
 fun ExtraJournalButtons(
-    journalItem:Journal,
-    firstName:String,
+    journalItem: Journal,
+    firstName: String,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -199,7 +216,8 @@ fun ExtraJournalButtons(
         }
 
         Box() {
-            Image(painter = painterResource(id = R.drawable.message_card), contentDescription = null,
+            Image(painter = painterResource(id = R.drawable.message_card),
+                contentDescription = null,
                 modifier = Modifier
                     .size(48.dp)
                     .clickable {
@@ -212,7 +230,8 @@ fun ExtraJournalButtons(
         }
 
         Box() {
-            Image(painter = painterResource(id = R.drawable.add_user_ico), contentDescription = null,
+            Image(painter = painterResource(id = R.drawable.add_user_ico),
+                contentDescription = null,
                 modifier = Modifier
                     .size(48.dp)
                     .clickable {
