@@ -261,7 +261,11 @@ fun ScreenMobileBaseOrg(navController: NavController) {
                     }
                 }
                 if (companyAddExpanded) {
-                    AddCompanyCard(companyAddExpanded)
+                    navController.navigate(Screen.AddCompanyCard.route) {
+                        popUpTo(route = Screen.AddCompanyCard.route) {
+                            inclusive = true
+                        }
+                    }
                 }
 
                 LazyColumn {

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import ge.giosan777.matutu.mbasemobile.ScreenMobileBase
 import ge.giosan777.matutu.mbasemobile.ScreenMobileBaseOrg
 import ge.giosan777.matutu.mbasemobile.WelcomeScreen
+import ge.giosan777.matutu.mbasemobile.screen_components.AddCompanyCard
 
 @Composable
 fun SetUpNavGraph(
@@ -27,6 +28,11 @@ fun SetUpNavGraph(
             route = Screen.WelcomeScreen.route
         ){
             WelcomeScreen(navController)
+        }
+        composable(
+            route = Screen.AddCompanyCard.route
+        ){
+            AddCompanyCard(navController)
         }
     }
 }

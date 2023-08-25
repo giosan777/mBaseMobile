@@ -5,13 +5,16 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,7 +38,7 @@ import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.navigator.Screen
 import ge.giosan777.matutu.mbasemobile.navigator.SetUpNavGraph
 import ge.giosan777.matutu.mbasemobile.screen_components.TopAppBarMy
-import ge.giosan777.matutu.mbasemobile.service.CallsService
+import ge.giosan777.matutu.mbasemobile.service.ServiceTest
 import ge.giosan777.matutu.mbasemobile.ui.theme.MBaseTheme
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogBattery
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogCallLogPermission
@@ -62,6 +65,7 @@ lateinit var mSettings: SharedPreferences
 lateinit var checkedState: MutableState<Boolean>
 lateinit var overlayPermissionContract: ActivityResultLauncher<Intent>
 lateinit var callLogShow: MutableState<Boolean>
+val serviceTest = ServiceTest()
 
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -256,8 +260,14 @@ class MainActivity : ComponentActivity() {
                 ) {
                     appPermissionBattery.value=true
                     callLogShow.value = true
-                    startForegroundService(Intent(this, CallsService::class.java))
-                    Log.d("MyLog", "READ_PHONE_STATE_AND_CALL_LOG_REQUEST_COD granted")
+
+                    val intentFilter = IntentFilter()
+                    intentFilter.addAction("android.intent.action.PHONE_STATE")
+                    APP_CONTEXT.registerReceiver(serviceTest, intentFilter)
+
+
+//                    startForegroundService(Intent(this, CallsService::class.java))
+//                    Log.d("MyLog", "READ_PHONE_STATE_AND_CALL_LOG_REQUEST_COD granted")
                 } else {
                     appCloseDialogPermission.value = true
                 }
@@ -281,8 +291,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+    }
 
 }
+
+
 
 
 fun setLanguage() {

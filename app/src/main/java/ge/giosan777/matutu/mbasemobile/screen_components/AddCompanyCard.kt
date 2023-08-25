@@ -61,9 +61,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.R
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.saveNewOrganization
+import ge.giosan777.matutu.mbasemobile.navigator.Screen
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternetFromAddNewOrg
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 import ge.giosan777.matutu.mbasemobile.utils.textTraslation
@@ -86,18 +88,11 @@ import java.io.InputStream
 import java.util.UUID
 
 
-@Preview
-@Composable
-fun AddCompPreview() {
-    AddCompanyCard(expanded = true)
-}
-
-
 private val newOrganization =
     ge.giosan777.matutu.mbasemobile.models.Organization(0, "", "", "", "", "", "", "")
 
 @Composable
-fun AddCompanyCard(expanded: Boolean) {
+fun AddCompanyCard(navController: NavController) {
     val companyName = remember {
         mutableStateOf("")
     }
@@ -117,8 +112,8 @@ fun AddCompanyCard(expanded: Boolean) {
     val focusManager = LocalFocusManager.current
 
     val color by animateColorAsState(
-        targetValue = if (expanded) MaterialTheme.colorScheme.tertiaryContainer
-        else MaterialTheme.colorScheme.primaryContainer,
+        targetValue = MaterialTheme.colorScheme.tertiaryContainer
+//        else MaterialTheme.colorScheme.primaryContainer,
     )
     val firstCardVisible = remember {
         mutableStateOf(true)
@@ -245,7 +240,7 @@ fun AddCompanyCard(expanded: Boolean) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     categoryValidation.value = organizationCategoryValidation(selectedText.value)
                     MyContent(selectedText, color, categoryValidation)
-                    val selectedTextTraslated=textTraslation(selectedText.value)
+                    val selectedTextTraslated = textTraslation(selectedText.value)
                     newOrganization.category = selectedTextTraslated
 
                     Image(
@@ -319,7 +314,7 @@ fun AddCompanyCard(expanded: Boolean) {
         }
     }
     if (secondCardVisible.value) {
-        UploadComplate(secondCardVisible)
+        UploadComplate(secondCardVisible,navController)
     }
 
 
@@ -438,7 +433,7 @@ fun RequestContentPermission(
                 }, modifier = Modifier.padding(start = 16.dp, bottom = 10.dp, end = 16.dp)) {
                     Text(text = "Complete")
                 }
-            }else{
+            } else {
                 AlertDialogInternetFromAddNewOrg()
             }
 
@@ -464,8 +459,8 @@ fun uploadImage(imageUri: String, imageName: String) {
 
 
     val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart(
-            "file", imageName, File(imageUri).asRequestBody(MEDIA_TYPE_JPG)
-        ).build()
+        "file", imageName, File(imageUri).asRequestBody(MEDIA_TYPE_JPG)
+    ).build()
 
     val request = Request.Builder().url("https://mbase.ge/").post(requestBody).build()
 
@@ -511,7 +506,7 @@ fun getRealPathFromURI(uri: Uri, context: Context): String? {
 }
 
 @Composable
-fun UploadComplate(secondCardVisible: MutableState<Boolean>) {
+fun UploadComplate(secondCardVisible: MutableState<Boolean>,navController:NavController) {
 
     Card(
         modifier = Modifier
@@ -533,7 +528,14 @@ fun UploadComplate(secondCardVisible: MutableState<Boolean>) {
                 style = MaterialTheme.typography.labelSmall
             )
             Button(
-                onClick = { secondCardVisible.value = false },
+                onClick = {
+                    secondCardVisible.value = false
+                    navController.navigate(Screen.MBaseOrg.route) {
+                        popUpTo(route = Screen.WelcomeScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                },
                 modifier = Modifier.padding(top = 24.dp)
             ) {
                 Text(text = "Ok")

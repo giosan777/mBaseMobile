@@ -1,6 +1,7 @@
 package ge.giosan777.matutu.mbasemobile.screen_components
 
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.provider.Settings
 import androidx.compose.foundation.layout.size
@@ -23,10 +24,13 @@ import ge.giosan777.matutu.mbasemobile.READ_PHONE_STATE_AND_CALL_LOG_REQUEST_COD
 import ge.giosan777.matutu.mbasemobile.checkedState
 import ge.giosan777.matutu.mbasemobile.mSettings
 import ge.giosan777.matutu.mbasemobile.overlayPermissionContract
-import ge.giosan777.matutu.mbasemobile.service.CallsService
+import ge.giosan777.matutu.mbasemobile.service.ServiceTest
+import ge.giosan777.matutu.mbasemobile.serviceTest
+
 
 @Composable()
 fun SwitchMy() {
+
     checkedState = remember {
         mutableStateOf(false)
     }
@@ -37,12 +41,9 @@ fun SwitchMy() {
         )
     ) {
         checkedState.value = true
-        APP_CONTEXT.startForegroundService(
-            Intent(
-                APP_CONTEXT,
-                CallsService::class.java
-            )
-        )//TODO//
+//        val intentFilter = IntentFilter()
+//        intentFilter.addAction("android.intent.action.PHONE_STATE")
+//        APP_CONTEXT.registerReceiver(serviceTest, intentFilter)
     }
 
     Switch(
@@ -60,21 +61,33 @@ fun SwitchMy() {
                     overlayPermissionContract.launch(intent)
 
                 }
-                APP_CONTEXT.startForegroundService(
-                    Intent(
-                        APP_CONTEXT,
-                        CallsService::class.java
-                    )
-                )
+
+
+//                val intentFilter = IntentFilter()
+//                intentFilter.addAction("android.intent.action.PHONE_STATE")
+//                APP_CONTEXT.registerReceiver(serviceTest, intentFilter)
+
+
+
+
+//                APP_CONTEXT.startForegroundService(
+//                    Intent(
+//                        APP_CONTEXT,
+//                        CallsService::class.java
+//                    )
+//                )
+
+
                 mSettings.edit().putBoolean("canDrawOverlays", true)
                     .apply()
             } else if (!checkedState.value) {
-                val serviceIntent =
-                    Intent(APP_CONTEXT, CallsService::class.java)
+//                val serviceIntent =
+//                    Intent(APP_CONTEXT, CallsService::class.java)
                 mSettings.edit().putBoolean("canDrawOverlays", false)
                     .apply()
 
-                APP_CONTEXT.stopService(serviceIntent)
+//                APP_CONTEXT.unregisterReceiver(serviceTest)
+//                APP_CONTEXT.stopService(serviceIntent)
             }
         },
         thumbContent = {
