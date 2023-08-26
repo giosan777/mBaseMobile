@@ -24,7 +24,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -57,7 +56,6 @@ import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getStartingNameWithOrg
 import ge.giosan777.matutu.mbasemobile.banner.Banner
 import ge.giosan777.matutu.mbasemobile.models.Organization
 import ge.giosan777.matutu.mbasemobile.navigator.Screen
-import ge.giosan777.matutu.mbasemobile.screen_components.AddCompanyCard
 import ge.giosan777.matutu.mbasemobile.screen_components.OrgCard
 import ge.giosan777.matutu.mbasemobile.utils.textTraslation
 import kotlinx.coroutines.DelicateCoroutinesApi

@@ -8,13 +8,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
-import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,7 +36,7 @@ import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.navigator.Screen
 import ge.giosan777.matutu.mbasemobile.navigator.SetUpNavGraph
 import ge.giosan777.matutu.mbasemobile.screen_components.TopAppBarMy
-import ge.giosan777.matutu.mbasemobile.service.ServiceTest
+import ge.giosan777.matutu.mbasemobile.broadcast.ServiceTest
 import ge.giosan777.matutu.mbasemobile.ui.theme.MBaseTheme
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogBattery
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogCallLogPermission

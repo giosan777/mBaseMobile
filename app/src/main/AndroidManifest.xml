@@ -45,7 +45,7 @@
 
 
 
-        <receiver android:name="ge.giosan777.matutu.mbasemobile.service.ServiceTest"
+        <receiver android:name="ge.giosan777.matutu.mbasemobile.broadcast.ServiceTest"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>

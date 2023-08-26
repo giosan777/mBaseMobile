@@ -70,6 +70,7 @@ https://docs.google.com/document/d/1rPzjZr67Ay0vSotD0STCn3AHCkn6b2bxlBrOycGmjz8/
 </string>
     <string name="phone">ტელეფონი</string>
     <string name="company">ორგანიზაცია</string>
+    <string name="search">ძებნა</string>
     <string name="battery_optimization">ბატარეის ოპტიმიზაციის გათიშვა</string>
     <string name="battery_optimization_text" translatable="true">აპლიკაციის გამართული მუშაობისთვის,გთხოვთ გათიშოთ ბატარეის ოპტიმიზაცია</string>
     <string name="category_bank">ბანკი</string>

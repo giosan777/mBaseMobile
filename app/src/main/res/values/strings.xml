@@ -37,11 +37,13 @@
     <string name="policy_2">privacy policy</string>
     <string name="danarekebis_jurnali">Call log</string>
     <string name="tanxmoba">I agree</string>
+    <string name="search">Search...</string>
     <string name="en" translatable="false">English</string>
     <string name="ge" translatable="false">ქართული</string>
     <string name="language" translatable="false">English</string>
     <string name="battery_optimization" translatable="true">turn off battery optimization</string>
     <string name="battery_optimization_text" translatable="true">For the application to work correctly, disable battery optimization</string>
+
 
 
     <string name="policy_text">

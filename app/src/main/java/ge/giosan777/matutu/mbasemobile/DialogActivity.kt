@@ -14,20 +14,28 @@ import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 
 class DialogActivity : ComponentActivity() {
     private lateinit var windowManager: WindowManager
     private lateinit var dialogView: View
-    lateinit var dialog: AlertDialog
+    private lateinit var dialog: AlertDialog
+    private lateinit var phoneAndUser:MutableState<String>
+    private var bus: EventBus = EventBus.getDefault()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         setContent {
-            val phoneAndUser = remember {
+            phoneAndUser = remember {
                 mutableStateOf("")
             }
 
@@ -36,30 +44,41 @@ class DialogActivity : ComponentActivity() {
             intent.extras?.getString("user")?.let {
                 phoneAndUser.value = it
                 newDialog(phoneAndUser.value)
-                Log.d("MyLog","sdadsadsadsad")
             }
 
 
         }
+    }
+
+    @Subscribe
+    fun messageAvailable(user: String) {
+        Log.d("MyLog", "movida $user")
+        if (this::windowManager.isInitialized) {
+            windowManager.removeView(dialogView)
+        }
+        dialog.dismiss()
+        newDialog(user)
     }
 
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             if ("ACTION_DAKETVA_ACTIVITY" == intent.action) {
-                Log.d("MyLog", "aaqaaaaaaaaaaaaaaaaaaaaaa")
                 finish()
             }
         }
     }
 
+
     override fun onResume() {
         super.onResume()
+        bus.register(DialogActivity@this);
         val filter = IntentFilter("ACTION_DAKETVA_ACTIVITY")
         registerReceiver(myReceiver, filter)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        bus.unregister(DialogActivity@this);
         if (this::windowManager.isInitialized) {
             windowManager.removeView(dialogView)
         }
