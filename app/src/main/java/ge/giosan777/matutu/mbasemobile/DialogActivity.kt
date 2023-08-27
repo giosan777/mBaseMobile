@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,30 +26,27 @@ class DialogActivity : ComponentActivity() {
     private lateinit var windowManager: WindowManager
     private lateinit var dialogView: View
     private lateinit var dialog: AlertDialog
-    private lateinit var phoneAndUser:MutableState<String>
+    private lateinit var phoneAndUser: MutableState<String>
     private var bus: EventBus = EventBus.getDefault()
 
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
         setContent {
             phoneAndUser = remember {
                 mutableStateOf("")
             }
-
             setFinishOnTouchOutside(false)
-
             intent.extras?.getString("user")?.let {
                 phoneAndUser.value = it
+
                 newDialog(phoneAndUser.value)
             }
-
-
         }
     }
+
 
     @Subscribe
     fun messageAvailable(user: String) {
@@ -71,14 +69,14 @@ class DialogActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        bus.register(DialogActivity@this);
+        bus.register(DialogActivity@ this);
         val filter = IntentFilter("ACTION_DAKETVA_ACTIVITY")
         registerReceiver(myReceiver, filter)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        bus.unregister(DialogActivity@this);
+        bus.unregister(DialogActivity@ this);
         if (this::windowManager.isInitialized) {
             windowManager.removeView(dialogView)
         }
@@ -108,20 +106,20 @@ class DialogActivity : ComponentActivity() {
         dialog = builder.create()
 
         dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-//        dialog.window?.setType(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
 
         dialog.setOnCancelListener(DialogInterface.OnCancelListener {
             this.finish()
         })
 
-
         dialog.show()
+
         btnOk.setOnClickListener(View.OnClickListener {
             dialog.dismiss()
             this.finish()
         })
     }
+
 }
 
 

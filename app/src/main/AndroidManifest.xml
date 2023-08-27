@@ -58,7 +58,7 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:showOnLockScreen="true"
-            android:theme="@style/TestMy"
+            android:theme="@style/DialogStyleMy"
 
             />
 
@@ -66,7 +66,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MBaseMobile">
+            android:theme="@style/Theme.SplashMy">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
