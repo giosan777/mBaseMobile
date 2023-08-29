@@ -125,5 +125,7 @@ https://docs.google.com/document/d/1rPzjZr67Ay0vSotD0STCn3AHCkn6b2bxlBrOycGmjz8/
     <string name="else_search_category">Or search by Category</string>
     <string name="ok">Ok</string>
     <string name="disable">Disable economy</string>
+    <string name="Identify_call">Identify the incoming call</string>
+    <string name="privacy_policy">Privacy policy</string>
 
 </resources>

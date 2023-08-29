@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -56,6 +57,7 @@ import ge.giosan777.matutu.mbasemobile.database.saveAllContactsToLocalDbOrg
 import ge.giosan777.matutu.mbasemobile.models.Person
 import ge.giosan777.matutu.mbasemobile.navigator.Screen
 import ge.giosan777.matutu.mbasemobile.screen_components.JournalCard
+import ge.giosan777.matutu.mbasemobile.screen_components.SwitchMy
 import ge.giosan777.matutu.mbasemobile.screen_components.personCard
 import ge.giosan777.matutu.mbasemobile.sorting.contactSorting1
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
@@ -95,6 +97,7 @@ fun ScreenMobileBase(navController: NavController) {
             .fillMaxSize()
             .padding(start = 15.dp, end = 15.dp)
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -129,6 +132,30 @@ fun ScreenMobileBase(navController: NavController) {
                         style = MaterialTheme.typography.displayMedium
                     )
                 }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(modifier= Modifier.weight(0.9f),verticalAlignment = Alignment.CenterVertically) {
+                    SwitchMy()
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp),
+                        text = stringResource(R.string.Identify_call)
+                    )
+                }
+                Icon(
+                    modifier = Modifier
+                        .weight(0.1f)
+                        .clickable {
+                            navController.navigate(route = Screen.VideoScreen.route)
+                        }
+                        .size(32.dp)
+                        .padding(start = 4.dp),
+                    painter = painterResource(R.drawable.question_icon),
+                    contentDescription = "question icon"
+                )
+
             }
 
 
@@ -230,7 +257,8 @@ fun ScreenMobileBase(navController: NavController) {
                                 Dispatchers.IO,
                                 start = CoroutineStart.UNDISPATCHED
                             ) {
-                                val allJournal = getAllJournalFromLocalDbJournal(APP_CONTEXT).reversed()
+                                val allJournal =
+                                    getAllJournalFromLocalDbJournal(APP_CONTEXT).reversed().take(50)
                                 itemsIndexed(allJournal) { _, item ->
                                     JournalCard(journalItem = item)
                                 }
@@ -239,15 +267,25 @@ fun ScreenMobileBase(navController: NavController) {
                     }
                     Text(
                         modifier = Modifier
-                            .weight(0.05f)
+                            .weight(0.08f)
                             .clickable {
-                                val intent = Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse("https://mbase.ge/policy")
-                                )
-                                startActivity(APP_CONTEXT, intent, Bundle())
+                                if (mSettings.contains("language") && mSettings.getString("language", "ka").equals("ka")) {
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://mbase.ge/policy")
+                                    )
+                                    startActivity(APP_CONTEXT, intent, Bundle())
+                                }
+                                else{
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://mbase.ge/policy_en")
+                                    )
+                                    startActivity(APP_CONTEXT, intent, Bundle())
+                                }
+
                             },
-                        text = "Privacy policy",
+                        text = stringResource(R.string.privacy_policy),
                         color = Color.Blue,
                         textDecoration = TextDecoration.Underline
                     )

@@ -8,6 +8,7 @@ import ge.giosan777.matutu.mbasemobile.ScreenMobileBase
 import ge.giosan777.matutu.mbasemobile.ScreenMobileBaseOrg
 import ge.giosan777.matutu.mbasemobile.WelcomeScreen
 import ge.giosan777.matutu.mbasemobile.screen_components.AddCompanyCard
+import ge.giosan777.matutu.mbasemobile.screen_components.VideoScreen
 
 @Composable
 fun SetUpNavGraph(
@@ -33,6 +34,11 @@ fun SetUpNavGraph(
             route = Screen.AddCompanyCard.route
         ){
             AddCompanyCard(navController)
+        }
+        composable(
+            route = Screen.VideoScreen.route
+        ){
+            VideoScreen(navController)
         }
     }
 }

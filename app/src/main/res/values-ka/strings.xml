@@ -121,7 +121,8 @@ https://docs.google.com/document/d/1rPzjZr67Ay0vSotD0STCn3AHCkn6b2bxlBrOycGmjz8/
     <string name="else_search_category">ან მოძებნე კატეგორიით</string>
     <string name="ok">კარგი</string>
     <string name="disable">ეკონომიის გათიშვა</string>
-
+    <string name="Identify_call">შემომავალი ზარის იდენტიფიცირება</string>
+    <string name="privacy_policy">კონფიდენციალურობის პოლიტიკა</string>
 
 
 </resources>

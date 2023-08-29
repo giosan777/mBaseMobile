@@ -17,10 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,7 +41,6 @@ fun TopAppBarMy() {
         Modifier.background(MaterialTheme.colorScheme.primary),
         actions = {
             LocaleDropdownMenu()
-            SwitchMy()
         },
         navigationIcon = {
             IconButton(onClick = {
@@ -67,7 +64,7 @@ fun TopAppBarMy() {
 
 @Composable
 fun LocaleDropdownMenu() {
-    var expanded = remember { mutableStateOf(false) }
+    val expanded = remember { mutableStateOf(false) }
 
     Box {
         IconButton(onClick = { expanded.value = true }) {

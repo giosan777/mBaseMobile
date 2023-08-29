@@ -5,5 +5,6 @@ sealed class Screen(val route:String){
     object MBaseOrg:Screen(route = "mbase_org_screen")
     object WelcomeScreen:Screen(route = "welcome_Screen")
     object AddCompanyCard:Screen(route = "AddCompany_Screen")
+    object VideoScreen:Screen(route = "video_Screen")
 
 }

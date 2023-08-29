@@ -21,7 +21,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,10 +32,10 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import ge.giosan777.matutu.mbasemobile.broadcast.ServiceTest
 import ge.giosan777.matutu.mbasemobile.navigator.Screen
 import ge.giosan777.matutu.mbasemobile.navigator.SetUpNavGraph
 import ge.giosan777.matutu.mbasemobile.screen_components.TopAppBarMy
-import ge.giosan777.matutu.mbasemobile.broadcast.ServiceTest
 import ge.giosan777.matutu.mbasemobile.ui.theme.MBaseTheme
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogBattery
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogCallLogPermission
@@ -66,7 +65,6 @@ lateinit var callLogShow: MutableState<Boolean>
 val serviceTest = ServiceTest()
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class MainActivity : ComponentActivity() {
 
     private lateinit var navController: NavHostController
