@@ -287,10 +287,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
 
-    }
 
 }
 
@@ -304,9 +301,10 @@ fun setLanguage() {
         Locale.setDefault(locale)
         val resources = APP_CONTEXT.resources
         val configuration = resources.configuration
-        configuration.locale = locale
-        resources.updateConfiguration(configuration, resources.displayMetrics)
+        configuration.setLocale(locale)
+//        resources.updateConfiguration(configuration, resources.displayMetrics)
+        APP_CONTEXT.createConfigurationContext(configuration)
+
     }
 }
-
 

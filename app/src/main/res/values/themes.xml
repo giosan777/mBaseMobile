@@ -23,7 +23,7 @@
         <item name="android:resizeableActivity">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">#004CAF50</item>
-
     </style>
+    
 
 </resources>

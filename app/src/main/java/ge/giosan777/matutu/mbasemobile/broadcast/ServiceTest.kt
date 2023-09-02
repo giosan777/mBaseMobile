@@ -8,8 +8,10 @@ import android.util.Log
 import android.widget.Toast
 import ge.giosan777.matutu.mbasemobile.APP_PREFERENCES
 import ge.giosan777.matutu.mbasemobile.Volley.mobileBase.getOneContactExcept
+import ge.giosan777.matutu.mbasemobile.database.AppDatabase
 import ge.giosan777.matutu.mbasemobile.database.saveAllJournalToLocalDbJournal
 import ge.giosan777.matutu.mbasemobile.models.Journal
+import ge.giosan777.matutu.mbasemobile.utils.hasConnectionWiFi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,15 +54,35 @@ class ServiceTest : BroadcastReceiver() {
                             val journalList = mutableListOf(journal)
                             saveAllJournalToLocalDbJournal(context, journalList)
 
-                            i.putExtra("user", "Search..." )
-                            context.startActivity(i)
+//                            i.putExtra("user", "Search..." )
+//                            context.startActivity(i)
 
-                            GlobalScope.launch(Dispatchers.IO) {
-                                getOneContactExcept(sortedNumber, context) {
-                                    Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
-                                    bus.post(it)
+                            if(hasConnectionWiFi(context)){
+                                GlobalScope.launch(Dispatchers.IO) {
+                                    getOneContactExcept(sortedNumber, context) {
+                                        Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
+//                                        bus.post(it)
+                                        Log.d("MyLog","aris wifi")
+                                        i.putExtra("user", it )
+                                        context.startActivity(i)
+                                    }
+                                }
+                            }else{
+                                val mainDb = AppDatabase.getDb(context)
+                                val personArray = mainDb.getDao().findByPhoneStartingWith(sortedNumber).orEmpty()
+                                val sortedList=personArray.sortedDescending()
+                                if (sortedList.isNotEmpty()) {
+                                    Toast.makeText(context, "Call ${sortedList[0].firstName}", Toast.LENGTH_LONG).show()
+                                    i.putExtra("user", sortedList[0].firstName )
+                                    context.startActivity(i)
+//                                    bus.post(sortedList[0].firstName.toString())
+                                }else{
+                                    i.putExtra("user", "User is not in the database")
+                                    context.startActivity(i)
+//                                    bus.post("User is not in the database")
                                 }
                             }
+
 
                         }
                     }
@@ -82,12 +104,31 @@ class ServiceTest : BroadcastReceiver() {
 
                             saveAllJournalToLocalDbJournal(context, journalList)
 
-                            i.putExtra("user", "Search..." )
-                            context.startActivity(i)
+//                            i.putExtra("user", "Search..." )
+//                            context.startActivity(i)
 
-                            GlobalScope.launch(Dispatchers.IO) {
-                                getOneContactExcept(sortedNumber, context) {
-                                    bus.post(it)
+                            if(hasConnectionWiFi(context)){
+                                GlobalScope.launch(Dispatchers.IO) {
+                                    getOneContactExcept(sortedNumber, context) {
+                                        Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
+//                                        bus.post(it)
+                                        i.putExtra("user", it )
+                                        context.startActivity(i)
+                                    }
+                                }
+                            }else{
+                                val mainDb = AppDatabase.getDb(context)
+                                val personArray = mainDb.getDao().findByPhoneStartingWith(sortedNumber).orEmpty()
+                                val sortedList=personArray.sortedDescending()
+                                if (sortedList.isNotEmpty()) {
+                                    Toast.makeText(context, "Call ${sortedList[0].firstName}", Toast.LENGTH_LONG).show()
+                                    i.putExtra("user", sortedList[0].firstName )
+                                    context.startActivity(i)
+//                                    bus.post(sortedList[0].firstName.toString())
+                                }else{
+                                    i.putExtra("user", "User is not in the database")
+                                    context.startActivity(i)
+//                                    bus.post("User is not in the database")
                                 }
                             }
 

@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
@@ -18,7 +17,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 
 
 class DialogActivity : ComponentActivity() {
@@ -36,7 +34,7 @@ class DialogActivity : ComponentActivity() {
             phoneAndUser = remember {
                 mutableStateOf("")
             }
-            setFinishOnTouchOutside(false)
+            setFinishOnTouchOutside(true)
             intent.extras?.getString("user")?.let {
                 phoneAndUser.value = it
 
@@ -46,15 +44,15 @@ class DialogActivity : ComponentActivity() {
     }
 
 
-    @Subscribe
-    fun messageAvailable(user: String) {
-        Log.d("MyLog", "movida $user")
-        if (this::windowManager.isInitialized) {
-            windowManager.removeView(dialogView)
-        }
-        dialog.dismiss()
-        newDialog(user)
-    }
+//    @Subscribe
+//    fun messageAvailable(user: String) {
+//        Log.d("MyLog", "movida $user")
+//        if (this::windowManager.isInitialized) {
+//            windowManager.removeView(dialogView)
+//        }
+//        dialog.dismiss()
+//        newDialog(user)
+//    }
 
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
@@ -67,14 +65,14 @@ class DialogActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        bus.register(DialogActivity@ this);
+//        bus.register(DialogActivity@ this);
         val filter = IntentFilter("ACTION_DAKETVA_ACTIVITY")
         registerReceiver(myReceiver, filter)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        bus.unregister(DialogActivity@ this);
+//        bus.unregister(DialogActivity@ this);
         if (this::windowManager.isInitialized) {
             windowManager.removeView(dialogView)
         }
@@ -93,17 +91,38 @@ class DialogActivity : ComponentActivity() {
         customDialogView.minimumHeight = 100
 
 
-
         builder.setView(customDialogView)
         val btnOk =
             customDialogView.findViewById<ImageButton>(R.id.btn_ok)
         val txtUser =
             customDialogView.findViewById<TextView>(R.id.txt_user)
         txtUser.text = userName
-
         dialog = builder.create()
 
+
+        dialog.window?.setDimAmount(0F)
         dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        dialog.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
+            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        );
+        dialog.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED,
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+        );
+        dialog.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        );
+        dialog.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+
+
+
+
+
+
+
+
 
 
         dialog.setOnCancelListener(DialogInterface.OnCancelListener {
