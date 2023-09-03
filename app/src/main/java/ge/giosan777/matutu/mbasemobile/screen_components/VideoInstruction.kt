@@ -17,7 +17,7 @@ import ge.giosan777.matutu.mbasemobile.R
 
 @Composable
 fun VideoScreenCallIdentity(navController: NavController) {
-    val videoUri= Uri.parse("android.resource://${APP_CONTEXT.packageName}/${R.raw.video}")//"https://mbase.ge/files/video.mp4"
+    val videoUri= Uri.parse("android.resource://${APP_CONTEXT.packageName}/${R.raw.video}")//"https://mbase.ge/files/video_info.mp4"
     val context = LocalContext.current
     val exoPlayer = remember {
         SimpleExoPlayer.Builder(context).build().apply {
@@ -39,7 +39,7 @@ fun VideoScreenCallIdentity(navController: NavController) {
 
 @Composable
 fun VideoScreenXiaomi(navController: NavController) {
-    val videoUri= Uri.parse("android.resource://${APP_CONTEXT.packageName}/${R.raw.xiaomi_permissions}")//"https://mbase.ge/files/video.mp4"
+    val videoUri= Uri.parse("android.resource://${APP_CONTEXT.packageName}/${R.raw.xiaomi_permissions}")//"https://mbase.ge/files/xiaomi_permissions.mp4"
     val context = LocalContext.current
     val exoPlayer = remember {
         SimpleExoPlayer.Builder(context).build().apply {

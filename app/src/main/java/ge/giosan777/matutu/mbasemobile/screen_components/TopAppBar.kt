@@ -54,9 +54,9 @@ fun TopAppBarMy(navController: NavController) {
     checkedStateIsActive = remember {
         mutableStateOf(false)
     }
-    isXiaomi.value= checkedStateIsActive.value
 
     if (Build.MANUFACTURER.equals("Xiaomi", true) && checkedStateIsActive.value) {
+        isXiaomi.value = true
         if (isShowOnLockScreenPermissionEnable()) {
             isXiaomi.value = false
             Toast.makeText(APP_CONTEXT, "Permission is already granted!!", Toast.LENGTH_SHORT)

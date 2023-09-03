@@ -13,13 +13,13 @@
     <style name="Theme.MBaseMobile" parent="android:Theme.Material.Light.NoActionBar" />
 
 
-    <style name="AlertDialogMy" parent="android:Theme.Dialog">
+    <style name="AlertDialogMy" parent="@style/Theme.AppCompat.Dialog.Alert">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">#004CAF50</item>
     </style>
 
 
-    <style name="DialogActivityMy" parent="Theme.AppCompat.Dialog.Alert">
+    <style name="DialogActivityMy" parent="@style/Theme.AppCompat.Dialog">
         <item name="android:resizeableActivity">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">#004CAF50</item>

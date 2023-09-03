@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.PixelFormat
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
@@ -24,6 +25,7 @@ class DialogActivity : ComponentActivity() {
     private lateinit var dialogView: View
     private lateinit var dialog: AlertDialog
     private lateinit var phoneAndUser: MutableState<String>
+
     ////////////////////////////////////////////////////////////
 //    private var bus: EventBus = EventBus.getDefault()
 //    @Subscribe
@@ -48,10 +50,8 @@ class DialogActivity : ComponentActivity() {
             phoneAndUser = remember {
                 mutableStateOf("")
             }
-
-            setFinishOnTouchOutside(true)
-
-            intent.extras?.getString("user")?.let {it_string->
+            setFinishOnTouchOutside(false)
+            intent.extras?.getString("user")?.let { it_string ->
                 phoneAndUser.value = it_string
                 newDialog(phoneAndUser.value)
 
@@ -110,26 +110,11 @@ class DialogActivity : ComponentActivity() {
         dialog.window?.setDimAmount(0F)
         dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
 
-        dialog.window?.setFlags(
-            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
-            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-        );
-        dialog.window?.setFlags(
-            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED,
-            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-        );
-        dialog.window?.setFlags(
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-        );
-//        dialog.window?.setFlags(
-//            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-//            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-//        );
-//        dialog.window?.setFlags(
-//            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-//            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-//        );
+        dialog.window?.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        dialog.window?.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        dialog.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        dialog.window?.setFormat(PixelFormat.TRANSLUCENT)
+
 
 
 
