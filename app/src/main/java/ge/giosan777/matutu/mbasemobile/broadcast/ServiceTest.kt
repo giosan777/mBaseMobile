@@ -62,7 +62,6 @@ class ServiceTest : BroadcastReceiver() {
                                     getOneContactExcept(sortedNumber, context) {
                                         Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
 //                                        bus.post(it)
-                                        Log.d("MyLog","aris wifi")
                                         i.putExtra("user", it )
                                         context.startActivity(i)
                                     }

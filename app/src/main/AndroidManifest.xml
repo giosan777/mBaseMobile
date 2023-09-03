@@ -9,8 +9,7 @@
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-<!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />-->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
@@ -22,33 +21,28 @@
         android:required="true" />
 
     <application
-
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher"
         android:label="MBase"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SplashMy"
         tools:targetApi="31">
 
-        <!--Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713-->
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7766146936543732~5453417596" />
-
-<!--        <meta-data-->
-<!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
-<!--            android:value="ca-app-pub-3940256099942544~3347511713" />-->
-
-
-
-        <receiver android:name="ge.giosan777.matutu.mbasemobile.broadcast.ServiceTest"
+            android:value="ca-app-pub-7766146936543732~5453417596" /> <!-- <meta-data -->
+        <!-- android:name="com.google.android.gms.ads.APPLICATION_ID" -->
+        <!-- android:value="ca-app-pub-3940256099942544~3347511713" /> -->
+        <receiver
+            android:name=".broadcast.ServiceTest"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
 
@@ -58,26 +52,26 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:showOnLockScreen="true"
-            android:theme="@style/DialogStyleMy"
-
-            />
-
+            android:turnScreenOn="true"
+            android:supportsPictureInPicture="true"
+            android:theme="@style/DialogActivityMy" />
         <activity
+
+
+
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.SplashMy">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-<!--        <service-->
-<!--            android:name=".service.CallsService"-->
-<!--            android:foregroundServiceType="dataSync|location|mediaPlayback|phoneCall"-->
-<!--            android:process=":MBaseService" />-->
-
+        </activity> <!-- <service -->
+        <!-- android:name=".service.CallsService" -->
+        <!-- android:foregroundServiceType="dataSync|location|mediaPlayback|phoneCall" -->
+        <!-- android:process=":MBaseService" /> -->
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
@@ -86,8 +80,6 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
-
-
     </application>
 
 </manifest>

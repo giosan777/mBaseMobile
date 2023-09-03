@@ -45,7 +45,6 @@
     <string name="battery_optimization_text" translatable="true">For the application to work correctly, disable battery optimization</string>
 
 
-
     <string name="policy_text">
 1. Displaying the Company Number in the Database
 If you want your company number to be easily searchable by other users of the application, you can add your company\'s

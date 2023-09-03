@@ -8,7 +8,8 @@ import ge.giosan777.matutu.mbasemobile.ScreenMobileBase
 import ge.giosan777.matutu.mbasemobile.ScreenMobileBaseOrg
 import ge.giosan777.matutu.mbasemobile.WelcomeScreen
 import ge.giosan777.matutu.mbasemobile.screen_components.AddCompanyCard
-import ge.giosan777.matutu.mbasemobile.screen_components.VideoScreen
+import ge.giosan777.matutu.mbasemobile.screen_components.VideoScreenCallIdentity
+import ge.giosan777.matutu.mbasemobile.screen_components.VideoScreenXiaomi
 
 @Composable
 fun SetUpNavGraph(
@@ -36,9 +37,15 @@ fun SetUpNavGraph(
             AddCompanyCard(navController)
         }
         composable(
-            route = Screen.VideoScreen.route
+            route = Screen.VideoScreenCallIdentify.route
         ){
-            VideoScreen(navController)
+            VideoScreenCallIdentity(navController)
         }
+        composable(
+            route = Screen.VideoScreenXiaomi.route
+        ){
+            VideoScreenXiaomi(navController)
+        }
+
     }
 }

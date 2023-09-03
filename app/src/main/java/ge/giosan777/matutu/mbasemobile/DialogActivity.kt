@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -16,7 +17,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import org.greenrobot.eventbus.EventBus
 
 
 class DialogActivity : ComponentActivity() {
@@ -24,26 +24,8 @@ class DialogActivity : ComponentActivity() {
     private lateinit var dialogView: View
     private lateinit var dialog: AlertDialog
     private lateinit var phoneAndUser: MutableState<String>
-    private var bus: EventBus = EventBus.getDefault()
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            phoneAndUser = remember {
-                mutableStateOf("")
-            }
-            setFinishOnTouchOutside(true)
-            intent.extras?.getString("user")?.let {
-                phoneAndUser.value = it
-
-                newDialog(phoneAndUser.value)
-            }
-        }
-    }
-
-
+    ////////////////////////////////////////////////////////////
+//    private var bus: EventBus = EventBus.getDefault()
 //    @Subscribe
 //    fun messageAvailable(user: String) {
 //        Log.d("MyLog", "movida $user")
@@ -53,6 +35,31 @@ class DialogActivity : ComponentActivity() {
 //        dialog.dismiss()
 //        newDialog(user)
 //    }
+///////////////////////////////////////////////////////////////
+    private var screenViewBounds = Rect()
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+
+        setContent {
+            phoneAndUser = remember {
+                mutableStateOf("")
+            }
+
+            setFinishOnTouchOutside(true)
+
+            intent.extras?.getString("user")?.let {it_string->
+                phoneAndUser.value = it_string
+                newDialog(phoneAndUser.value)
+
+            }
+
+        }
+    }
+
 
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
@@ -82,7 +89,7 @@ class DialogActivity : ComponentActivity() {
 
 
     fun newDialog(userName: String) {
-        val builder = AlertDialog.Builder(this, R.style.CustomDialog)
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogMy)
         val customDialogView: View = layoutInflater.inflate(
             R.layout.dialog_custom_layout,
             null
@@ -102,6 +109,7 @@ class DialogActivity : ComponentActivity() {
 
         dialog.window?.setDimAmount(0F)
         dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+
         dialog.window?.setFlags(
             WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
             WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
@@ -114,14 +122,14 @@ class DialogActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
         );
-        dialog.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-
-
-
-
-
-
-
+//        dialog.window?.setFlags(
+//            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+//            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+//        );
+//        dialog.window?.setFlags(
+//            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+//            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+//        );
 
 
 

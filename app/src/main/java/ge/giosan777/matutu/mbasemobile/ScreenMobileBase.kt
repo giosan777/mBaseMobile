@@ -148,7 +148,7 @@ fun ScreenMobileBase(navController: NavController) {
                     modifier = Modifier
                         .weight(0.1f)
                         .clickable {
-                            navController.navigate(route = Screen.VideoScreen.route)
+                            navController.navigate(route = Screen.VideoScreenCallIdentify.route)
                         }
                         .size(32.dp)
                         .padding(start = 4.dp),

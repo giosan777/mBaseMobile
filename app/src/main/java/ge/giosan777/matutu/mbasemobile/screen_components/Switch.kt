@@ -34,9 +34,7 @@ fun SwitchMy() {
         )
     ) {
         checkedState.value = true
-//        val intentFilter = IntentFilter()
-//        intentFilter.addAction("android.intent.action.PHONE_STATE")
-//        APP_CONTEXT.registerReceiver(serviceTest, intentFilter)
+
     }
 
     Switch(
@@ -44,6 +42,8 @@ fun SwitchMy() {
         onCheckedChange = {
 
             checkedState.value = it
+            checkedStateIsActive.value=it
+
             if (checkedState.value) {
                 if (!Settings.canDrawOverlays(APP_CONTEXT)) {
                     val intent =
@@ -56,24 +56,10 @@ fun SwitchMy() {
                 }
 
 
-//                val intentFilter = IntentFilter()
-//                intentFilter.addAction("android.intent.action.PHONE_STATE")
-//                APP_CONTEXT.registerReceiver(serviceTest, intentFilter)
-
-
-
-
-//                APP_CONTEXT.startForegroundService(
-//                    Intent(
-//                        APP_CONTEXT,
-//                        CallsService::class.java
-//                    )
-//                )
-
-
                 mSettings.edit().putBoolean("canDrawOverlays", true)
                     .apply()
             } else if (!checkedState.value) {
+
 //                val serviceIntent =
 //                    Intent(APP_CONTEXT, CallsService::class.java)
                 mSettings.edit().putBoolean("canDrawOverlays", false)

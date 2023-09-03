@@ -100,6 +100,7 @@ class MainActivity : ComponentActivity() {
         }
 
 
+
         setContent {
             appCloseDialog = remember {
                 mutableStateOf(false)
@@ -181,12 +182,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        TopAppBarMy()
                         navController = rememberNavController()
+                        TopAppBarMy(navController)
                         SetUpNavGraph(navController = navController)
                         if (!mSettings.contains("firstStart")) {
                             navController.navigate(route = Screen.WelcomeScreen.route)
                         }
+
                     }
                 }
             }
