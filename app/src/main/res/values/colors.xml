@@ -4,6 +4,7 @@
     <color name="btn_enabled">#4551E5</color>
     <color name="my_transparent">#212EC8</color>
     <color name="splashscreen_background">#4551E5</color>
+    <color name="dialog_call_screen">#FFFFFF</color>
 
 
 </resources>

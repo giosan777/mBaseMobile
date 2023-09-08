@@ -32,7 +32,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import ge.giosan777.matutu.mbasemobile.broadcast.ServiceTest
+import ge.giosan777.matutu.mbasemobile.broadcast.Broadcast
 import ge.giosan777.matutu.mbasemobile.navigator.Screen
 import ge.giosan777.matutu.mbasemobile.navigator.SetUpNavGraph
 import ge.giosan777.matutu.mbasemobile.screen_components.TopAppBarMy
@@ -62,7 +62,7 @@ lateinit var mSettings: SharedPreferences
 lateinit var checkedState: MutableState<Boolean>
 lateinit var overlayPermissionContract: ActivityResultLauncher<Intent>
 lateinit var callLogShow: MutableState<Boolean>
-val serviceTest = ServiceTest()
+val serviceTest = Broadcast()
 
 
 class MainActivity : ComponentActivity() {

@@ -14,12 +14,13 @@ import ge.giosan777.matutu.mbasemobile.models.Journal
 import ge.giosan777.matutu.mbasemobile.utils.hasConnectionWiFi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import java.util.Calendar
 
 
-class ServiceTest : BroadcastReceiver() {
+class Broadcast : BroadcastReceiver() {
 
     private var countCall = 0
 
@@ -53,42 +54,37 @@ class ServiceTest : BroadcastReceiver() {
                             val journal = Journal(null, sortedNumber, 1, currentDateTime)
                             val journalList = mutableListOf(journal)
                             saveAllJournalToLocalDbJournal(context, journalList)
-
-//                            i.putExtra("user", "Search..." )
-//                            context.startActivity(i)
-
                             if(hasConnectionWiFi(context)){
                                 GlobalScope.launch(Dispatchers.IO) {
+                                    delay(1000)
                                     getOneContactExcept(sortedNumber, context) {
-                                        Toast.makeText(context, "Call $it", Toast.LENGTH_LONG).show()
 //                                        bus.post(it)
                                         i.putExtra("user", it )
                                         context.startActivity(i)
                                     }
                                 }
                             }else{
-                                val mainDb = AppDatabase.getDb(context)
-                                val personArray = mainDb.getDao().findByPhoneStartingWith(sortedNumber).orEmpty()
-                                val sortedList=personArray.sortedDescending()
-                                if (sortedList.isNotEmpty()) {
-                                    Toast.makeText(context, "Call ${sortedList[0].firstName}", Toast.LENGTH_LONG).show()
-                                    i.putExtra("user", sortedList[0].firstName )
-                                    context.startActivity(i)
+                                GlobalScope.launch(Dispatchers.IO) {
+                                    delay(1000)
+                                    val mainDb = AppDatabase.getDb(context)
+                                    val personArray = mainDb.getDao().findByPhoneStartingWith(sortedNumber).orEmpty()
+                                    val sortedList=personArray.sortedDescending()
+                                    if (sortedList.isNotEmpty()) {
+                                        i.putExtra("user", sortedList[0].firstName )
+                                        context.startActivity(i)
 //                                    bus.post(sortedList[0].firstName.toString())
-                                }else{
-                                    i.putExtra("user", "User is not in the database")
-                                    context.startActivity(i)
+                                    }else{
+                                        i.putExtra("user", "User is not in the database")
+                                        context.startActivity(i)
 //                                    bus.post("User is not in the database")
+                                    }
                                 }
                             }
-
-
                         }
                     }
 
                     TelephonyManager.EXTRA_STATE_OFFHOOK -> {
                         Log.d("MyLog", "Звонок начат")
-
                         val outGoingCall =
                             intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
                         outGoingCall?.let {
@@ -97,15 +93,9 @@ class ServiceTest : BroadcastReceiver() {
 
                             val calendar = Calendar.getInstance()
                             val currentDateTime = calendar.timeInMillis
-
                             val journal = Journal(null, sortedNumber, 2, currentDateTime)
                             val journalList = mutableListOf(journal)
-
                             saveAllJournalToLocalDbJournal(context, journalList)
-
-//                            i.putExtra("user", "Search..." )
-//                            context.startActivity(i)
-
                             if(hasConnectionWiFi(context)){
                                 GlobalScope.launch(Dispatchers.IO) {
                                     getOneContactExcept(sortedNumber, context) {
@@ -130,11 +120,8 @@ class ServiceTest : BroadcastReceiver() {
 //                                    bus.post("User is not in the database")
                                 }
                             }
-
                         }
-
                     }
-
                     TelephonyManager.EXTRA_STATE_IDLE -> {
                         if (countCall % 2 == 0) {
                             val intent1 = Intent("ACTION_DAKETVA_ACTIVITY")
