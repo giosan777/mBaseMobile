@@ -156,66 +156,116 @@ fun OrgCard(orgCard: MutableState<MutableList<Organization>>, rigi: Int) {
                         OrgItemButton(expanded = expanded, onClick = { expanded = !expanded })
                     }
                     Divider(Modifier.padding(8.dp))
+
+                    ///adress
                     if (expanded) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = "Address: ${orgCard.value[rigi].address}",
-                                style = MaterialTheme.typography.labelSmall,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.padding(start = 10.dp).weight(0.7f,true),
-                                maxLines = 2
-                            )
-                            Icon(
-                                painter = painterResource(id = R.drawable.google_map_icon),
-                                contentDescription = "map_ico",
-                                Modifier
-                                    .padding(end = 16.dp)
-                                    .clickable {
-                                        val address = orgCard.value[rigi].address
-                                        val uri = Uri.parse("geo:0,0?q=$address")
-                                        val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+                        if (!(orgCard.value[rigi].address).isNullOrEmpty())
+                        {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Address: ${orgCard.value[rigi].address}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.padding(start = 10.dp).weight(0.7f,true),
+                                    maxLines = 2
+                                )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.google_map_icon),
+                                    contentDescription = "map_ico",
+                                    Modifier
+                                        .padding(end = 16.dp)
+                                        .clickable {
+                                            val address = orgCard.value[rigi].address
+                                            val uri = Uri.parse("geo:0,0?q=$address")
+                                            val mapIntent = Intent(Intent.ACTION_VIEW, uri)
 //                                        mapIntent.setPackage("com.google.android.apps.maps")
-                                        startActivity(APP_CONTEXT, mapIntent, Bundle())
-                                    }
-                            )
+                                            startActivity(APP_CONTEXT, mapIntent, Bundle())
+                                        }
+                                )
+                            }
                         }
+                        //misamarti
+                        if (!(orgCard.value[rigi].location).isNullOrEmpty())
+                        {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Address: ${orgCard.value[rigi].location}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.padding(start = 10.dp).weight(0.7f,true),
+                                    maxLines = 2
+                                )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.google_map_icon),
+                                    contentDescription = "map_ico",
+                                    Modifier
+                                        .padding(end = 16.dp)
+                                        .clickable {
+                                            val address = orgCard.value[rigi].location
+                                            val uri = Uri.parse("geo:0,0?q=$address")
+                                            val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+//                                        mapIntent.setPackage("com.google.android.apps.maps")
+                                            startActivity(APP_CONTEXT, mapIntent, Bundle())
+                                        }
+                                )
+                            }
+                        }
+
                         Divider(Modifier.padding(8.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
+                        if (!(orgCard.value[rigi].languages).isNullOrEmpty()){
                             Text(
-                                text = "WebSite: ${orgCard.value[rigi].webSite}",
+                                text = "Description: ${orgCard.value[rigi].languages}",
                                 style = MaterialTheme.typography.labelSmall,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier
-                                    .padding(start = 10.dp).weight(0.7f,true),
-                                maxLines = 2
-                            )
-                            Icon(
-                                painter = painterResource(id = R.drawable.copy_ico),
-                                contentDescription = "phone_ico",
-                                Modifier
-                                    .padding(end = 16.dp)
-                                    .clickable {
-                                        copyToClipboard(
-                                            APP_CONTEXT,
-                                            orgCard.value[rigi].webSite ?: ""
-                                        )
-                                        Toast
-                                            .makeText(
-                                                APP_CONTEXT,
-                                                "WebSite Copied",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                            .show()
-                                    }
+                                modifier = Modifier.padding(start = 10.dp, bottom = 10.dp),
+                                maxLines = 7
                             )
                         }
+
+
+                        if (!(orgCard.value[rigi].webSite).isNullOrEmpty()){
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "WebSite: ${orgCard.value[rigi].webSite}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier
+                                        .padding(start = 10.dp).weight(0.7f,true),
+                                    maxLines = 2
+                                )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.copy_ico),
+                                    contentDescription = "phone_ico",
+                                    Modifier
+                                        .padding(end = 16.dp)
+                                        .clickable {
+                                            copyToClipboard(
+                                                APP_CONTEXT,
+                                                orgCard.value[rigi].webSite ?: ""
+                                            )
+                                            Toast
+                                                .makeText(
+                                                    APP_CONTEXT,
+                                                    "WebSite Copied",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                .show()
+                                        }
+                                )
+                            }
+                        }
+
                         Divider(Modifier.padding(8.dp))
+
                         Text(
                             text = "Description: ${orgCard.value[rigi].description}",
                             style = MaterialTheme.typography.labelSmall,

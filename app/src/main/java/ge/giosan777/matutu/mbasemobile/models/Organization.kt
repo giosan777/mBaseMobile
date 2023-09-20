@@ -13,5 +13,7 @@ data class Organization(
     @ColumnInfo(name = "category") var category: String,
     @ColumnInfo(name = "address") var address: String?,
     @ColumnInfo(name = "web_site") var webSite: String?,
-    @ColumnInfo(name = "img") var img: String?
+    @ColumnInfo(name = "img") var img: String?,
+    @ColumnInfo(name = "languages") var languages: String?,
+    @ColumnInfo(name = "location") var location: String?
 )

@@ -88,7 +88,7 @@ import java.util.UUID
 
 
 private val newOrganization =
-    ge.giosan777.matutu.mbasemobile.models.Organization(0, "", "", "", "", "", "", "")
+    ge.giosan777.matutu.mbasemobile.models.Organization(0, "", "", "", "", "", "", "","","")
 
 @Composable
 fun AddCompanyCard(navController: NavController) {
