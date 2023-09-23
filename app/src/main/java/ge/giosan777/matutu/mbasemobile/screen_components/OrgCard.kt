@@ -220,7 +220,7 @@ fun OrgCard(orgCard: MutableState<MutableList<Organization>>, rigi: Int) {
                         Divider(Modifier.padding(8.dp))
                         if (!(orgCard.value[rigi].languages).isNullOrEmpty()){
                             Text(
-                                text = "Description: ${orgCard.value[rigi].languages}",
+                                text = "Languages: ${orgCard.value[rigi].languages}",
                                 style = MaterialTheme.typography.labelSmall,
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.padding(start = 10.dp, bottom = 10.dp),
@@ -266,13 +266,16 @@ fun OrgCard(orgCard: MutableState<MutableList<Organization>>, rigi: Int) {
 
                         Divider(Modifier.padding(8.dp))
 
-                        Text(
-                            text = "Description: ${orgCard.value[rigi].description}",
-                            style = MaterialTheme.typography.labelSmall,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.padding(start = 10.dp, bottom = 10.dp),
-                            maxLines = 7
-                        )
+                        if (!(orgCard.value[rigi].description).isNullOrEmpty()){
+                            Text(
+                                text = "Description: ${orgCard.value[rigi].description}",
+                                style = MaterialTheme.typography.labelSmall,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(start = 10.dp, bottom = 10.dp),
+                                maxLines = 7
+                            )
+                        }
+
 
                     }
                 }

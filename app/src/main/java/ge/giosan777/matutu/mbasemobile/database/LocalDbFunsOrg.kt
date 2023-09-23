@@ -23,6 +23,12 @@ fun getAllOrganizationsWithNameOrg(
     return mainDbOrg.getDao().findByNameStartingWith(orgName)
 }
 
+fun findByOrganizationNameIsContainingIgnoreCase(
+    orgNameContains: String
+): List<Organization> {
+    return mainDbOrg.getDao().findByOrganizationNameIsContainingIgnoreCase(orgNameContains)
+}
+
 fun getAllOrganizationsWithPhoneExceptOrg(
     category: String,
 ): List<Organization> {

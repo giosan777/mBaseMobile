@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import ge.giosan777.matutu.mbasemobile.Volley.orgBase.findByOrganizationNameIsContaining
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getCategoryStartingNameWithOrg
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getStartingNameWithOrg
 import ge.giosan777.matutu.mbasemobile.banner.Banner
@@ -163,14 +164,15 @@ fun ScreenMobileBaseOrg(navController: NavController) {
                                 } else {
                                     cardVisible.value = true
                                     orgSearch.value = it
-                                    GlobalScope.launch(Dispatchers.IO) {
-                                        getStartingNameWithOrg(
-                                            orgState,
-                                            orgSearch.value
-                                        )
-                                    }
+                                    if (orgSearch.value.length > 2) {
+                                        GlobalScope.launch(Dispatchers.IO) {
+                                            findByOrganizationNameIsContaining(
+                                                orgState,
+                                                orgSearch.value
+                                            )
+                                        }
+                                    }else cardVisible.value=false
                                 }
-
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                             label = {

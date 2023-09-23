@@ -1,5 +1,6 @@
 package ge.giosan777.matutu.mbasemobile.Volley.orgBase
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
@@ -8,6 +9,7 @@ import com.google.gson.Gson
 import ge.giosan777.matutu.mbasemobile.APP_CONTEXT
 import ge.giosan777.matutu.mbasemobile.Volley.MyHurlStack
 import ge.giosan777.matutu.mbasemobile.database.AppDatabaseOrg
+import ge.giosan777.matutu.mbasemobile.database.findByOrganizationNameIsContainingIgnoreCase
 import ge.giosan777.matutu.mbasemobile.database.getAllOrganizationsWithNameOrg
 import ge.giosan777.matutu.mbasemobile.models.Organization
 
@@ -29,6 +31,31 @@ fun getStartingNameWithOrg(
         { _ ->
             val orgList = getAllOrganizationsWithNameOrg(orgName)
             mutableState.value = orgList.toMutableList()
+        }
+    )
+    queue.add(stringRequest)
+}
+
+fun findByOrganizationNameIsContaining(
+    mutableState: MutableState<MutableList<Organization>>,
+    orgNameContains: String,
+) {
+    val url = "https://mbase.ge/user_organization_base/findByOrganizationNameIsContainingIgnoreCase/$orgNameContains"
+    val queue = Volley.newRequestQueue(APP_CONTEXT, MyHurlStack())
+    val stringRequest = StringRequest(
+        Request.Method.GET,
+        url,
+        { response ->
+            val jsonString = response.toString()
+            val orgArray: Array<Organization> = Gson().fromJson(jsonString, Array<Organization>::class.java)
+            mutableState.value = orgArray.toMutableList()
+            Log.d("MyLog",orgArray.size.toString())
+        },
+        { _ ->
+            val orgList = findByOrganizationNameIsContainingIgnoreCase(orgNameContains)
+            mutableState.value = orgList.toMutableList()
+            Log.d("MyLog",orgList.size.toString())
+
         }
     )
     queue.add(stringRequest)

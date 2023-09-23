@@ -27,4 +27,7 @@ interface OrgDAO {
 
     @Query("SELECT * FROM organizations WHERE category LIKE :startingCategoryWith || '%'")
     fun findByCategoryStartingWith(startingCategoryWith:String ): List<Organization>
+
+    @Query("SELECT * FROM organizations WHERE organization_name LIKE '%' || :OrgNameContains || '%'")
+    fun findByOrganizationNameIsContainingIgnoreCase(OrgNameContains:String ): List<Organization>
 }
