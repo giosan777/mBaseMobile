@@ -24,11 +24,12 @@
     <string name="close">Close</string>
     <string name="expand_button_content_description">expand button content description</string>
     <string name="add_organization">Add organization</string>
-    <string name="enter_company_phone">Enter Company Phone</string>
-    <string name="enter_company_address">Enter Company Address</string>
-    <string name="enter_company_web_site">Enter Company Web Site</string>
-    <string name="enter_company_category">Enter Company Category</string>
-    <string name="enter_company_description">Enter Company Description</string>
+    <string name="enter_company_phone">Enter Phone</string>
+    <string name="enter_company_address">Enter Address</string>
+    <string name="enter_company_languages">Enter languages</string>
+    <string name="enter_company_web_site">Enter Web Site</string>
+    <string name="enter_company_category">Enter Category</string>
+    <string name="enter_company_description">Enter Description</string>
     <string name="category">Category</string>
     <string name="aucilebeli_veli">aucilebeli veli</string>
     <string name="ignore_battery_optimization">IGNORE_BATTERY_OPTIMIZATIONs</string>

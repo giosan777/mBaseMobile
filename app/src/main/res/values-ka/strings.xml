@@ -22,11 +22,12 @@
     <string name="close">დახურვა</string>
     <string name="expand_button_content_description">expand button content description</string>
     <string name="add_organization">ორგანიზაციის დამატება</string>
-    <string name="enter_company_phone">ორგანიზაციის ტელეფონი</string>
-    <string name="enter_company_address">ორგანიზაციის მისამართი</string>
-    <string name="enter_company_web_site">ორგანიზაციის ვებ გვერდი</string>
-    <string name="enter_company_category">ორგანიზაციის კატეგორია</string>
-    <string name="enter_company_description">ორგანიზაციის აღწერა</string>
+    <string name="enter_company_phone">ტელეფონი</string>
+    <string name="enter_company_address">მისამართი</string>
+    <string name="enter_company_languages">ენების ფლობა</string>
+    <string name="enter_company_web_site">ვებ გვერდი</string>
+    <string name="enter_company_category">კატეგორია</string>
+    <string name="enter_company_description">აღწერა</string>
     <string name="category">კატეგორია</string>
     <string name="aucilebeli_veli">აუცილებელი ველი</string>
     <string name="ignore_battery_optimization">ბატარეის ოპტიმიზაციის გათიშვა</string>

@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -23,6 +22,7 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,20 +40,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.findByOrganizationNameIsContaining
 import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getCategoryStartingNameWithOrg
-import ge.giosan777.matutu.mbasemobile.Volley.orgBase.getStartingNameWithOrg
 import ge.giosan777.matutu.mbasemobile.banner.Banner
 import ge.giosan777.matutu.mbasemobile.models.Organization
 import ge.giosan777.matutu.mbasemobile.navigator.Screen
@@ -171,7 +164,7 @@ fun ScreenMobileBaseOrg(navController: NavController) {
                                                 orgSearch.value
                                             )
                                         }
-                                    }else cardVisible.value=false
+                                    } else cardVisible.value = false
                                 }
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -379,39 +372,55 @@ fun CategoryChoice(
         stringResource(R.string.category_sxva)
     )
 
-    Card(modifier = Modifier.background(Color.White)) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .background(Color.White),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            options.forEach { itString ->
-                ClickableText(
-                    modifier = Modifier,
-                    text = buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.Bold,
-                                fontStyle = FontStyle.Italic,
-                                color = Color.Black,
-                                fontSize = 18.sp
-                            )
-                        ) {
-                            append(itString)
-                        }
-                    }, onClick = {
+
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .background(Color.White),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        options.forEach { itString ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .clickable {
                         selectedText.value = itString
                         companyCategoryExpanded.value = false
-                    })
-                Divider()
-                Divider()
-                Divider()
-                Divider()
-                Divider()
+                    },
+                elevation = CardDefaults.cardElevation(),
+                shape = RoundedCornerShape(bottomStart = 16.dp, topEnd = 16.dp)
+            ) {
+                Box(modifier = Modifier.align(Alignment.CenterHorizontally)){
+                    Text(modifier = Modifier, text = itString)
+                }
+
+
             }
+//                ClickableText(
+//                    modifier = Modifier,
+//                    text = buildAnnotatedString {
+//                        withStyle(
+//                            style = SpanStyle(
+//                                fontWeight = FontWeight.Bold,
+//                                fontStyle = FontStyle.Italic,
+//                                color = Color.Black,
+//                                fontSize = 18.sp
+//                            )
+//                        ) {
+//                            append(itString)
+//                        }
+//                    }, onClick = {
+//                        selectedText.value = itString
+//                        companyCategoryExpanded.value = false
+//                    })
+            Divider()
+            Divider()
+            Divider()
+            Divider()
+            Divider()
         }
     }
-
 }
+

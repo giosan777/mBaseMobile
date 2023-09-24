@@ -108,6 +108,9 @@ fun AddCompanyCard(navController: NavController) {
     val companyDescription = remember {
         mutableStateOf("")
     }
+    val companyLanguages = remember {
+        mutableStateOf("")
+    }
     val focusManager = LocalFocusManager.current
 
     val color by animateColorAsState(
@@ -265,6 +268,22 @@ fun AddCompanyCard(navController: NavController) {
                     label = {
                         Text(
                             stringResource(R.string.enter_company_address),
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    })
+                OutlinedTextField(value = companyLanguages.value,
+                    onValueChange = {
+                        companyLanguages.value = it
+                        newOrganization.languages = companyLanguages.value
+                    },
+                    modifier = Modifier.padding(start = 16.dp, bottom = 5.dp),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }),
+                    label = {
+                        Text(
+                            stringResource(R.string.enter_company_languages),
                             style = MaterialTheme.typography.labelSmall
                         )
                     })

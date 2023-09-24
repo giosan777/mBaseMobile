@@ -297,16 +297,16 @@ class MainActivity : ComponentActivity() {
 
 
 fun setLanguage() {
-    if (mSettings.contains("language") && mSettings.getString("language", "ka").equals("ka")) {
-        println(mSettings.getString("language", "ka"))
+//    if (mSettings.contains("language") && mSettings.getString("language", "ka").equals("ka")) {
+//        println(mSettings.getString("language", "ka"))
         val locale = Locale("ka")
         Locale.setDefault(locale)
         val resources = APP_CONTEXT.resources
         val configuration = resources.configuration
         configuration.setLocale(locale)
-//        resources.updateConfiguration(configuration, resources.displayMetrics)
+        resources.updateConfiguration(configuration, resources.displayMetrics)
         APP_CONTEXT.createConfigurationContext(configuration)
 
-    }
+//    }
 }
 
