@@ -22,7 +22,9 @@ fun getAllContactsFromServer(context: Context, callbacks: (MutableList<Person>) 
                 val personArray: Array<Person> = Gson().fromJson(jsonString, Array<Person>::class.java)
                 val personList = mutableListOf<Person>()
                 personArray.forEach {
-                    personList.add(Person(null, it.phone, it.firstName, it.lastName,it.duplicateInt))
+                    if (!(it.phone.isNullOrBlank())&&!(it.firstName.isNullOrBlank())) {
+                        personList.add(Person(null, it.phone, it.firstName, it.lastName,it.duplicateInt))
+                    }
                 }
                 callbacks.invoke(personList)
 

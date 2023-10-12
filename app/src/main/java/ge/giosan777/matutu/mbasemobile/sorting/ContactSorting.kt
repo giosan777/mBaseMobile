@@ -2,7 +2,7 @@ package ge.giosan777.matutu.mbasemobile.sorting
 
 import ge.giosan777.matutu.mbasemobile.models.Person
 
-fun contactSorting1(unsortingList: MutableList<Person>): MutableList<Person> {
+fun contactSorting(unsortingList: MutableList<Person>): MutableList<Person> {
     val sortingList = mutableListOf<Person>()
     unsortingList.forEach {
         val phoneTMP = it.phone.removePrefix("+995").replace("[^\\w+]".toRegex(), "")

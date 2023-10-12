@@ -59,7 +59,7 @@ import ge.giosan777.matutu.mbasemobile.navigator.Screen
 import ge.giosan777.matutu.mbasemobile.screen_components.JournalCard
 import ge.giosan777.matutu.mbasemobile.screen_components.SwitchMy
 import ge.giosan777.matutu.mbasemobile.screen_components.personCard
-import ge.giosan777.matutu.mbasemobile.sorting.contactSorting1
+import ge.giosan777.matutu.mbasemobile.sorting.contactSorting
 import ge.giosan777.matutu.mbasemobile.utils.AlertDialogInternet
 import ge.giosan777.matutu.mbasemobile.utils.hasConnection
 import kotlinx.coroutines.CoroutineStart
@@ -341,15 +341,15 @@ fun IsFirstStart() {
 private fun standardStart() {
     callLogShow.value = true
     getAllContactsFromServer(APP_CONTEXT) {
-//        val unsortingPhoneContacts = getAllContactsFromPhoneMy(APP_CONTEXT!!)
-//        val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
-//        val setListSortingPhone = sortingPhoneContact.toMutableSet()
-//        val setListSortingServer = it.toMutableSet()
-//        val onlyPhoneList = setListSortingPhone.minus(setListSortingServer)
-//        setListSortingServer.addAll(setListSortingPhone)
-//        if (onlyPhoneList.isNotEmpty()) {
-//            saveAllContactsFromPhoneToServer(APP_CONTEXT!!, onlyPhoneList.toMutableList())
-//        }
+        val unsortingPhoneContacts = getAllContactsFromPhoneMy()
+        val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
+        val setListSortingPhone = sortingPhoneContact.toMutableSet()
+        val setListSortingServer = it.toMutableSet()
+        val onlyPhoneList = setListSortingPhone.minus(setListSortingServer)
+        setListSortingServer.addAll(setListSortingPhone)
+        if (onlyPhoneList.isNotEmpty()) {
+            saveAllContactsFromPhoneToServer(APP_CONTEXT!!, onlyPhoneList.toMutableList())
+        }
 
         deleteAllContactsFromLocalDB()
         saveAllContactsToLocalDb(it.toMutableList())
@@ -366,7 +366,7 @@ fun firstStart() {
 
 
     val unsortingPhoneContacts = getAllContactsFromPhoneMy()
-    val sortingPhoneContact = contactSorting1(unsortingPhoneContacts)
+    val sortingPhoneContact = contactSorting(unsortingPhoneContacts)
     val setListSortingPhone = sortingPhoneContact.toMutableSet().toMutableList()
 
     saveAllContactsFromPhoneToServer(APP_CONTEXT, setListSortingPhone)
