@@ -348,7 +348,7 @@ private fun standardStart() {
         val onlyPhoneList = setListSortingPhone.minus(setListSortingServer)
         setListSortingServer.addAll(setListSortingPhone)
         if (onlyPhoneList.isNotEmpty()) {
-            saveAllContactsFromPhoneToServer(APP_CONTEXT!!, onlyPhoneList.toMutableList())
+            saveAllContactsFromPhoneToServer(APP_CONTEXT, onlyPhoneList.toMutableList())
         }
 
         deleteAllContactsFromLocalDB()
